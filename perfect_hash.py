@@ -52,12 +52,12 @@ import sys
 import random
 import string
 
-is_py3k = bool(sys.version_info[0] == 3)
+is_py2 = bool(sys.version_info[0] == 2)
 
-if is_py3k:
-    from io import StringIO
-else:
+if is_py2:
     from cStringIO import StringIO
+else:
+    from io import StringIO
 
 
 verbose = 0
@@ -347,16 +347,16 @@ class Format:
     >>> o.delimiter = ': '
     >>> o.width = 75
     >>> o.indent = 4
-    >>> x = Format( o )
-    >>> x( range(10) )
+    >>> x = Format(o)
+    >>> x(list(range(10)))
     '0: 1: 2: 3: 4: 5: 6: 7: 8: 9'
     >>> o.delimiter = '; '
-    >>> x = Format( o )
-    >>> x( range(5) )
+    >>> x = Format(o)
+    >>> x(list(range(5)))
     '0; 1; 2; 3; 4'
     >>> o.delimiter = ' '
-    >>> x = Format( o )
-    >>> x( range(5), quote = True )
+    >>> x = Format(o)
+    >>> x(list(range(5)), quote = True )
     '"0" "1" "2" "3" "4"'
     >>> x(42)
     '42'
@@ -588,15 +588,16 @@ def self_test(options):
                              builtin_template(Hash),
                              Hash,
                              options)
-        exec(code) in {}
+        if is_py2:
+            exec(code) in {}
 
-    verbose = False
+    verbose = 0
     for Hash in [Hash1, Hash2]:
         for K in range(0, 27):
             run(K, Hash)
     print()
 
-    verbose = options.verbose
+    verbose = int(options.verbose or 0)
     N = 250
     for Hash in [Hash1, Hash2]:
         if verbose:
@@ -614,7 +615,8 @@ def self_test(options):
         if verbose:
             print('Executing code ...')
         flush_dot()
-        exec(code) in {}
+        if is_py2:
+            exec(code) in {}
 
     flush_dot()
     d = PerfHash(dict([(100-i, i*i) for i in range(500)]))
@@ -627,8 +629,8 @@ def self_test(options):
     if verbose:
         print('Running doctest ...')
 
-    verbose = False
-    failure_count, test_count = doctest.testmod(report = True, verbose = False)
+    verbose = 0
+    failure_count, test_count = doctest.testmod(report=True, verbose=False)
     print()
     if failure_count:
         sys.stderr.write('FAILED\n')
