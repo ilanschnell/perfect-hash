@@ -1,4 +1,3 @@
-
 CXX = g++ -Wall
 
 
@@ -15,17 +14,18 @@ states-code.o: states-code.cc states-code.hh states.dat.h
 
 
 states-code.cc: states.dat states-tmpl.cc states-code.hh
-	../perfect_hash.py --splitby '|' --keycol 2 states.dat states-tmpl.cc
+	python ../perfect_hash.py --splitby '|' --keycol 2 states.dat \
+                                  states-tmpl.cc
 
 
 states.dat.h: states.dat
-	./mk_header.py >$@
+	python mk_header.py >$@
 
 
 clean:
 	rm lookup *.o states.dat.h states-code.cc
 
 
-test:
+test: lookup
 	./lookup 'NY'
 	./lookup 'QW'

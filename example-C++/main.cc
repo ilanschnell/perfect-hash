@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 using namespace std;
@@ -19,6 +18,6 @@ int main (int argc, char *argv[])
 
   cout << "The state of " << s.name ()
        << " has a population of " << 1e-6 * s.population () << " million.\n";
-  
+
   return 0;
 }
