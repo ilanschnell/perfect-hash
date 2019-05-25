@@ -60,7 +60,7 @@ else:
     from cStringIO import StringIO
 
 
-verbose = False
+verbose = 0
 trails = 5
 
 
@@ -639,7 +639,7 @@ def self_test(options):
         sys.exit(0)
 
 
-if __name__ == '__main__':
+def main():
     from optparse import OptionParser
 
     usage = "usage: %prog [options] KEYS_FILE [TMPL_FILE]"
@@ -766,10 +766,12 @@ is processed and the output code is written to stdout.
     options, args = parser.parse_args()
 
     if options.trails > 0:
+        global trails
         trails = options.trails
     else:
         parser.error("trails before increasing N has to be larger than zero")
 
+    global verbose
     verbose = options.verbose
 
     if options.test:
@@ -874,3 +876,7 @@ is processed and the output code is written to stdout.
         outstream.write(code)
         if not outname == 'std':
             outstream.close()
+
+
+if __name__ == '__main__':
+    main()
