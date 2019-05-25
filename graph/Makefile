@@ -1,16 +1,15 @@
 
 
-
 animals.ps: animals.dot
 	neato -Tps $< -Gstart=100 -o $@
 
 
 animals.dot: animals.py
-	./py2dot -l $< -o $@
+	python py2dot.py -l $< -o $@
 
 
 animals.py: ../animals.txt
-	../perfect_hash.py $< >$@
+	python ../perfect_hash.py $< >$@
 
 
 clean:
@@ -19,5 +18,4 @@ clean:
 
 test:
 	true
-
 
