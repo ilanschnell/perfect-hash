@@ -31,10 +31,10 @@ d[True] = False
 
 assert d[True] == False
 
-for i in xrange(10):  # very expensive
+for i in range(10):  # very expensive
     d[i] = 2*i*i + 3*i -7
 
 assert d[4] == 37
 
 
-print 'OK'
+print('OK')

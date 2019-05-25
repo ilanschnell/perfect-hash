@@ -25,8 +25,8 @@ def mkRandHash(N):
     """
     Return a random hash function which returns hash values from 0..N-1.
     """
-    junk = "".join(random.choice(string.letters + string.digits)
-                   for i in xrange(10))
+    junk = "".join(random.choice(string.ascii_letters + string.digits)
+                   for i in range(10))
     return lambda key: hash(junk + str(key)) % N
 
 
@@ -35,4 +35,4 @@ f1, f2, G = generate_hash(month, mkRandHash)
 for k, h in month.items():
     assert h == ( G[f1(k)] + G[f2(k)] ) % len(G)
 
-print 'OK'
+print('OK')

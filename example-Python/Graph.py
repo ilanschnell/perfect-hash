@@ -15,17 +15,17 @@ from perfect_hash import Graph
 
 G = Graph(3)
 assert G.assign_vertex_values() == True
-    
+
 # Now we make an edge between vertex 0 and 1 with desired edge value 2:
 G.connect(0, 1, 2)
 
 # Make another edge 1:2 with desired edge value 1:
 G.connect(1, 2, 1)
-    
+
 # The graph is still acyclic, and assigning values works:
 assert G.assign_vertex_values() == True
 assert G.vertex_values == [0, 2, 2]
-    
+
 # What do these values mean?
 # When you add the values for edge 0:1 you get 0 + 2 = 2, as desired.
 # For edge 1:2 you add 2 + 2 = 4 = 1 (mod 3), as desired.
@@ -36,5 +36,4 @@ G.connect(0, 2, 0)
 
 assert G.assign_vertex_values() == False
 
-
-print 'OK'
+print('OK')

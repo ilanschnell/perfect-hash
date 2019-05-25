@@ -1,5 +1,3 @@
-
-
 all:
 	true
 
@@ -9,7 +7,6 @@ clean:
 
 
 test:
-	./generate_hash.py
-	./PerfHash.py
-	./Graph.py
-
+	python generate_hash.py
+	python PerfHash.py
+	python Graph.py
