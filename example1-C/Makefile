@@ -1,4 +1,3 @@
-
 CC = gcc -Wall
 
 
@@ -15,17 +14,17 @@ states-code.o: states-code.c states-code.h
 
 
 states-code.c: states.dat states-tmpl.c
-	../perfect_hash.py --splitby '|' --keycol 2 $^
+	python ../perfect_hash.py --splitby '|' --keycol 2 $^
 
 
 states.dat.h: states.dat
-	./mk_header.py >$@
+	python ./mk_header.py >$@
 
 
 clean:
 	rm lookup *.o states.dat.h states-code.c
 
 
-test:
+test: lookup
 	./lookup 'NY'
 	./lookup 'QW'
