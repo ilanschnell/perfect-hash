@@ -1,26 +1,24 @@
+PYTHON_PREFIX=/Users/ilan/a
 
 
-CC = gcc -Wall
-
-
-stations.so: stationsmodule.c stations.dat.h stations-code.h
-	$(CC) -shared -fPIC -I/usr/local/include/python2.5 \
-            -o stations.so stationsmodule.c
+stations.so: stations.c stations.dat.h stations-code.h
+	gcc -arch x86_64 -I${PYTHON_PREFIX}/include/python2.7 \
+            -Wall -O3 -Wstrict-prototypes -c stations.c -o stations.o
+	gcc -bundle -undefined dynamic_lookup -L${PYTHON_PREFIX}/lib \
+            -arch x86_64 stations.o -o stations.so
 
 
 stations.dat.h: stations.dat
-	sed <$< >$@ -e 's:\([^,]*\),\([^,]*\):  { "\1", "\2" },:'
+	sed <$< >$@ -e 's:\([^,]*\),\([^,]*\):    {"\1", "\2"},:'
 
 
 stations-code.h: stations.dat stations-tmpl.h
-	../perfect_hash.py --trails 2 $^
+	python ../perfect_hash.py --trails 2 $^
 
 
 clean:
-	rm stations-code.h stations.dat.h stations.so
+	rm stations-code.h stations.dat.h stations.so stations.o
 
 
-test:
+test: stations.so
 	python -c "import stations; print stations.locator('DL5BAC')"
-
-

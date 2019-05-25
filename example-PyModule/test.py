@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import sys
 from timeit import Timer
 from stations import locator
@@ -7,7 +6,7 @@ call = sys.argv[1]
 print repr(call)
 D = {}
 
-for line in file('stations.dat'):
+for line in open('stations.dat'):
     c, l = [x.strip() for x in line.split(',')]
     D[c] = l
 
