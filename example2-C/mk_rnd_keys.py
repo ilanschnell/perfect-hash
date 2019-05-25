@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # ./mk_rnd_keys.py 10000 | sort | uniq | shuf >keywords.txt
 
 import sys
