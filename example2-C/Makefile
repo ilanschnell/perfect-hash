@@ -6,7 +6,7 @@ a.out: main.c keys.code.h
 
 
 keys.code.h: keys.dat keys.tmpl.h
-	python ../perfect_hash.py --trails=40 -v $^
+	python ../perfect_hash.py -v $^
 
 
 keys.dat:

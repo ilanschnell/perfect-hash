@@ -19,10 +19,10 @@ int hash_g(char *s, int *T)
 
 int hash(char *k)
 {
-    if (strlen (k) > NS)
+    if (strlen(k) > NS)
         return 0;
 
-    return (hash_g (k, T1) + hash_g (k, T2)) % NG;
+    return (hash_g(k, T1) + hash_g(k, T2)) % NG;
 }
 
 bool has_key(char *k)
