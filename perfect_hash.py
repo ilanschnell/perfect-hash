@@ -30,7 +30,7 @@ The algorithm works like this:
 5.  Check if G is acyclic, i.e. has no loops; if no, go back to step 2.
 
 6.  Assign values to each vertex such that, for each edge, you can add
-    the values for the two vertices and get the desired (hash) value 
+    the values for the two vertices and get the desired (hash) value
     for that edge.  This task is easy, because the graph is acyclic.
     This is done by picking a vertex, and assigning it a value of 0.
     Then do a depth-first search, assigning values to new vertices so that
@@ -46,12 +46,19 @@ If the procedure fails, G is cyclic, and we go back to step 2, replacing G
 with a new graph, and thereby discarding the vertex values from the failed
 attempt.
 """
-__author__  = 'Ilan Schnell <ilanschnell@gmail.com>, 2008 (and AMK 2000)'
-__license__ = 'GNU GPL 2'
-__version__ = '0.1'
+from __future__ import print_function
 
+import sys
+import random
+import string
 
-import sys, random, string, cStringIO
+is_py3k = bool(sys.version_info[0] == 3)
+
+if is_py3k:
+    from io import StringIO
+else:
+    from cStringIO import StringIO
+
 
 verbose = False
 trails = 5
@@ -64,28 +71,28 @@ class Graph:
     are assigned, which will fail if the graph is cyclic.  The vertex values
     are assigned such that the two values corresponding to an edge add up to
     the desired edge value (mod N).
-    
+
     Example:
     >>> G = Graph(3)
     >>> G.assign_vertex_values()
     True
-    
+
     Now we make an edge between vertex 0 and 1 with desired edge value 2:
     >>> G.connect(0, 1, 2)
-    
+
     Make another edge 1:2 with desired edge value 1:
     >>> G.connect(1, 2, 1)
-    
+
     The graph is still acyclic, and assigning values works:
     >>> G.assign_vertex_values()
     True
     >>> G.vertex_values
     [0, 2, 2]
-    
+
     What do these values mean?
     When you add the values for edge 0:1 you get 0 + 2 = 2, as desired.
     For edge 1:2 you add 2 + 2 = 4 = 1 (mod 3), as desired.
-    
+
     Adding edge 0:2 produces a loop, so the graph is no longer acyclic.
     Assigning values fails.
     >>> G.connect(0, 2, 0)
@@ -94,11 +101,11 @@ class Graph:
     """
     def __init__(self, N):
         self.N = N                     # number of vertices
-        
+
         # maps a vertex number to the list of tuples (vertices, edge value)
         # to which it is connected by edges.
-        self.adjacent = [[] for n in xrange(N)]
-    
+        self.adjacent = [[] for n in range(N)]
+
     def connect(self, vertex1, vertex2, edge_value):
         """
         Connect 'vertex1' and 'vertex2' with an edge, with associated
@@ -107,7 +114,7 @@ class Graph:
         # Add vertices to each other's adjacent list
         self.adjacent[vertex1].append( (vertex2, edge_value) )
         self.adjacent[vertex2].append( (vertex1, edge_value) )
-        
+
     def assign_vertex_values(self):
         """
         Try to assign the vertex values, such that, for each edge, you can
@@ -121,11 +128,11 @@ class Graph:
         On success (when the graph is acyclic) True is returned.
         """
         self.vertex_values = self.N * [-1]  # -1 means unassigned
-        
+
         visited = self.N * [False]
-        
+
         # Loop over all vertices, taking unvisited ones as roots.
-        for root in xrange(self.N):
+        for root in range(self.N):
             if visited[root]:
                 continue
 
@@ -137,7 +144,7 @@ class Graph:
             while tovisit:
                 parent, vertex = tovisit.pop()
                 visited[vertex] = True
-                
+
                 # Loop over adjacent vertices, but skip the vertex we arrived
                 # here from the first time it is encountered.
                 skip = True
@@ -145,20 +152,20 @@ class Graph:
                     if skip and neighbor == parent:
                         skip = False
                         continue
-                    
+
                     if visited[neighbor]:
                         # We visited here before, so the graph is cyclic.
                         return False
 
                     tovisit.append( (vertex, neighbor) )
-                    
+
                     # Set new vertex's value to the desired edge value,
                     # minus the value of the vertex we came here from.
                     self.vertex_values[neighbor] = \
                         ( edge_value - self.vertex_values[vertex] ) % self.N
 
         # check if all vertices have a valid value
-        for vertex in xrange(self.N):
+        for vertex in range(self.N):
             assert self.vertex_values[vertex] >= 0
 
         # We got though, so the graph is acyclic,
@@ -177,7 +184,7 @@ def generate_hash(kdic, Hash):
     N = 1 if not kdic else (max(kdic.values()) + 1)
     if verbose >= 2:
         sys.stderr.write('N = %i\n' % N)
-    
+
     trail = 0 # Number of trial graphs so far
     while True:
         if (trail % trails) == 0:   # trails failures, increase N slightly
@@ -187,29 +194,29 @@ def generate_hash(kdic, Hash):
                 sys.stderr.write('\n')
                 sys.stderr.write('Generating graphs N = %i ' % N)
         trail += 1
-        
+
         if verbose:
             sys.stderr.write('.')
             sys.stderr.flush()
-        
+
         G = Graph(N)   # Create graph with N vertices
         f1 = Hash(N)   # Create 2 random hash functions
         f2 = Hash(N)
-        
+
         # Connect vertices given by the values of the two hash functions
         # for each key.  Associate the desired hash value with each edge.
-        for key, hashval in kdic.iteritems():
+        for key, hashval in kdic.items():
             G.connect(f1(key), f2(key), hashval)
-        
+
         # Try to assign the vertex values.  This will fail when the graph
         # is cyclic.  But when the graph is acyclic it will succeed and we
         # break out, because we're done.
         if G.assign_vertex_values():
             break
-    
+
     if verbose:
         sys.stderr.write('\nAcyclic graph found after %i trails.\n' % trail)
-        
+
     if verbose >= 2:
         sys.stderr.write('N = %i\n' % N)
     if verbose:
@@ -217,13 +224,13 @@ def generate_hash(kdic, Hash):
 
     # Sanity check the result by actually verifying that all the keys
     # hash to the right value.
-    for key, hashval in kdic.iteritems():
+    for key, hashval in kdic.items():
         assert hashval == ( G.vertex_values[f1(key)] +
                             G.vertex_values[f2(key)] ) % N
-    
+
     if verbose:
         sys.stderr.write('OK\n')
-    
+
     return f1, f2, G.vertex_values
 
 
@@ -236,9 +243,10 @@ class Hash1:
     """
     def __init__(self, N):
         self.N = N
-        self.salt = "".join(random.choice(string.letters + string.digits)
-                            for i in xrange(8))
-        
+        self.salt = "".join(random.choice(string.ascii_letters +
+                                          string.digits)
+                            for i in range(8))
+
     def __call__(self, key):
         return hash(self.salt + str(key)) % self.N
 
@@ -259,15 +267,15 @@ class Hash2:
     def __init__(self, N):
         self.N = N
         self.salt = []
-        
+
     def __call__(self, key):
         skey = str(key)
         while len(self.salt) < len(skey): # add more salt if necessary
             self.salt.append(random.randint(0, self.N-1))
-        
+
         return sum(self.salt[i] * ord(c)
                    for i, c in enumerate(skey)) % self.N
-    
+
     template = """
 S1 = [$S1]
 S2 = [$S2]
@@ -286,7 +294,7 @@ class PerfHash:
     which should be avoided, in particulat inserting new keys is
     prohibitively expensive since a new perfect hash table needs to be
     constructed.  However, this class can be usefull for testing.
-    
+
     >>> d = PerfHash({'foo':(429, 'bar'), 42:True, False:'baz'})
     >>> d['foo'], d[42], d[False]
     ((429, 'bar'), True, 'baz')
@@ -302,11 +310,11 @@ class PerfHash:
         self.klst = []
         self.objs = []
         kdic = {}
-        for hashval, (key, obj) in enumerate(dic.iteritems()):
+        for hashval, (key, obj) in enumerate(dic.items()):
             self.klst.append(key)
             self.objs.append(obj)
             kdic[key] = hashval
-            
+
         self.N = len(dic)
         self.f1, self.f2, self.G = generate_hash(kdic, Hash1)
 
@@ -319,7 +327,7 @@ class PerfHash:
 
     def hashval(self, key):
         return ( self.G[self.f1(key)] + self.G[self.f2(key)] ) % len(self.G)
-    
+
     def __getitem__(self, key):
         h = self.hashval(key)
         if h < self.N and key == self.klst[h]:
@@ -331,7 +339,7 @@ class PerfHash:
         h = self.hashval(key)
         return h < self.N and key == self.klst[h]
 
-    
+
 class Format:
     """
     >>> class o:
@@ -357,7 +365,7 @@ class Format:
     """
     def __init__(self, options):
         names = ['width', 'indent', 'delimiter']
-        
+
         for name in names:
             setattr(self, name, getattr(options, name))
 
@@ -365,23 +373,23 @@ class Format:
             sys.stderr.write("Format options:\n")
             for name in names:
                 sys.stderr.write('  %s: %r\n' % (name, getattr(self, name)))
-    
+
     def __call__(self, data, quote = False):
         if type(data) != type([]):
             return str(data)
-        
+
         lendel = len(self.delimiter)
-        aux = cStringIO.StringIO()
+        aux = StringIO()
         pos = 20
         for i, elt in enumerate(data):
             last = bool(i == len(data)-1)
-            
+
             s = ('"%s"' if quote else '%s') % elt
-            
+
             if pos + len(s) + lendel > self.width:
                 aux.write('\n' + (self.indent * ' '))
                 pos = self.indent
-            
+
             aux.write(s)
             pos += len(s)
             if not last:
@@ -402,14 +410,14 @@ def keyDict(keys_hashes):
     K = len(keys_hashes)     # number of keys
     if verbose >= 2:
         sys.stderr.write('K = %i\n' % K)
-        
+
     kdic = dict(keys_hashes)
     if len(kdic) < K:
         sys.stderr.write('Warning: Input contains duplicate keys\n')
-    
+
     if len(set(kdic.values())) < K:
         sys.stderr.write('Warning: Input contains duplicate hash values\n')
-    
+
     return kdic
 
 
@@ -422,10 +430,10 @@ def generate_code(keys_hashes, template, Hash, options):
     The return value is the substituted code template.
     """
     f1, f2, G = generate_hash(keyDict(keys_hashes), Hash)
-    
+
     assert f1.N == f2.N == len(G)
     assert len(f1.salt) == len(f2.salt)
-    
+
     fmt = Format(options)
 
     return string.Template(template).substitute(
@@ -462,7 +470,7 @@ def read_table(filename, options):
         for name in ['comment', 'splitby', 'keycol', 'hashcol']:
             sys.stderr.write('  %s: %r\n' %
                              (name, getattr(options, name)))
-        
+
     for n, line in enumerate(f):
         line = line.strip()
         if not line or line.startswith(options.comment):
@@ -472,13 +480,13 @@ def read_table(filename, options):
             line = line.split(options.comment)[0].strip()
 
         row = [col.strip() for col in line.split(options.splitby)]
-        
+
         try:
             key = row[options.keycol-1]
         except IndexError :
             exit("%s:%i: Error: Cannot read key, not enough columns." %
                  (filename, n+1))
-            
+
         if options.hashcol:
             try:
                 val = row[options.hashcol-1]
@@ -492,11 +500,11 @@ def read_table(filename, options):
                      (filename, n+1, row[options.hashcol-1]))
         else:
             hashval += 1
-        
+
         keys_hashes.append( (key, hashval) )
 
     f.close()
-    
+
     if not keys_hashes:
         exit("Error: no keys found in file `%s'." % filename)
 
@@ -520,7 +528,7 @@ def read_template(filename):
     try:
         f = file(filename)
     except IOError :
-        fatal_error("Error: Could not open `%s' for reading." % filename)
+        sys.exit("Error: Could not open `%s' for reading." % filename)
 
     return f.read()
 
@@ -552,31 +560,31 @@ def print_code(code, name, width = 78):
     sys.stderr.write(center(' BEGIN %s ' % name) + '\n')
     sys.stderr.write(code + '\n')
     sys.stderr.write(center(' END %s ' % name) + '\n')
-    
+
 
 def self_test(options):
     import doctest
     global verbose
-    print 'Starting self tests ...'
+    print('Starting self tests ...')
 
     def random_word():
-        return ''.join(random.choice(string.letters + string.digits)
-                       for i in xrange(random.randint(1, 20)))
+        return ''.join(random.choice(string.ascii_letters + string.digits)
+                       for i in range(random.randint(1, 20)))
 
     def flush_dot():
         sys.stdout.write('.')
         sys.stdout.flush()
-        
+
     def run(K, Hash):
         flush_dot()
-        
-        keys = [chr(65+i) for i in xrange(K)]
-        hashes = range(K)
-        
+
+        keys = [chr(65 + i) for i in range(K)]
+        hashes = list(range(K))
+
         random.shuffle(keys)
         random.shuffle(hashes)
-        
-        code = generate_code(zip(keys, hashes),
+
+        code = generate_code(list(zip(keys, hashes)),
                              builtin_template(Hash),
                              Hash,
                              options)
@@ -584,44 +592,44 @@ def self_test(options):
 
     verbose = False
     for Hash in [Hash1, Hash2]:
-        for K in xrange(0, 27):
+        for K in range(0, 27):
             run(K, Hash)
-    print
-    
+    print()
+
     verbose = options.verbose
     N = 250
     for Hash in [Hash1, Hash2]:
         if verbose:
-            print 'Generating approximately %i key/hash pairs ...' % N
+            print('Generating approximately %i key/hash pairs ...' % N)
         kh = {}
-        for i in xrange(N):
+        for i in range(N):
             kh[random_word()] = i
 
         if verbose:
-            print 'Generating code for %i key/hash pairs ...' % len(kh)
+            print('Generating code for %i key/hash pairs ...' % len(kh))
         code = generate_code(kh.items(),
                              builtin_template(Hash),
                              Hash,
                              options)
         if verbose:
-            print 'Executing code ...'
+            print('Executing code ...')
         flush_dot()
         exec(code) in {}
 
     flush_dot()
-    d = PerfHash(dict([(100-i, i*i) for i in xrange(500)]))
-    for i in xrange(500):
+    d = PerfHash(dict([(100-i, i*i) for i in range(500)]))
+    for i in range(500):
         assert d[100-i] == i*i
     flush_dot()
     d[None] = True
     assert d[None] == True
-    
+
     if verbose:
-        print 'Running doctest ...'
-    
+        print('Running doctest ...')
+
     verbose = False
     failure_count, test_count = doctest.testmod(report = True, verbose = False)
-    print
+    print()
     if failure_count:
         sys.stderr.write('FAILED\n')
         sys.exit(2)
@@ -633,21 +641,21 @@ def self_test(options):
 
 if __name__ == '__main__':
     from optparse import OptionParser
-    
+
     usage = "usage: %prog [options] KEYS_FILE [TMPL_FILE]"
-    
+
     description = """\
 Generates code for perfect hash functions from
 a file with keywords and a code template.
 If no template file is provided, a small built-in Python template
 is processed and the output code is written to stdout.
 """
-    
+
     parser = OptionParser(usage = usage,
                           description = description,
                           prog = sys.argv[0],
                           version = "%prog 0.1")
-    
+
     parser.add_option("--delimiter",
                       action  = "store",
                       default = ", ",
@@ -699,7 +707,7 @@ is processed and the output code is written to stdout.
                                 "KEYS_FILE which contains the keys. "
                                 "Default is %default, i.e. the first column.",
                       metavar = "INT")
-                      
+
     parser.add_option("--hashcol",
                       action  = "store",
                       default = 0,
@@ -710,7 +718,7 @@ is processed and the output code is written to stdout.
                                 "By default the hash values are given by the "
                                 "sequence 0..N-1.",
                       metavar = "INT")
-                      
+
     parser.add_option("--trails",
                       action  = "store",
                       default = 5,
@@ -722,7 +730,7 @@ is processed and the output code is written to stdout.
                                 "compute but G will be smaller. "
                                 "Default is %default",
                       metavar = "INT")
-                      
+
     parser.add_option("--hft",
                       action  = "store",
                       default = 2,
@@ -735,7 +743,7 @@ is processed and the output code is written to stdout.
                       action  = "store_true",
                       help    = "Execute the generated code within "
                                 "the Python interpreter.")
-    
+
     parser.add_option("-o", "--output",
                       action  = "store",
                       help    = "Specify output FILE explicitly. "
@@ -745,16 +753,16 @@ is processed and the output code is written to stdout.
                                 "from the name of the template file by "
                                 "substituting `tmpl' to `code'.",
                       metavar = "FILE")
-    
+
     parser.add_option("--test",
                       action  = "store_true",
                       help    = "Perform self test")
-    
+
     parser.add_option("-v", "--verbose",
                       action  = "count",
                       help    = "Be verbose, "
                                 "use -vv to be even more verbose")
-    
+
     options, args = parser.parse_args()
 
     if options.trails > 0:
@@ -763,10 +771,10 @@ is processed and the output code is written to stdout.
         parser.error("trails before increasing N has to be larger than zero")
 
     verbose = options.verbose
-    
+
     if options.test:
         self_test(options)
-    
+
     if len(args) not in (1, 2):
         parser.error("incorrect number of arguments")
 
@@ -779,30 +787,30 @@ is processed and the output code is written to stdout.
         Hash = Hash2
     else:
         parser.error("Hash function %i not implemented.")
-    
+
     # --------------------- end parsing and checking --------------
-    
+
     # ---------------- keys_file
-    
+
     keys_file = args[0]
-    
+
     if verbose:
         sys.stderr.write("keys_file = %r\n" % keys_file)
-    
+
     # ---------------- keys_hashes
-    
+
     keys_hashes = read_table(keys_file, options)
-    
+
     if verbose >= 3:
         print_keys_hashes(keys_hashes)
-        
+
     # ---------------- tmpl_file
 
     if len(args) == 2:
         tmpl_file = args[1]
     else:
         tmpl_file = None
-    
+
     if verbose:
         sys.stderr.write("tmpl_file = %r\n" % tmpl_file)
 
@@ -812,15 +820,15 @@ is processed and the output code is written to stdout.
         template = read_template(tmpl_file)
     else:
         template = builtin_template(Hash)
-    
+
     if verbose >= 3:
         print_code(template, 'TEMPLATE')
-    
+
     # ---------------- outname
-    
+
     if options.output:
         outname = options.output
-        
+
     else:
         if tmpl_file:
             if tmpl_file.count('tmpl'):
@@ -829,18 +837,18 @@ is processed and the output code is written to stdout.
                 exit("Hmm, template filename does not contain 'tmpl'")
         else:
             outname = 'std'
-    
+
     if verbose:
         sys.stderr.write("outname = %r\n" % outname)
 
     # ---------------- outstream
-    
+
     if outname == 'std':
         outstream = sys.stdout
 
     elif outname == 'no':
         outstream = None
-        
+
     else:
         try:
             outstream = open(outname, 'w')
@@ -848,13 +856,13 @@ is processed and the output code is written to stdout.
             exit("Error: Could not open `%s' for writing." % outname)
 
     # ---------------- generated code
-    
+
     code = generate_code(keys_hashes, template, Hash, options)
     if verbose >= 3:
         print_code(code, 'GENERATED CODE')
 
     # ---------------- execute code
-    
+
     if options.execute or template == builtin_template(Hash):
         if verbose:
             sys.stderr.write('Executing code...\n')
