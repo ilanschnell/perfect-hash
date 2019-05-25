@@ -1,4 +1,3 @@
-
 perfect_hash.py
 
 Ilan Schnell <ilanschnell@gmail.com>, 2008
@@ -19,7 +18,7 @@ Z. J. Czech, G. Havas and B.S. Majewski.
 http://citeseer.ist.psu.edu/122364.html
 
 
-Content:
+Contents:
 
 perfect_hash.py     The actual program, try $ ./perfect_hash.py animals.txt
 
