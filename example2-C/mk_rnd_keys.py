@@ -12,4 +12,4 @@ N = int(sys.argv[1])
 
 
 for n in xrange(N):
-    print key()
+    print(key())

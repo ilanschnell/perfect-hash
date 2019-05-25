@@ -6,11 +6,11 @@ a.out: main.c keys.code.h
 
 
 keys.code.h: keys.dat keys.tmpl.h
-	python ../perfect_hash.py $^
+	python ../perfect_hash.py --trails=40 -v $^
 
 
 keys.dat:
-	python ./mk_rnd_keys.py 100 >keys.dat
+	python ./mk_rnd_keys.py 1000 >keys.dat
 
 
 clean:

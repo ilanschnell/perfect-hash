@@ -182,22 +182,21 @@ def generate_hash(kdic, Hash):
     """
     # N is the number of vertices in the graph G
     N = 1 if not kdic else (max(kdic.values()) + 1)
-    if verbose >= 2:
-        sys.stderr.write('N = %i\n' % N)
+    if verbose:
+        print('N = %i' % N)
 
     trail = 0 # Number of trial graphs so far
     while True:
         if (trail % trails) == 0:   # trails failures, increase N slightly
             if trail > 0:
-                N = max(N+1, int(1.05*N))
+                N = max(N + 1, int(1.05 * N))
             if verbose:
-                sys.stderr.write('\n')
-                sys.stderr.write('Generating graphs N = %i ' % N)
+                sys.stdout.write('\nGenerating graphs N = %i ' % N)
         trail += 1
 
         if verbose:
-            sys.stderr.write('.')
-            sys.stderr.flush()
+            sys.stdout.write('.')
+            sys.stdout.flush()
 
         G = Graph(N)   # Create graph with N vertices
         f1 = Hash(N)   # Create 2 random hash functions
@@ -215,21 +214,18 @@ def generate_hash(kdic, Hash):
             break
 
     if verbose:
-        sys.stderr.write('\nAcyclic graph found after %i trails.\n' % trail)
-
-    if verbose >= 2:
-        sys.stderr.write('N = %i\n' % N)
-    if verbose:
-        sys.stderr.write('Checking generated hash function... ')
+        print('\nAcyclic graph found after %i trails.' % trail)
+        print('N = %i' % N)
 
     # Sanity check the result by actually verifying that all the keys
     # hash to the right value.
     for key, hashval in kdic.items():
-        assert hashval == ( G.vertex_values[f1(key)] +
-                            G.vertex_values[f2(key)] ) % N
+        assert hashval == (
+            G.vertex_values[f1(key)] + G.vertex_values[f2(key)]
+        ) % N
 
     if verbose:
-        sys.stderr.write('OK\n')
+        print('OK')
 
     return f1, f2, G.vertex_values
 
@@ -590,14 +586,14 @@ def self_test(options):
             exec(code) in {}
 
     verbose = 0
-    for Hash in [Hash1, Hash2]:
+    for Hash in Hash1, Hash2:
         for K in range(0, 27):
             run(K, Hash)
     print()
 
     verbose = int(options.verbose or 0)
     N = 250
-    for Hash in [Hash1, Hash2]:
+    for Hash in Hash1, Hash2:
         if verbose:
             print('Generating approximately %i key/hash pairs ...' % N)
         kh = {}
@@ -772,7 +768,7 @@ is processed and the output code is written to stdout.
         parser.error("trails before increasing N has to be larger than zero")
 
     global verbose
-    verbose = options.verbose
+    verbose = int(options.verbose or 0)
 
     if options.test:
         self_test(options)
