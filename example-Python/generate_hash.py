@@ -33,6 +33,6 @@ def mkRandHash(N):
 f1, f2, G = generate_hash(month, mkRandHash)
 
 for k, h in month.items():
-    assert h == ( G[f1(k)] + G[f2(k)] ) % len(G)
+    assert h == (G[f1(k)] + G[f2(k)]) % len(G)
 
 print('OK')

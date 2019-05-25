@@ -421,7 +421,6 @@ def keyDict(keys_hashes):
     return kdic
 
 
-
 def generate_code(keys_hashes, template, Hash, options):
     """
     Takes a list of key value pairs and inserts the generated parameter
@@ -445,7 +444,6 @@ def generate_code(keys_hashes, template, Hash, options):
         NK = len(keys_hashes),
         K  = fmt([key for key, hashval in keys_hashes], quote = True),
         H  = fmt([hashval for key, hashval in keys_hashes]))
-
 
 
 def read_table(filename, options):
@@ -501,7 +499,7 @@ def read_table(filename, options):
         else:
             hashval += 1
 
-        keys_hashes.append( (key, hashval) )
+        keys_hashes.append((key, hashval))
 
     f.close()
 
@@ -516,7 +514,7 @@ def print_keys_hashes(keys_hashes):
     fmt = '%-20s %10s'
     head = fmt % ('Key', 'Hash value')
     sys.stderr.write('\n' + head + '\n')
-    sys.stderr.write(len(head)*'-' + '\n')
+    sys.stderr.write(len(head) * '-' + '\n')
     for tup in keys_hashes:
         sys.stderr.write(fmt % tup + '\n')
     sys.stderr.write('\n')
