@@ -102,7 +102,7 @@ class Graph:
     def __init__(self, N):
         self.N = N                     # number of vertices
 
-        # maps a vertex number to the list of tuples (vertices, edge value)
+        # maps a vertex number to the list of tuples (vertex, edge value)
         # to which it is connected by edges.
         self.adjacent = [[] for n in range(N)]
 
@@ -112,8 +112,8 @@ class Graph:
         value 'value'
         """
         # Add vertices to each other's adjacent list
-        self.adjacent[vertex1].append( (vertex2, edge_value) )
-        self.adjacent[vertex2].append( (vertex1, edge_value) )
+        self.adjacent[vertex1].append((vertex2, edge_value))
+        self.adjacent[vertex2].append((vertex1, edge_value))
 
     def assign_vertex_values(self):
         """
@@ -140,7 +140,7 @@ class Graph:
             self.vertex_values[root] = 0    # set arbitrarily to zero
 
             # Stack of vertices to visit, a list of tuples (parent, vertex)
-            tovisit = [ (None, root) ]
+            tovisit = [(None, root)]
             while tovisit:
                 parent, vertex = tovisit.pop()
                 visited[vertex] = True
@@ -157,12 +157,12 @@ class Graph:
                         # We visited here before, so the graph is cyclic.
                         return False
 
-                    tovisit.append( (vertex, neighbor) )
+                    tovisit.append((vertex, neighbor))
 
                     # Set new vertex's value to the desired edge value,
                     # minus the value of the vertex we came here from.
-                    self.vertex_values[neighbor] = \
-                        ( edge_value - self.vertex_values[vertex] ) % self.N
+                    self.vertex_values[neighbor] = (
+                        edge_value - self.vertex_values[vertex]) % self.N
 
         # check if all vertices have a valid value
         for vertex in range(self.N):
@@ -322,7 +322,7 @@ class PerfHash:
         self.__init__(dic)
 
     def hashval(self, key):
-        return ( self.G[self.f1(key)] + self.G[self.f2(key)] ) % len(self.G)
+        return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
 
     def __getitem__(self, key):
         h = self.hashval(key)
