@@ -458,7 +458,7 @@ def read_table(filename, options):
         sys.stderr.write("Reading table from file `%s' to extract keys.\n" %
                          filename)
     try:
-        f = file(filename)
+        f = open(filename)
     except IOError :
         exit("Error: Could not open `%s' for reading." % filename)
 
@@ -526,7 +526,7 @@ def read_template(filename):
         sys.stderr.write("Reading template from file `%s'.\n" % filename)
 
     try:
-        f = file(filename)
+        f = open(filename)
     except IOError :
         sys.exit("Error: Could not open `%s' for reading." % filename)
 
