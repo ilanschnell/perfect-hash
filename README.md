@@ -7,7 +7,7 @@ A given code template is filled with parameters, such that the
 output is code which implements the hash function.
 Templates can easily be constructed for any programming language.
 
-The code is based on an a program A.M. Kuchling wrote:
+Part of the code is based on an a program A.M. Kuchling wrote:
 http://www.amk.ca/python/code/perfect-hash
 
 The algorithm the program uses is described in the paper
