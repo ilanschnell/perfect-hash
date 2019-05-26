@@ -243,29 +243,25 @@ class Hash1:
     """
     def __init__(self, N):
         self.N = N
-        self.salt = "".join(
-            random.choice(string.ascii_letters + string.digits)
-            for i in range(6))
+        self.salt = random.randint(0, 1 << 31)
 
-    def DEKhash(self, s):
-        res = len(s)
+    def DEKhash(self, x, s):
         for c in s:
-            res = ((res << 5) ^ (res >> 27) ^ ord(c)) % (1 << 31)
-        return res
+            x = ((x << 5) ^ (x >> 27) ^ ord(c)) % (1 << 31)
+        return x
 
     def __call__(self, key):
-        return self.DEKhash(self.salt + str(key)) % self.N
+        return self.DEKhash(self.salt, str(key)) % self.N
 
     template = """
-def DEKhash(s):
-    res = len(s)
+def DEKhash(x, s):
     for c in s:
-        res = ((res << 5) ^ (res >> 27) ^ ord(c)) % (1 << 31)
-    return res
+        x = ((x << 5) ^ (x >> 27) ^ ord(c)) % (1 << 31)
+    return x
 
 def perfect_hash(key):
-    return (G[DEKhash('$S1' + str(key)) % $NG] +
-            G[DEKhash('$S2' + str(key)) % $NG]) % $NG
+    return (G[DEKhash($S1, str(key)) % $NG] +
+            G[DEKhash($S2, str(key)) % $NG]) % $NG
 """
 
 class Hash2:
@@ -443,12 +439,16 @@ def generate_code(keys_hashes, template, Hash, options):
     f1, f2, G = generate_hash(keyDict(keys_hashes), Hash)
 
     assert f1.N == f2.N == len(G)
-    assert len(f1.salt) == len(f2.salt)
+    try:
+        salt_len = len(f1.salt)
+        assert salt_len == len(f2.salt)
+    except TypeError:
+        salt_len = None
 
     fmt = Format(options)
 
     return string.Template(template).substitute(
-        NS = len(f1.salt),
+        NS = salt_len,
         S1 = fmt(f1.salt),
         S2 = fmt(f2.salt),
         NG = len(G),
@@ -469,7 +469,7 @@ def read_table(filename, options):
                          filename)
     try:
         f = open(filename)
-    except IOError :
+    except IOError:
         exit("Error: Could not open `%s' for reading." % filename)
 
     keys_hashes = []

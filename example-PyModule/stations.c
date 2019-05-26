@@ -60,7 +60,7 @@ stations_locator(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef module_functions[] = {
-    {"locator",  stations_locator, METH_VARARGS, "Get locator from callsign."},
+    {"locator", stations_locator, METH_VARARGS, "Get locator from callsign."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
