@@ -382,7 +382,7 @@ class Format:
             for name in names:
                 sys.stdout.write('  %s: %r\n' % (name, getattr(self, name)))
 
-    def __call__(self, data, quote = False):
+    def __call__(self, data, quote=False):
         if type(data) != type([]):
             return str(data)
 
@@ -390,7 +390,7 @@ class Format:
         aux = StringIO()
         pos = 20
         for i, elt in enumerate(data):
-            last = bool(i == len(data)-1)
+            last = bool(i == len(data) - 1)
 
             s = ('"%s"' if quote else '%s') % elt
 
@@ -530,6 +530,7 @@ def print_keys_hashes(keys_hashes):
     for tup in keys_hashes:
         sys.stdout.write(fmt % tup + '\n')
     sys.stdout.write('\n')
+
 
 def read_template(filename):
     if verbose >= 2:
