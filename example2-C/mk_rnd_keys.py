@@ -2,10 +2,10 @@
 
 import sys
 from random import choice, randint
-from string import digits, ascii_uppercase, ascii_lowercase
+from string import ascii_letters, digits
 
 def key():
-    return ''.join(choice(ascii_uppercase + ascii_lowercase + digits)
+    return ''.join(choice(ascii_letters + digits)
                    for i in range(randint(6, 20)))
 
 N = int(sys.argv[1])
