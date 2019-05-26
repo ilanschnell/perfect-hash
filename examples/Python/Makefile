@@ -1,7 +1,3 @@
-all:
-	true
-
-
 clean:
 	true
 

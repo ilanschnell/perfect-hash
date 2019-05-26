@@ -17,7 +17,7 @@ stations-code.h: stations.dat stations-tmpl.h
 
 
 clean:
-	rm stations-code.h stations.dat.h stations.so stations.o
+	rm -f stations-code.h stations.dat.h stations.so *.o
 
 
 test: stations.so

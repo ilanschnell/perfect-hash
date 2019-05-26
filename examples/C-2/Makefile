@@ -14,7 +14,7 @@ keys.dat:
 
 
 clean:
-	rm keys.dat keys.code.h a.out
+	rm -f keys.dat keys.code.h a.out
 
 
 test: a.out

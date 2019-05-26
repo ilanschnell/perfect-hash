@@ -23,7 +23,7 @@ states.dat.h: states.dat
 
 
 clean:
-	rm lookup *.o states.dat.h states-code.cc
+	rm -f lookup *.o states.dat.h states-code.cc
 
 
 test: lookup
