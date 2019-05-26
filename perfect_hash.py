@@ -46,7 +46,7 @@ If the procedure fails, G is cyclic, and we go back to step 2, replacing G
 with a new graph, and thereby discarding the vertex values from the failed
 attempt.
 """
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import sys
 import random
@@ -189,7 +189,7 @@ def generate_hash(kdic, Hash):
     if verbose:
         print('N = %i' % N)
 
-    trail = 0 # Number of trial graphs so far
+    trail = 0  # Number of trial graphs so far
     while True:
         if (trail % trails) == 0:   # trails failures, increase N slightly
             if trail > 0:
