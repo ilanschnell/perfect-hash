@@ -366,9 +366,9 @@ class Format:
             setattr(self, name, getattr(options, name))
 
         if verbose >=2:
-            sys.stderr.write("Format options:\n")
+            sys.stdout.write("Format options:\n")
             for name in names:
-                sys.stderr.write('  %s: %r\n' % (name, getattr(self, name)))
+                sys.stdout.write('  %s: %r\n' % (name, getattr(self, name)))
 
     def __call__(self, data, quote = False):
         if type(data) != type([]):
@@ -405,14 +405,14 @@ def keyDict(keys_hashes):
     """
     K = len(keys_hashes)     # number of keys
     if verbose >= 2:
-        sys.stderr.write('K = %i\n' % K)
+        sys.stdout.write('K = %i\n' % K)
 
     kdic = dict(keys_hashes)
     if len(kdic) < K:
-        sys.stderr.write('Warning: Input contains duplicate keys\n')
+        sys.stdout.write('Warning: Input contains duplicate keys\n')
 
     if len(set(kdic.values())) < K:
-        sys.stderr.write('Warning: Input contains duplicate hash values\n')
+        sys.stdout.write('Warning: Input contains duplicate hash values\n')
 
     return kdic
 
@@ -449,7 +449,7 @@ def read_table(filename, options):
     from 0 to N-1, where N is the number of rows found in the file.
     """
     if verbose >= 2:
-        sys.stderr.write("Reading table from file `%s' to extract keys.\n" %
+        sys.stdout.write("Reading table from file `%s' to extract keys.\n" %
                          filename)
     try:
         f = open(filename)
@@ -460,9 +460,9 @@ def read_table(filename, options):
     hashval = -1
 
     if verbose >= 2:
-        sys.stderr.write("Reader options:\n")
+        sys.stdout.write("Reader options:\n")
         for name in ['comment', 'splitby', 'keycol', 'hashcol']:
-            sys.stderr.write('  %s: %r\n' %
+            sys.stdout.write('  %s: %r\n' %
                              (name, getattr(options, name)))
 
     for n, line in enumerate(f):
@@ -509,15 +509,15 @@ def read_table(filename, options):
 def print_keys_hashes(keys_hashes):
     fmt = '%-20s %10s'
     head = fmt % ('Key', 'Hash value')
-    sys.stderr.write('\n' + head + '\n')
-    sys.stderr.write(len(head) * '-' + '\n')
+    sys.stdout.write('\n' + head + '\n')
+    sys.stdout.write(len(head) * '-' + '\n')
     for tup in keys_hashes:
-        sys.stderr.write(fmt % tup + '\n')
-    sys.stderr.write('\n')
+        sys.stdout.write(fmt % tup + '\n')
+    sys.stdout.write('\n')
 
 def read_template(filename):
     if verbose >= 2:
-        sys.stderr.write("Reading template from file `%s'.\n" % filename)
+        sys.stdout.write("Reading template from file `%s'.\n" % filename)
 
     try:
         f = open(filename)
@@ -551,9 +551,9 @@ def print_code(code, name, width = 78):
     def center(s):
         v = (width - len(s))/2
         return '='*v + s + '='*v
-    sys.stderr.write(center(' BEGIN %s ' % name) + '\n')
-    sys.stderr.write(code + '\n')
-    sys.stderr.write(center(' END %s ' % name) + '\n')
+    sys.stdout.write(center(' BEGIN %s ' % name) + '\n')
+    sys.stdout.write(code + '\n')
+    sys.stdout.write(center(' END %s ' % name) + '\n')
 
 
 def self_test(options):
@@ -630,8 +630,8 @@ def self_test(options):
         sys.stderr.write('FAILED\n')
         sys.exit(2)
     else:
-        sys.stderr.write('%i tests passed.\n' % test_count)
-        sys.stderr.write('OK\n')
+        sys.stdout.write('%i tests passed.\n' % test_count)
+        sys.stdout.write('OK\n')
         sys.exit(0)
 
 
@@ -793,7 +793,7 @@ is processed and the output code is written to stdout.
     keys_file = args[0]
 
     if verbose:
-        sys.stderr.write("keys_file = %r\n" % keys_file)
+        sys.stdout.write("keys_file = %r\n" % keys_file)
 
     # ---------------- keys_hashes
 
@@ -810,7 +810,7 @@ is processed and the output code is written to stdout.
         tmpl_file = None
 
     if verbose:
-        sys.stderr.write("tmpl_file = %r\n" % tmpl_file)
+        sys.stdout.write("tmpl_file = %r\n" % tmpl_file)
 
     # ---------------- template
 
@@ -837,7 +837,7 @@ is processed and the output code is written to stdout.
             outname = 'std'
 
     if verbose:
-        sys.stderr.write("outname = %r\n" % outname)
+        sys.stdout.write("outname = %r\n" % outname)
 
     # ---------------- outstream
 
@@ -863,7 +863,7 @@ is processed and the output code is written to stdout.
 
     if options.execute or template == builtin_template(Hash):
         if verbose:
-            sys.stderr.write('Executing code...\n')
+            sys.stdout.write('Executing code...\n')
         exec(code)
 
     # ---------------- write code to output stream
