@@ -1,5 +1,4 @@
 import re
-from os.path import join
 from distutils.core import setup
 
 
@@ -11,7 +10,7 @@ except IOError:
 
 # Read version from perfect_hash/__init__.py
 pat = re.compile(r'__version__\s*=\s*(\S+)', re.M)
-data = open(join('perfect_hash', '__init__.py')).read()
+data = open('perfect_hash.py').read()
 kwds['version'] = eval(pat.search(data).group(1))
 
 
