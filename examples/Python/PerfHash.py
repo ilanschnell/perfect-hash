@@ -14,7 +14,7 @@ efficient and always faster than PerfHash.
 
 import sys
 
-sys.path.append('..')
+sys.path.append('../..')
 from perfect_hash import PerfHash
 
 

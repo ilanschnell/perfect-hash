@@ -13,7 +13,7 @@ returns a random hash function which returns hash values from 0..N-1.
 import sys
 import random, string
 
-sys.path.append('..')
+sys.path.append('../..')
 from perfect_hash import generate_hash
 
 

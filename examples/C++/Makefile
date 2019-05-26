@@ -14,8 +14,8 @@ states-code.o: states-code.cc states-code.hh states.dat.h
 
 
 states-code.cc: states.dat states-tmpl.cc states-code.hh
-	python ../perfect_hash.py --splitby '|' --keycol 2 states.dat \
-                                  states-tmpl.cc
+	python ../../perfect_hash.py --splitby '|' --keycol 2 states.dat \
+                                     states-tmpl.cc
 
 
 states.dat.h: states.dat

@@ -10,7 +10,7 @@ up to the desired edge value (mod N).
 """
 import sys
 
-sys.path.append('..')
+sys.path.append('../..')
 from perfect_hash import Graph
 
 G = Graph(3)
