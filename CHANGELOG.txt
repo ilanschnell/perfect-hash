@@ -1,0 +1,9 @@
+2019-05-XX: 0.2.0
+-----------------
+  * Support for Python 3
+  * reorganize code
+
+
+2008-05-05: 0.1
+---------------
+  * Initial release which only supported Python 2 (tested on 2.5)
