@@ -17,16 +17,16 @@ int main (int argc, char *argv[])
     int hashval;
 
     if (argc != 2) {
-        printf ("Usage: %s <abbreviation>\n", argv[0]);
+        printf("Usage: %s <abbreviation>\n", argv[0]);
         return 2;
     }
 
     if ((hashval = has_key(abbr)) == -1)
-        printf ("'%s' is not an abbreviation for a state.\n", abbr);
+        printf("'%s' is not an abbreviation for a state.\n", abbr);
     else
-        printf ("The state of %s has a population of %g million.\n",
-                states[hashval].name,
-                1e-6 * states[hashval].pop);
+        printf("The state of %s has a population of %g million.\n",
+               states[hashval].name,
+               1e-6 * states[hashval].pop);
 
     return 0;
 }

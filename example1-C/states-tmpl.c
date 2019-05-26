@@ -11,7 +11,8 @@ static int G[] = { $G };
 
 static char *K[] = { $K };
 
-static int hash_g (const char *key, const int *T)
+static int
+hash_g(const char *key, const int *T)
 {
     int i, sum = 0;
 
@@ -22,15 +23,16 @@ static int hash_g (const char *key, const int *T)
     return G[sum];
 }
 
-static int perfect_hash (const char *key)
+static int
+perfect_hash(const char *key)
 {
     if (strlen (key) > $NS)
         return 0;
 
-    return (hash_g (key, T1) + hash_g (key, T2)) % $NG;
+    return (hash_g(key, T1) + hash_g(key, T2)) % $NG;
 }
 
-int has_key (const char *abbr)
+int has_key(const char *abbr)
 {
     int hash_value = perfect_hash (abbr);
 
