@@ -2,14 +2,14 @@
 
 import sys
 from random import choice, randint
-from string import digits, uppercase, lowercase
+from string import digits, ascii_uppercase, ascii_lowercase
 
 def key():
-    return ''.join(choice(uppercase + lowercase + digits)
-                   for i in xrange(randint(6, 20)))
+    return ''.join(choice(ascii_uppercase + ascii_lowercase + digits)
+                   for i in range(randint(6, 20)))
 
 N = int(sys.argv[1])
 
 
-for n in xrange(N):
+for n in range(N):
     print(key())
