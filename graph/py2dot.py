@@ -15,8 +15,8 @@ class Graph(object):
         value 'value'
         """
         # Add vertices to each other's adjacent list
-        self.adjacent[vertex1].append( (vertex2, edge_value) )
-        self.adjacent[vertex2].append( (vertex1, edge_value) )
+        self.adjacent[vertex1].append((vertex2, edge_value))
+        self.adjacent[vertex2].append((vertex1, edge_value))
 
     def check(self):
         """
@@ -43,7 +43,7 @@ class Graph(object):
 
             # explore tree starting at 'root'
             # Stack of vertices to visit, a list of tuples (parent, vertex)
-            tovisit = [ (None, root) ]
+            tovisit = [(None, root)]
             while tovisit:
                 parent, vertex = tovisit.pop()
                 visited[vertex] = treenum
@@ -60,7 +60,7 @@ class Graph(object):
                         # We visited here before, so the graph is cyclic.
                         exit('Hmm, graph is cyclic.')
 
-                    tovisit.append( (vertex, neighbor) )
+                    tovisit.append((vertex, neighbor))
 
             treenum += 1
 
@@ -72,7 +72,7 @@ class Graph(object):
         self.size = [treesizes[visited[v]] for v in range(self.N)]
 
         if verbose:
-            freq = (self.N+1) * [0]
+            freq = (self.N + 1) * [0]
             for size in treesizes:
                 freq[size] += 1
 
@@ -93,7 +93,8 @@ class Graph(object):
             fo.write('  node [color="#a0e0ee", style=filled];\n')
 
             for vertex, value in enumerate(self.vertex_values):
-                if self.size[vertex] < minsize: continue
+                if self.size[vertex] < minsize:
+                    continue
                 fo.write('  { node [label="%i: %i"] v%i }\n' % (
                     vertex, value, vertex))
         else:
@@ -101,7 +102,8 @@ class Graph(object):
                      '        style=filled, shape=circle]\n')
 
         for vertex in range(self.N):          # edges
-            if self.size[vertex] < minsize: continue
+            if self.size[vertex] < minsize:
+                continue
             for neighbor, edge_value in self.adjacent[vertex]:
                 if neighbor > vertex:  continue
                 fo.write('  v%i -- v%i%s;\n' %
