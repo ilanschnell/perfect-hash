@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
-class Graph:
+
+class Graph(object):
     def __init__(self, N):
         self.N = N                     # number of vertices
 
         # maps a vertex number to the list of (vertices, edge value)
         # to which it is connected by edges.
-        self.adjacent = [[] for n in xrange(N)]
+        self.adjacent = [[] for n in range(N)]
 
     def connect(self, vertex1, vertex2, edge_value):
         """
@@ -21,7 +22,7 @@ class Graph:
         """
         See if vertex values add up to edge values (mod N).
         """
-        for vertex in xrange(self.N):
+        for vertex in range(self.N):
             for neighbor, edge_value in self.adjacent[vertex]:
                 assert (self.vertex_values[vertex] +
                         self.vertex_values[neighbor]) % self.N == edge_value
@@ -36,7 +37,7 @@ class Graph:
         treenum = 0
 
         # Loop over all vertices, taking unvisited ones as roots.
-        for root in xrange(self.N):
+        for root in range(self.N):
             if visited[root] >= 0:
                 continue
 
@@ -68,7 +69,7 @@ class Graph:
         for tree in visited:
             treesizes[tree] += 1
 
-        self.size = [treesizes[visited[v]] for v in xrange(self.N)]
+        self.size = [treesizes[visited[v]] for v in range(self.N)]
 
         if verbose:
             freq = (self.N+1) * [0]
@@ -99,7 +100,7 @@ class Graph:
             fo.write('  node [color="#3377a0", label="",\n'
                      '        style=filled, shape=circle]\n')
 
-        for vertex in xrange(self.N):          # edges
+        for vertex in range(self.N):          # edges
             if self.size[vertex] < minsize: continue
             for neighbor, edge_value in self.adjacent[vertex]:
                 if neighbor > vertex:  continue
@@ -176,7 +177,7 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
 
     if len(args)==1:
         try:
-            fi = file(args[0])
+            fi = open(args[0])
         except IOError :
             exit("Error: Can't open `%s' for reading." % args[0])
     else:
@@ -200,7 +201,7 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
 
     if options.output:
         try:
-            fo = file(options.output, 'w')
+            fo = open(options.output, 'w')
         except IOError :
             exit("Error: Can't open `%s' for writing." % options.output)
     else:
@@ -209,8 +210,3 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
     # ------------ write output, i.e. generate .dot output
 
     g.write(fo, options.labels)
-
-
-# Local Variables:
-# mode: python
-# End:
