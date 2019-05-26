@@ -35,6 +35,11 @@ setup(
         "Topic :: Utilities",
     ],
     description = "creating perfect minimal hash function",
-    packages = ["perfect_hash"],
+    py_modules = ["perfect_hash"],
+    entry_points = {
+        'console_scripts': [
+            'perfect_hash = perfect_hash:main',
+        ],
+    },
     **kwds
 )
