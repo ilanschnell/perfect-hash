@@ -9,25 +9,22 @@ static struct {
 #include "stations.dat.h"
 };
 
-static int
-hash_f(const char *s, const int *T)
+static unsigned int
+DEKhash(const unsigned int init, const char *s)
 {
-    register int i, sum = 0;
+    register unsigned int x;
 
-    for (i = 0; s[i] != '\0'; i++) {
-        sum += T[i] * s[i];
-        sum %= NG;
-    }
-    return sum;
+    x = init;
+    for (; *s != '\0'; s++)
+        x = ((x << 5) ^ (x >> 27) ^ (*s)) % (1 << 31);
+
+    return x;
 }
 
 static int
 perf_hash(const char *k)
 {
-    if (strlen(k) > NS)
-        return 0;
-
-    return (G[hash_f(k, T1) ] + G[hash_f(k, T2)]) % NG;
+    return (G[DEKhash(S1, k) % NG] + G[DEKhash(S2, k) % NG]) % NG;
 }
 
 static int
