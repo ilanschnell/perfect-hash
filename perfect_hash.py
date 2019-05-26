@@ -243,17 +243,29 @@ class Hash1:
     """
     def __init__(self, N):
         self.N = N
-        self.salt = "".join(random.choice(string.ascii_letters +
-                                          string.digits)
-                            for i in range(8))
+        self.salt = "".join(
+            random.choice(string.ascii_letters + string.digits)
+            for i in range(6))
+
+    def DEKhash(self, s):
+        res = len(s)
+        for c in s:
+            res = ((res << 5) ^ (res >> 27) ^ ord(c)) % (1 << 31)
+        return res
 
     def __call__(self, key):
-        return hash(self.salt + str(key)) % self.N
+        return self.DEKhash(self.salt + str(key)) % self.N
 
     template = """
+def DEKhash(s):
+    res = len(s)
+    for c in s:
+        res = ((res << 5) ^ (res >> 27) ^ ord(c)) % (1 << 31)
+    return res
+
 def perfect_hash(key):
-    return (G[hash('$S1' + str(key)) % $NG] +
-            G[hash('$S2' + str(key)) % $NG]) % $NG
+    return (G[DEKhash('$S1' + str(key)) % $NG] +
+            G[DEKhash('$S2' + str(key)) % $NG]) % $NG
 """
 
 class Hash2:
