@@ -51,7 +51,7 @@ from __future__ import print_function
 import sys
 import random
 import string
-from subprocess import check_call
+import subprocess
 from shutil import rmtree
 from tempfile import mkdtemp
 from os.path import join
@@ -252,8 +252,8 @@ class Hash1:
 
     template = """
 def perfect_hash(key):
-    return (G[ hash('$S1' + str(key)) % $NG ] +
-            G[ hash('$S2' + str(key)) % $NG ]) % $NG
+    return (G[hash('$S1' + str(key)) % $NG] +
+            G[hash('$S2' + str(key)) % $NG]) % $NG
 """
 
 class Hash2:
@@ -554,7 +554,7 @@ for k, h in zip(K, H):
 def print_code(code, name, width = 78):
     def center(s):
         v = (width - len(s))/2
-        return '='*v + s + '='*v
+        return '=' * v + s + '=' * v
     sys.stdout.write(center(' BEGIN %s ' % name) + '\n')
     sys.stdout.write(code + '\n')
     sys.stdout.write(center(' END %s ' % name) + '\n')
@@ -564,8 +564,12 @@ def run_code(code):
     path = join(tmpdir, 't.py')
     with open(path, 'w') as fo:
         fo.write(code)
-    check_call([sys.executable, path])
-    rmtree(tmpdir)
+    try:
+        subprocess.check_call([sys.executable, path])
+    except subprocess.CalledProcessError as e:
+        raise AssertionError(e)
+    finally:
+        rmtree(tmpdir)
 
 def self_test(options):
     import doctest
