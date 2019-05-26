@@ -68,7 +68,7 @@ verbose = 0
 trails = 5
 
 
-class Graph:
+class Graph(object):
     """
     Implements a graph with 'N' vertices.  First, you connect the graph with
     edges, which have a desired value associated.  Then the vertex values
@@ -234,7 +234,7 @@ def generate_hash(kdic, Hash):
     return f1, f2, G.vertex_values
 
 
-class Hash1:
+class Hash1(object):
     """
     Random hash function generator.
     For simplicity and speed, this doesn't implement any byte-level hashing
@@ -264,7 +264,7 @@ def perfect_hash(key):
             G[DEKhash($S2, str(key)) % $NG]) % $NG
 """
 
-class Hash2:
+class Hash2(object):
     """
     Random hash function generator.
     Simple byte level hashing, each byte is multiplied in sequence to a table
@@ -296,7 +296,7 @@ def perfect_hash(key):
 """
 
 
-class PerfHash:
+class PerfHash(object):
     """
     This class is designed for creating perfect hash tables at run time,
     which should be avoided, in particulat inserting new keys is
@@ -348,7 +348,7 @@ class PerfHash:
         return h < self.N and key == self.klst[h]
 
 
-class Format:
+class Format(object):
     """
     >>> class o:
     ...     pass
