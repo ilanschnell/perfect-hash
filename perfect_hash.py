@@ -51,6 +51,10 @@ from __future__ import print_function
 import sys
 import random
 import string
+from subprocess import check_call
+from shutil import rmtree
+from tempfile import mkdtemp
+from os.path import join
 
 is_py2 = bool(sys.version_info[0] == 2)
 
@@ -555,6 +559,13 @@ def print_code(code, name, width = 78):
     sys.stdout.write(code + '\n')
     sys.stdout.write(center(' END %s ' % name) + '\n')
 
+def run_code(code):
+    tmpdir = mkdtemp()
+    path = join(tmpdir, 't.py')
+    with open(path, 'w') as fo:
+        fo.write(code)
+    check_call([sys.executable, path])
+    rmtree(tmpdir)
 
 def self_test(options):
     import doctest
@@ -582,8 +593,7 @@ def self_test(options):
                              builtin_template(Hash),
                              Hash,
                              options)
-        if is_py2:
-            exec(code) in {}
+        run_code(code)
 
     verbose = 0
     for Hash in Hash1, Hash2:
@@ -609,8 +619,7 @@ def self_test(options):
         if verbose:
             print('Executing code ...')
         flush_dot()
-        if is_py2:
-            exec(code) in {}
+        run_code(code)
 
     flush_dot()
     d = PerfHash(dict([(100 - i, i * i) for i in range(500)]))
@@ -864,7 +873,7 @@ is processed and the output code is written to stdout.
     if options.execute or template == builtin_template(Hash):
         if verbose:
             sys.stdout.write('Executing code...\n')
-        exec(code)
+        run_code(code)
 
     # ---------------- write code to output stream
 
