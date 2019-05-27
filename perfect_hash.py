@@ -539,13 +539,11 @@ def print_keys_hashes(keys_hashes):
 def read_template(filename):
     if verbose:
         sys.stdout.write("Reading template from file `%s'.\n" % filename)
-
     try:
-        f = open(filename)
+        with open(filename, 'r') as fi:
+            return fi.read()
     except IOError :
         sys.exit("Error: Could not open `%s' for reading." % filename)
-
-    return f.read()
 
 
 def builtin_template(Hash):
