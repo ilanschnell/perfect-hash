@@ -531,7 +531,8 @@ def print_keys_hashes(keys_hashes):
     print(len(head) * '-')
     for tup in keys_hashes[:10]:
         print(fmt % tup)
-    print('...')
+    if len(keys_hashes) > 10:
+        print('...')
     sys.stdout.write('\n')
 
 
