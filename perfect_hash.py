@@ -54,6 +54,7 @@ import sys
 import random
 import string
 import subprocess
+from collections import defaultdict
 from shutil import rmtree
 from tempfile import mkdtemp
 from os.path import join
@@ -66,7 +67,7 @@ else:
     from io import StringIO
 
 
-verbose = 0
+verbose = False
 trails = 5
 
 
@@ -110,7 +111,7 @@ class Graph(object):
 
         # maps a vertex number to the list of tuples (vertex, edge value)
         # to which it is connected by edges.
-        self.adjacent = [[] for n in range(N)]
+        self.adjacent = defaultdict(list)
 
     def connect(self, vertex1, vertex2, edge_value):
         """
@@ -379,7 +380,7 @@ class Format(object):
         for name in names:
             setattr(self, name, getattr(options, name))
 
-        if verbose >=2:
+        if verbose:
             sys.stdout.write("Format options:\n")
             for name in names:
                 sys.stdout.write('  %s: %r\n' % (name, getattr(self, name)))
@@ -418,7 +419,7 @@ def keyDict(keys_hashes):
     4
     """
     K = len(keys_hashes)     # number of keys
-    if verbose >= 2:
+    if verbose:
         sys.stdout.write('K = %i\n' % K)
 
     kdic = dict(keys_hashes)
@@ -466,24 +467,24 @@ def read_table(filename, options):
     for the hash value is specified, a sequence of hash values is generated,
     from 0 to N-1, where N is the number of rows found in the file.
     """
-    if verbose >= 2:
+    if verbose:
         sys.stdout.write("Reading table from file `%s' to extract keys.\n" %
                          filename)
     try:
-        f = open(filename)
+        fi = open(filename)
     except IOError:
-        exit("Error: Could not open `%s' for reading." % filename)
+        sys.exit("Error: Could not open `%s' for reading." % filename)
 
     keys_hashes = []
     hashval = -1
 
-    if verbose >= 2:
+    if verbose:
         sys.stdout.write("Reader options:\n")
         for name in ['comment', 'splitby', 'keycol', 'hashcol']:
             sys.stdout.write('  %s: %r\n' %
                              (name, getattr(options, name)))
 
-    for n, line in enumerate(f):
+    for n, line in enumerate(fi):
         line = line.strip()
         if not line or line.startswith(options.comment):
             continue
@@ -494,28 +495,28 @@ def read_table(filename, options):
         row = [col.strip() for col in line.split(options.splitby)]
 
         try:
-            key = row[options.keycol-1]
+            key = row[options.keycol - 1]
         except IndexError :
-            exit("%s:%i: Error: Cannot read key, not enough columns." %
-                 (filename, n+1))
+            sys.exit("%s:%i: Error: Cannot read key, not enough columns." %
+                     (filename, n+1))
 
         if options.hashcol:
             try:
-                val = row[options.hashcol-1]
+                val = row[options.hashcol - 1]
             except IndexError :
-                exit("%s:%i: Error: Cannot read hash value, not enough columns."
-                     % (filename, n+1))
+                sys.exit("%s:%i: Error: Cannot read hash value, not enough "
+                         "columns." % (filename, n + 1))
             try:
                 hashval = int(val)
             except ValueError :
-                exit("%s:%i: Error: Cannot convert `%s' to int." %
-                     (filename, n+1, row[options.hashcol-1]))
+                sys.exit("%s:%i: Error: Cannot convert `%s' to int." %
+                         (filename, n+1, row[options.hashcol - 1]))
         else:
             hashval += 1
 
         keys_hashes.append((key, hashval))
 
-    f.close()
+    fi.close()
 
     if not keys_hashes:
         exit("Error: no keys found in file `%s'." % filename)
@@ -535,7 +536,7 @@ def print_keys_hashes(keys_hashes):
 
 
 def read_template(filename):
-    if verbose >= 2:
+    if verbose:
         sys.stdout.write("Reading template from file `%s'.\n" % filename)
 
     try:
@@ -564,15 +565,6 @@ assert len(K) == len(H) == $NK
 for k, h in zip(K, H):
     assert perfect_hash(k) == h
 """
-
-
-def print_code(code, name, width = 78):
-    def center(s):
-        v = (width - len(s))/2
-        return '=' * v + s + '=' * v
-    sys.stdout.write(center(' BEGIN %s ' % name) + '\n')
-    sys.stdout.write(code + '\n')
-    sys.stdout.write(center(' END %s ' % name) + '\n')
 
 def run_code(code):
     tmpdir = mkdtemp()
@@ -623,7 +615,7 @@ def self_test(options):
             run(K, Hash)
     print()
 
-    verbose = int(options.verbose or 0)
+    verbose = options.verbose
     N = 250
     for Hash in Hash1, Hash2:
         if verbose:
@@ -654,12 +646,11 @@ def self_test(options):
     if verbose:
         print('Running doctest ...')
 
-    verbose = 0
     failure_count, test_count = doctest.testmod(report=True, verbose=False)
     print()
     if failure_count:
         sys.stderr.write('FAILED\n')
-        sys.exit(2)
+        sys.exit(1)
     else:
         sys.stdout.write('%i tests passed.\n' % test_count)
         sys.stdout.write('OK\n')
@@ -786,9 +777,8 @@ is processed and the output code is written to stdout.
                       help    = "Perform self test")
 
     parser.add_option("-v", "--verbose",
-                      action  = "count",
-                      help    = "Be verbose, "
-                                "use -vv to be even more verbose")
+                      action  = "store_true",
+                      help    = "verbosity")
 
     options, args = parser.parse_args()
 
@@ -799,7 +789,7 @@ is processed and the output code is written to stdout.
         parser.error("trails before increasing N has to be larger than zero")
 
     global verbose
-    verbose = int(options.verbose or 0)
+    verbose = options.verbose
 
     if options.test:
         self_test(options)
@@ -819,21 +809,15 @@ is processed and the output code is written to stdout.
 
     # --------------------- end parsing and checking --------------
 
-    # ---------------- keys_file
-
     keys_file = args[0]
 
     if verbose:
         sys.stdout.write("keys_file = %r\n" % keys_file)
 
-    # ---------------- keys_hashes
-
     keys_hashes = read_table(keys_file, options)
 
-    if verbose >= 3:
+    if verbose:
         print_keys_hashes(keys_hashes)
-
-    # ---------------- tmpl_file
 
     if len(args) == 2:
         tmpl_file = args[1]
@@ -843,34 +827,22 @@ is processed and the output code is written to stdout.
     if verbose:
         sys.stdout.write("tmpl_file = %r\n" % tmpl_file)
 
-    # ---------------- template
-
-    if tmpl_file:
-        template = read_template(tmpl_file)
-    else:
-        template = builtin_template(Hash)
-
-    if verbose >= 3:
-        print_code(template, 'TEMPLATE')
-
-    # ---------------- outname
+    template = (read_template(tmpl_file) if tmpl_file else
+                                      builtin_template(Hash))
 
     if options.output:
         outname = options.output
-
     else:
         if tmpl_file:
-            if tmpl_file.count('tmpl'):
+            if 'tmpl' in tmpl_file:
                 outname = tmpl_file.replace('tmpl', 'code')
             else:
-                exit("Hmm, template filename does not contain 'tmpl'")
+                sys.exit("Hmm, template filename does not contain 'tmpl'")
         else:
             outname = 'std'
 
     if verbose:
         sys.stdout.write("outname = %r\n" % outname)
-
-    # ---------------- outstream
 
     if outname == 'std':
         outstream = sys.stdout
@@ -882,22 +854,14 @@ is processed and the output code is written to stdout.
         try:
             outstream = open(outname, 'w')
         except IOError :
-            exit("Error: Could not open `%s' for writing." % outname)
-
-    # ---------------- generated code
+            sys.exit("Error: Could not open `%s' for writing." % outname)
 
     code = generate_code(keys_hashes, template, Hash, options)
-    if verbose >= 3:
-        print_code(code, 'GENERATED CODE')
-
-    # ---------------- execute code
 
     if options.execute or template == builtin_template(Hash):
         if verbose:
             sys.stdout.write('Executing code...\n')
         run_code(code)
-
-    # ---------------- write code to output stream
 
     if outstream:
         outstream.write(code)
