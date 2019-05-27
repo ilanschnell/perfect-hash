@@ -496,19 +496,19 @@ def read_table(filename, options):
 
         try:
             key = row[options.keycol - 1]
-        except IndexError :
+        except IndexError:
             sys.exit("%s:%i: Error: Cannot read key, not enough columns." %
                      (filename, n+1))
 
         if options.hashcol:
             try:
                 val = row[options.hashcol - 1]
-            except IndexError :
+            except IndexError:
                 sys.exit("%s:%i: Error: Cannot read hash value, not enough "
                          "columns." % (filename, n + 1))
             try:
                 hashval = int(val)
-            except ValueError :
+            except ValueError:
                 sys.exit("%s:%i: Error: Cannot convert `%s' to int." %
                          (filename, n+1, row[options.hashcol - 1]))
         else:
@@ -524,14 +524,14 @@ def read_table(filename, options):
     return keys_hashes
 
 
-
 def print_keys_hashes(keys_hashes):
     fmt = '%-20s %10s'
     head = fmt % ('Key', 'Hash value')
-    sys.stdout.write('\n' + head + '\n')
-    sys.stdout.write(len(head) * '-' + '\n')
-    for tup in keys_hashes:
-        sys.stdout.write(fmt % tup + '\n')
+    print('\n' + head)
+    print(len(head) * '-')
+    for tup in keys_hashes[:10]:
+        print(fmt % tup)
+    print('...')
     sys.stdout.write('\n')
 
 
