@@ -19,18 +19,17 @@ class NewGraph(Graph):
                 assert (self.vertex_values[vertex] +
                         self.vertex_values[neighbor]) % self.N == edge_value
 
-    def calc_tree_sizes(self):
+    def enumerate_trees(self):
         """
-        After running this method, the attribute size will contain a list,
-        which maps the vertices to the size of the tree that vertex belongs
-        to.
+        Explore all trees, and enumerate them.  Returns a list mapping
+        vertices to thier tree number.
         """
-        visited = self.N * [-1]  # -1 unvisited, otherwise the number of tree
-        treenum = 0
+        tree = self.N * [-1]  # -1 unvisited, otherwise the number of tree
+        counter = 0
 
         # Loop over all vertices, taking unvisited ones as roots.
         for root in range(self.N):
-            if visited[root] >= 0:
+            if tree[root] >= 0:
                 continue
 
             # explore tree starting at 'root'
@@ -38,7 +37,7 @@ class NewGraph(Graph):
             tovisit = [(None, root)]
             while tovisit:
                 parent, vertex = tovisit.pop()
-                visited[vertex] = treenum
+                tree[vertex] = counter
 
                 # Loop over adjacent vertices, but skip the vertex we arrived
                 # here from the first time it is encountered.
@@ -48,23 +47,32 @@ class NewGraph(Graph):
                         skip = False
                         continue
 
-                    if visited[neighbor] >= 0:
+                    if tree[neighbor] >= 0:
                         # We visited here before, so the graph is cyclic.
                         sys.exit('Hmm, graph is cyclic.')
 
                     tovisit.append((vertex, neighbor))
 
-            treenum += 1
+            counter += 1
+        assert all(n >=0 for n in tree)
+        return tree
+
+    def set_tree_sizes(self, verbose=False):
+        """
+        Set the 'size' attribute which is a list mapping vertices
+        to the size of the tree that vertex belongs to.
+        """
+        tree = self.enumerate_trees()
 
         # maps the tree number to number of vertices within that tree
         treesizes = defaultdict(int)
-        for treenum in visited:
-            treesizes[treenum] += 1
+        for n in tree:
+            treesizes[n] += 1
 
         # maps all vertices to the size of the tree they are within
-        self.size = [treesizes[visited[v]] for v in range(self.N)]
+        self.size = [treesizes[tree[v]] for v in range(self.N)]
 
-        if 1:  # XXX
+        if verbose:
             freq = defaultdict(int)
             for size in treesizes.values():
                 freq[size] += 1
@@ -73,12 +81,7 @@ class NewGraph(Graph):
             for s in sorted(freq):
                 print('%5d %5d' % (s, freq[s]))
 
-    def print_tree_sizes(self):
-        pass
-
     def write(self, fo, labels=False, minsize=1):
-        self.calc_tree_sizes()
-
         fo.write('graph G {\n'
                  '  size = "8,8";\n'
                  '  edge [color="#ff0000"]\n')
@@ -176,8 +179,7 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
     for key, hashval in zip(K, H):
         g.connect(hash_f(key, S1), hash_f(key, S2), hashval)
     g.check()
-    if opts.verbose:
-        g.print_tree_sizes()
+    g.set_tree_sizes(opts.verbose)
 
     if opts.output:
         try:
