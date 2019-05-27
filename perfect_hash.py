@@ -580,6 +580,7 @@ def self_test(options):
     global verbose
     print('Python location:', sys.executable)
     print('Python version:', sys.version)
+    print('perfect_hash location:', __file__)
     print('perfect_hash version:', __version__)
     print('Starting self tests ...')
 
