@@ -672,7 +672,7 @@ is processed and the output code is written to stdout.
     parser = OptionParser(usage = usage,
                           description = description,
                           prog = sys.argv[0],
-                          version = "%prog 0.1")
+                          version = "%prog: " + __version__)
 
     parser.add_option("--delimiter",
                       action  = "store",
@@ -805,7 +805,7 @@ is processed and the output code is written to stdout.
     elif options.hft == 2:
         Hash = Hash2
     else:
-        parser.error("Hash function %i not implemented.")
+        parser.error("Hash function %s not implemented." % options.hft)
 
     # --------------------- end parsing and checking --------------
 
