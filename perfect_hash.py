@@ -819,25 +819,21 @@ is processed and the output code is written to stdout.
     if verbose:
         print_keys_hashes(keys_hashes)
 
-    if len(args) == 2:
-        tmpl_file = args[1]
-    else:
-        tmpl_file = None
+    tmpl_file = args[1] if len(args) == 2 else None
 
     if verbose:
         sys.stdout.write("tmpl_file = %r\n" % tmpl_file)
 
     template = (read_template(tmpl_file) if tmpl_file else
-                                      builtin_template(Hash))
+                                                   builtin_template(Hash))
 
     if options.output:
         outname = options.output
     else:
         if tmpl_file:
-            if 'tmpl' in tmpl_file:
-                outname = tmpl_file.replace('tmpl', 'code')
-            else:
+            if 'tmpl' not in tmpl_file:
                 sys.exit("Hmm, template filename does not contain 'tmpl'")
+            outname = tmpl_file.replace('tmpl', 'code')
         else:
             outname = 'std'
 
@@ -846,10 +842,8 @@ is processed and the output code is written to stdout.
 
     if outname == 'std':
         outstream = sys.stdout
-
     elif outname == 'no':
         outstream = None
-
     else:
         try:
             outstream = open(outname, 'w')
