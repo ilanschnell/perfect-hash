@@ -381,9 +381,9 @@ class Format(object):
             setattr(self, name, getattr(options, name))
 
         if verbose:
-            sys.stdout.write("Format options:\n")
+            print("Format options:")
             for name in names:
-                sys.stdout.write('  %s: %r\n' % (name, getattr(self, name)))
+                print('  %s: %r' % (name, getattr(self, name)))
 
     def __call__(self, data, quote=False):
         if type(data) != type([]):
@@ -420,14 +420,14 @@ def keyDict(keys_hashes):
     """
     K = len(keys_hashes)     # number of keys
     if verbose:
-        sys.stdout.write('K = %i\n' % K)
+        print('K = %i' % K)
 
     kdic = dict(keys_hashes)
     if len(kdic) < K:
-        sys.stdout.write('Warning: Input contains duplicate keys\n')
+        print('Warning: Input contains duplicate keys')
 
     if len(set(kdic.values())) < K:
-        sys.stdout.write('Warning: Input contains duplicate hash values\n')
+        print('Warning: Input contains duplicate hash values')
 
     return kdic
 
@@ -468,8 +468,7 @@ def read_table(filename, options):
     from 0 to N-1, where N is the number of rows found in the file.
     """
     if verbose:
-        sys.stdout.write("Reading table from file `%s' to extract keys.\n" %
-                         filename)
+        print("Reading table from file `%s' to extract keys." % filename)
     try:
         fi = open(filename)
     except IOError:
@@ -479,10 +478,9 @@ def read_table(filename, options):
     hashval = -1
 
     if verbose:
-        sys.stdout.write("Reader options:\n")
+        print("Reader options:")
         for name in ['comment', 'splitby', 'keycol', 'hashcol']:
-            sys.stdout.write('  %s: %r\n' %
-                             (name, getattr(options, name)))
+            print('  %s: %r' % (name, getattr(options, name)))
 
     for n, line in enumerate(fi):
         line = line.strip()
@@ -533,12 +531,12 @@ def print_keys_hashes(keys_hashes):
         print(fmt % tup)
     if len(keys_hashes) > 10:
         print('...')
-    sys.stdout.write('\n')
+    print()
 
 
 def read_template(filename):
     if verbose:
-        sys.stdout.write("Reading template from file `%s'.\n" % filename)
+        print("Reading template from file `%s'" % filename)
     try:
         with open(filename, 'r') as fi:
             return fi.read()
@@ -811,7 +809,7 @@ is processed and the output code is written to stdout.
     keys_file = args[0]
 
     if verbose:
-        sys.stdout.write("keys_file = %r\n" % keys_file)
+        print("keys_file = %r" % keys_file)
 
     keys_hashes = read_table(keys_file, options)
 
@@ -821,7 +819,7 @@ is processed and the output code is written to stdout.
     tmpl_file = args[1] if len(args) == 2 else None
 
     if verbose:
-        sys.stdout.write("tmpl_file = %r\n" % tmpl_file)
+        print("tmpl_file = %r" % tmpl_file)
 
     template = (read_template(tmpl_file) if tmpl_file else
                                                    builtin_template(Hash))
@@ -837,7 +835,7 @@ is processed and the output code is written to stdout.
             outname = 'std'
 
     if verbose:
-        sys.stdout.write("outname = %r\n" % outname)
+        print("outname = %r\n" % outname)
 
     if outname == 'std':
         outstream = sys.stdout
@@ -853,7 +851,7 @@ is processed and the output code is written to stdout.
 
     if options.execute or template == builtin_template(Hash):
         if verbose:
-            sys.stdout.write('Executing code...\n')
+            print('Executing code...\n')
         run_code(code)
 
     if outstream:
