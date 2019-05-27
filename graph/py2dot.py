@@ -1,22 +1,13 @@
-#!/usr/bin/env python
+from __future__ import absolute_import, division, print_function
+
+import sys
+sys.path.append('..')
+
+from perfect_hash import Graph
 
 
-class Graph(object):
-    def __init__(self, N):
-        self.N = N                     # number of vertices
 
-        # maps a vertex number to the list of (vertices, edge value)
-        # to which it is connected by edges.
-        self.adjacent = [[] for n in range(N)]
-
-    def connect(self, vertex1, vertex2, edge_value):
-        """
-        Connect 'vertex1' and 'vertex2' with an edge, with associated
-        value 'value'
-        """
-        # Add vertices to each other's adjacent list
-        self.adjacent[vertex1].append((vertex2, edge_value))
-        self.adjacent[vertex2].append((vertex1, edge_value))
+class NewGraph(Graph):
 
     def check(self):
         """
@@ -83,7 +74,7 @@ class Graph(object):
                 if i == minsize-1:
                     sys.stderr.write('--------------\n')
 
-    def write(self, fo, labels = False):
+    def write(self, fo, labels=False):
         self.calc_tree_sizes()
 
         fo.write('graph G {\n'
@@ -175,40 +166,28 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
         sys.stderr.write('minsize (of trees): %i\n' % minsize)
         sys.stderr.write('labels (in output): %s\n' % options.labels)
 
-    # ------------ input filehandle
-
     if len(args)==1:
         try:
             fi = open(args[0])
-        except IOError :
-            exit("Error: Can't open `%s' for reading." % args[0])
+        except IOError:
+            sys.exit("Error: Can't open `%s' for reading." % args[0])
     else:
         fi = sys.stdin
 
-    # ------------ read input, i.e. execute code
-
     exec(fi.read())
 
-    # ------------ make graph
-
-    g = Graph(len(G))
+    g = NewGraph(len(G))
     g.vertex_values = G
     for key, hashval in zip(K, H):
-        g.connect(hash_f(key, S1),
-                  hash_f(key, S2),
-                  hashval)
+        g.connect(hash_f(key, S1), hash_f(key, S2), hashval)
     g.check()
-
-    # ------------ output filehandle
 
     if options.output:
         try:
             fo = open(options.output, 'w')
         except IOError :
-            exit("Error: Can't open `%s' for writing." % options.output)
+            sys.exit("Error: Can't open `%s' for writing." % options.output)
     else:
         fo = sys.stdout
-
-    # ------------ write output, i.e. generate .dot output
 
     g.write(fo, options.labels)
