@@ -1,3 +1,7 @@
+install:
+	python setup.py install
+
+
 test:
 	python perfect_hash.py --test
 
