@@ -1,4 +1,4 @@
-2019-05-XX: 0.2.0
+2019-05-27: 0.2.0
 -----------------
   * Support for Python 3
   * reorganize code
