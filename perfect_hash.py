@@ -589,6 +589,9 @@ def run_code(code):
 def self_test(options):
     import doctest
     global verbose
+    print('Python location:', sys.executable)
+    print('Python version:', sys.version)
+    print('perfect_hash version:', __version__)
     print('Starting self tests ...')
 
     def random_word():

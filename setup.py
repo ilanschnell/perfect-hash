@@ -35,10 +35,6 @@ setup(
     ],
     description = "creating perfect minimal hash function",
     py_modules = ["perfect_hash"],
-    entry_points = {
-        'console_scripts': [
-            'perfect_hash = perfect_hash:main',
-        ],
-    },
+    scripts = ['perfect_hash'],
     **kwds
 )
