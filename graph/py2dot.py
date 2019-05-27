@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import sys
+from collections import defaultdict
 sys.path.append('..')
 
 from perfect_hash import Graph
@@ -49,32 +50,33 @@ class NewGraph(Graph):
 
                     if visited[neighbor] >= 0:
                         # We visited here before, so the graph is cyclic.
-                        exit('Hmm, graph is cyclic.')
+                        sys.exit('Hmm, graph is cyclic.')
 
                     tovisit.append((vertex, neighbor))
 
             treenum += 1
 
         # maps the tree number to number of vertices within that tree
-        treesizes = treenum * [0]
-        for tree in visited:
-            treesizes[tree] += 1
+        treesizes = defaultdict(int)
+        for treenum in visited:
+            treesizes[treenum] += 1
 
+        # maps all vertices to the size of the tree they are within
         self.size = [treesizes[visited[v]] for v in range(self.N)]
 
-        if verbose:
-            freq = (self.N + 1) * [0]
-            for size in treesizes:
+        if 1:  # XXX
+            freq = defaultdict(int)
+            for size in treesizes.values():
                 freq[size] += 1
+            print(' Size   Trees')
+            print('--------------')
+            for s in sorted(freq):
+                print('%5d %5d' % (s, freq[s]))
 
-            sys.stderr.write(' Size   Trees\n')
-            for i, f in enumerate(freq):
-                if f:
-                    sys.stderr.write('%5i %5i\n' % (i, f))
-                if i == minsize-1:
-                    sys.stderr.write('--------------\n')
+    def print_tree_sizes(self):
+        pass
 
-    def write(self, fo, labels=False):
+    def write(self, fo, labels=False, minsize=1):
         self.calc_tree_sizes()
 
         fo.write('graph G {\n'
@@ -126,11 +128,11 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
 
     parser.add_option("-l", "--labels",
                       action  = "store_true",
-                      help    = "Be verbose")
+                      help    = "add edge labels")
 
     parser.add_option("-m", "--minsize",
                       action  = "store",
-                      default = 1,
+                      default = 2,
                       type    = "int",
                       help    = "Include only trees in the output which "
                                 "have at least INT vertices. "
@@ -146,25 +148,18 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
 
     parser.add_option("-v", "--verbose",
                       action  = "store_true",
-                      help    = "Be verbose")
+                      help    = "verbosity")
 
-    options, args = parser.parse_args()
-
-    if options.minsize > 0:
-        minsize = options.minsize
-    else:
-        parser.error("minimal size of trees has to be larger than zero")
-
-    verbose = options.verbose
+    opts, args = parser.parse_args()
 
     if len(args) > 1:
         parser.error("incorrect number of arguments")
 
     # --------------------- end parsing and checking -----------------------
 
-    if verbose:
-        sys.stderr.write('minsize (of trees): %i\n' % minsize)
-        sys.stderr.write('labels (in output): %s\n' % options.labels)
+    if opts.verbose:
+        sys.stderr.write('minsize (of trees): %i\n' % opts.minsize)
+        sys.stderr.write('labels (in output): %s\n' % opts.labels)
 
     if len(args)==1:
         try:
@@ -181,13 +176,15 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
     for key, hashval in zip(K, H):
         g.connect(hash_f(key, S1), hash_f(key, S2), hashval)
     g.check()
+    if opts.verbose:
+        g.print_tree_sizes()
 
-    if options.output:
+    if opts.output:
         try:
-            fo = open(options.output, 'w')
+            fo = open(opts.output, 'w')
         except IOError :
-            sys.exit("Error: Can't open `%s' for writing." % options.output)
+            sys.exit("Error: Can't open `%s' for writing." % opts.output)
     else:
         fo = sys.stdout
 
-    g.write(fo, options.labels)
+    g.write(fo, opts.labels, opts.minsize)
