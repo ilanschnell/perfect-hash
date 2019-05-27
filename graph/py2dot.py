@@ -42,7 +42,7 @@ class NewGraph(Graph):
                 # Loop over adjacent vertices, but skip the vertex we arrived
                 # here from the first time it is encountered.
                 skip = True
-                for neighbor, edge_value in self.adjacent[vertex]:
+                for neighbor, unused_edge_value in self.adjacent[vertex]:
                     if skip and neighbor == parent:
                         skip = False
                         continue
