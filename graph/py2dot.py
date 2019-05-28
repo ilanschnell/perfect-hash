@@ -135,7 +135,7 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
 
     parser.add_option("-m", "--minsize",
                       action  = "store",
-                      default = 2,
+                      default = 1,
                       type    = "int",
                       help    = "Include only trees in the output which "
                                 "have at least INT vertices. "
