@@ -1,8 +1,8 @@
-PYTHON_PREFIX=/Users/ilan/a
+PYTHON_PREFIX=/Users/ilan/a/envs/py37
 
 
 stations.so: stations.c stations.dat.h stations-code.h
-	gcc -arch x86_64 -I${PYTHON_PREFIX}/include/python2.7 \
+	gcc -arch x86_64 -I${PYTHON_PREFIX}/include/python3.7m \
             -Wall -O3 -Wstrict-prototypes -c stations.c -o stations.o
 	gcc -bundle -undefined dynamic_lookup -L${PYTHON_PREFIX}/lib \
             -arch x86_64 stations.o -o stations.so
@@ -21,4 +21,4 @@ clean:
 
 
 test: stations.so
-	python -c "import stations; print stations.locator('DL5BAC')"
+	python -c "import stations; print(stations.locator('DL5BAC'))"

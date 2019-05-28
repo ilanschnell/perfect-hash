@@ -51,7 +51,7 @@ stations_locator(PyObject *self, PyObject *args)
         return NULL;
 
     if (getlocator(callsign, locator) == 1)
-        return PyString_FromString(locator);
+        return PyUnicode_FromString(locator);
     else
         Py_RETURN_NONE;
 }
@@ -61,13 +61,18 @@ static PyMethodDef module_functions[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+static PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT, "stations", 0, -1, module_functions,
+};
+
 PyMODINIT_FUNC
-initstations(void)
+PyInit_stations(void)
 {
     PyObject *m;
 
-    m = Py_InitModule3("stations", module_functions, 0);
+    m = PyModule_Create(&moduledef);
     if (m == NULL)
-        return;
-    PyModule_AddObject(m, "__version__", PyString_FromString("1.0.0"));
+        return NULL;
+
+    return m;
 }
