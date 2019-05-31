@@ -1,4 +1,4 @@
-2019-XX-XX: 0.2.1
+2019-05-31: 0.2.1
 -----------------
   * update Python C extension example to work with Python 3.7
 
