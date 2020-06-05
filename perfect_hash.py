@@ -508,7 +508,7 @@ def read_table(filename, options):
                 hashval = int(val)
             except ValueError:
                 sys.exit("%s:%i: Error: Cannot convert `%s' to int." %
-                         (filename, n+1, row[options.hashcol - 1]))
+                         (filename, n + 1, row[options.hashcol - 1]))
         else:
             hashval += 1
 
