@@ -1,3 +1,8 @@
+2020-XX-XX: 0.2.2
+-----------------
+  * fix typos trail -> trial, issue #2
+
+
 2019-05-31: 0.2.1
 -----------------
   * update Python C extension example to work with Python 3.7
