@@ -68,7 +68,7 @@ else:
 
 
 verbose = False
-trails = 5
+trials = 5
 
 
 class Graph(object):
@@ -192,14 +192,14 @@ def generate_hash(kdic, Hash):
     if verbose:
         print('N = %i' % N)
 
-    trail = 0  # Number of trial graphs so far
+    trial = 0  # Number of trial graphs so far
     while True:
-        if (trail % trails) == 0:   # trails failures, increase N slightly
-            if trail > 0:
+        if (trial % trials) == 0:   # trials failures, increase N slightly
+            if trial > 0:
                 N = max(N + 1, int(1.05 * N))
             if verbose:
                 sys.stdout.write('\nGenerating graphs N = %i ' % N)
-        trail += 1
+        trial += 1
 
         if verbose:
             sys.stdout.write('.')
@@ -221,7 +221,7 @@ def generate_hash(kdic, Hash):
             break
 
     if verbose:
-        print('\nAcyclic graph found after %i trails.' % trail)
+        print('\nAcyclic graph found after %i trilas.' % trial)
         print('N = %i' % N)
 
     # Sanity check the result by actually verifying that all the keys
@@ -735,11 +735,11 @@ is processed and the output code is written to stdout.
                                 "sequence 0..N-1.",
                       metavar = "INT")
 
-    parser.add_option("--trails",
+    parser.add_option("--trials",
                       action  = "store",
                       default = 5,
                       type    = "int",
-                      help    = "Specifies the number of trails before "
+                      help    = "Specifies the number of trials before "
                                 "N is increased.  A small INT will give "
                                 "compute faster, but the array G will be "
                                 "large.  A large INT will take longer to "
@@ -780,11 +780,11 @@ is processed and the output code is written to stdout.
 
     options, args = parser.parse_args()
 
-    if options.trails > 0:
-        global trails
-        trails = options.trails
+    if options.trials > 0:
+        global trials
+        trials = options.trials
     else:
-        parser.error("trails before increasing N has to be larger than zero")
+        parser.error("trials before increasing N has to be larger than zero")
 
     global verbose
     verbose = options.verbose
