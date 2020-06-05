@@ -1,8 +1,8 @@
-PYTHON_PREFIX=/Users/ilan/a/envs/py37
+PYTHON_PREFIX=/Users/ilan/a/envs/py38
 
 
 stations.so: stations.c stations.dat.h stations-code.h
-	gcc -arch x86_64 -O3 -I${PYTHON_PREFIX}/include/python3.7m \
+	gcc -arch x86_64 -O3 -I${PYTHON_PREFIX}/include/python3.8 \
             -Wall -O3 -Wstrict-prototypes -c stations.c -o stations.o
 	gcc -bundle -undefined dynamic_lookup -L${PYTHON_PREFIX}/lib \
             -arch x86_64 stations.o -o stations.so
