@@ -479,7 +479,7 @@ def read_table(filename, options):
 
     if verbose:
         print("Reader options:")
-        for name in ['comment', 'splitby', 'keycol', 'hashcol']:
+        for name in 'comment', 'splitby', 'keycol':
             print('  %s: %r' % (name, getattr(options, name)))
 
     for n, line in enumerate(fi):
@@ -498,19 +498,7 @@ def read_table(filename, options):
             sys.exit("%s:%i: Error: Cannot read key, not enough columns." %
                      (filename, n+1))
 
-        if options.hashcol:
-            try:
-                val = row[options.hashcol - 1]
-            except IndexError:
-                sys.exit("%s:%i: Error: Cannot read hash value, not enough "
-                         "columns." % (filename, n + 1))
-            try:
-                hashval = int(val)
-            except ValueError:
-                sys.exit("%s:%i: Error: Cannot convert `%s' to int." %
-                         (filename, n + 1, row[options.hashcol - 1]))
-        else:
-            hashval += 1
+        hashval += 1
 
         keys_hashes.append((key, hashval))
 
@@ -722,17 +710,6 @@ is processed and the output code is written to stdout.
                       help    = "Specifies the column INT in the input "
                                 "KEYS_FILE which contains the keys. "
                                 "Default is %default, i.e. the first column.",
-                      metavar = "INT")
-
-    parser.add_option("--hashcol",
-                      action  = "store",
-                      default = 0,
-                      type    = "int",
-                      help    = "Specifies the column INT in the input "
-                                "KEYS_FILE which contains the desired "
-                                "hash values. "
-                                "By default the hash values are given by the "
-                                "sequence 0..N-1.",
                       metavar = "INT")
 
     parser.add_option("--trials",
