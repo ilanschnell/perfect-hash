@@ -564,7 +564,6 @@ def run_code(code):
         rmtree(tmpdir)
 
 def self_test(options):
-    import doctest
     global verbose
     print('Python location:', sys.executable)
     print('Python version:', sys.version)
@@ -629,18 +628,8 @@ def self_test(options):
     d[None] = True
     assert d[None] == True
 
-    if verbose:
-        print('Running doctest ...')
-
-    failure_count, test_count = doctest.testmod(report=True, verbose=False)
-    print()
-    if failure_count:
-        sys.stderr.write('FAILED\n')
-        sys.exit(1)
-    else:
-        sys.stdout.write('%i tests passed.\n' % test_count)
-        sys.stdout.write('OK\n')
-        sys.exit(0)
+    sys.stdout.write('\nOK\n')
+    sys.exit(0)
 
 
 def main():
