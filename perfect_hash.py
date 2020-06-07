@@ -278,17 +278,6 @@ class PerfHash(object):
     which should be avoided, in particulat inserting new keys is
     prohibitively expensive since a new perfect hash table needs to be
     constructed.  However, this class can be usefull for testing.
-
-    >>> d = PerfHash({'foo':(429, 'bar'), 42:True, False:'baz'})
-    >>> d['foo'], d[42], d[False]
-    ((429, 'bar'), True, 'baz')
-    >>> d[False] = (1, 2)
-    >>> d[False]
-    (1, 2)
-    >>> d.has_key('foo')
-    True
-    >>> d.has_key(True)
-    False
     """
     def __init__(self, dic):
         self.klst = []
@@ -302,13 +291,6 @@ class PerfHash(object):
         self.N = len(dic)
         self.f1, self.f2, self.G = generate_hash(kdic, Hash1)
 
-    def __setitem__(self, newkey, newobj):
-        dic = {}
-        for key in self.klst:
-            dic[key] = self[key]
-        dic[newkey] = newobj
-        self.__init__(dic)
-
     def hashval(self, key):
         return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
 
@@ -317,7 +299,7 @@ class PerfHash(object):
         if h < self.N and key == self.klst[h]:
             return self.objs[h]
         else:
-            raise IndexError
+            raise IndexError("no such key: %s" % key)
 
     def has_key(self, key):
         h = self.hashval(key)
