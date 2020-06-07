@@ -85,14 +85,13 @@ class TestsFormat(unittest.TestCase):
 class TestsIntegration(unittest.TestCase):
 
     def run_keys(self, keys, Hash):
-        hashes = list(range(len(keys)))
 
         class options:
             width = 80
             indent = 4
             delimiter = ','
 
-        code = generate_code(list(zip(keys, hashes)),
+        code = generate_code(keys,
                              builtin_template(Hash),
                              Hash,
                              options)

@@ -318,7 +318,7 @@ class Format(object):
                 print('  %s: %r' % (name, getattr(self, name)))
 
     def __call__(self, data, quote=False):
-        if type(data) != type([]):
+        if not isinstance(data, list):
             return str(data)
 
         lendel = len(self.delimiter)
@@ -342,36 +342,14 @@ class Format(object):
         return aux.getvalue()
 
 
-def keyDict(keys_hashes):
-    """
-    Checks a list with (key, hashvalue) tupels and returns dictionary.
-
-    >>> d = keyDict([(1, 2), (3, 4), (5, 6)])
-    >>> d[3]
-    4
-    """
-    K = len(keys_hashes)     # number of keys
-    if verbose:
-        print('K = %i' % K)
-
-    kdic = dict(keys_hashes)
-    if len(kdic) < K:
-        print('Warning: Input contains duplicate keys')
-
-    if len(set(kdic.values())) < K:
-        print('Warning: Input contains duplicate hash values')
-
-    return kdic
-
-
-def generate_code(keys_hashes, template, Hash, options):
+def generate_code(keys, template, Hash, options):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' strinng.  'Hash' is the random hash function
     generator, and the optional keywords are formating options.
     The return value is the substituted code template.
     """
-    f1, f2, G = generate_hash(keyDict(keys_hashes), Hash)
+    f1, f2, G = generate_hash(keys, Hash)
 
     assert f1.N == f2.N == len(G)
     try:
@@ -388,9 +366,8 @@ def generate_code(keys_hashes, template, Hash, options):
         S2 = fmt(f2.salt),
         NG = len(G),
         G  = fmt(G),
-        NK = len(keys_hashes),
-        K  = fmt([key for key, hashval in keys_hashes], quote=True),
-        H  = fmt([hashval for key, hashval in keys_hashes]))
+        NK = len(keys),
+        K  = fmt(list(keys), quote=True))
 
 
 def read_table(filename, options):
@@ -406,8 +383,7 @@ def read_table(filename, options):
     except IOError:
         sys.exit("Error: Could not open `%s' for reading." % filename)
 
-    keys_hashes = []
-    hashval = -1
+    keys = []
 
     if verbose:
         print("Reader options:")
@@ -430,16 +406,14 @@ def read_table(filename, options):
             sys.exit("%s:%i: Error: Cannot read key, not enough columns." %
                      (filename, n+1))
 
-        hashval += 1
-
-        keys_hashes.append((key, hashval))
+        keys.append(key)
 
     fi.close()
 
-    if not keys_hashes:
+    if not keys:
         exit("Error: no keys found in file `%s'." % filename)
 
-    return keys_hashes
+    return keys
 
 
 def read_template(filename):
@@ -463,11 +437,10 @@ G = [$G]
 # ============================ Sanity check =============================
 
 K = [$K]
-H = [$H]
 
-assert len(K) == len(H) == $NK
+assert len(K) == $NK
 
-for k, h in zip(K, H):
+for h, k in enumerate(K):
     assert perfect_hash(k) == h
 """
 
@@ -623,10 +596,10 @@ is processed and the output code is written to stdout.
     if verbose:
         print("keys_file = %r" % keys_file)
 
-    keys_hashes = read_table(keys_file, options)
+    keys = read_table(keys_file, options)
 
     if verbose:
-        print("Number os keys: %d" % len(keys_hashes))
+        print("Number os keys: %d" % len(keys))
 
     tmpl_file = args[1] if len(args) == 2 else None
 
@@ -659,7 +632,7 @@ is processed and the output code is written to stdout.
         except IOError :
             sys.exit("Error: Could not open `%s' for writing." % outname)
 
-    code = generate_code(keys_hashes, template, Hash, options)
+    code = generate_code(keys, template, Hash, options)
 
     if options.execute or template == builtin_template(Hash):
         if verbose:
