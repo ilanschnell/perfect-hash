@@ -580,8 +580,6 @@ def self_test(options):
     for i in range(500):
         assert d[100 - i] == i * i
     flush_dot()
-    d[None] = True
-    assert d[None] == True
 
     sys.stdout.write('\nOK\n')
     sys.exit(0)
