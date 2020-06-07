@@ -1,8 +1,17 @@
+import sys
+import random
 import unittest
 
 
-from perfect_hash import Graph, PerfHash, Format
+from perfect_hash import (
+    Graph, PerfHash, Format, Hash1, Hash2, generate_code, run_code,
+    builtin_template,
+)
 
+
+def flush_dot():
+    sys.stdout.write('.')
+    sys.stdout.flush()
 
 
 class TestsGraph(unittest.TestCase):
@@ -49,10 +58,9 @@ class TestsFormat(unittest.TestCase):
 
     def test_basic(self):
         class o:
-            pass
-        o.delimiter = ': '
-        o.width = 75
-        o.indent = 4
+            delimiter = ': '
+            width = 75
+            indent = 4
 
         x = Format(o)
         self.assertEqual(x(list(range(10))), '0: 1: 2: 3: 4: 5: 6: 7: 8: 9')
@@ -66,6 +74,32 @@ class TestsFormat(unittest.TestCase):
                          '"0" "1" "2" "3" "4"')
         self.assertEqual(x(42), '42')
         self.assertEqual(x('Hello'), 'Hello')
+
+
+class TestsIntegration(unittest.TestCase):
+
+    def run_letters(self, K, Hash):
+        keys = [chr(65 + i) for i in range(K)]
+        hashes = list(range(K))
+
+        random.shuffle(keys)
+
+        class options:
+            width = 80
+            indent = 4
+            delimiter = ','
+
+        code = generate_code(list(zip(keys, hashes)),
+                             builtin_template(Hash),
+                             Hash,
+                             options)
+        run_code(code)
+
+    def test_letters(self):
+        for Hash in Hash1, Hash2:
+            for K in range(0, 27):
+                self.run_letters(K, Hash)
+                flush_dot()
 
 
 if __name__ == '__main__':

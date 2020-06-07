@@ -501,27 +501,6 @@ def self_test(options):
         sys.stdout.write('.')
         sys.stdout.flush()
 
-    def run(K, Hash):
-        flush_dot()
-
-        keys = [chr(65 + i) for i in range(K)]
-        hashes = list(range(K))
-
-        random.shuffle(keys)
-        random.shuffle(hashes)
-
-        code = generate_code(list(zip(keys, hashes)),
-                             builtin_template(Hash),
-                             Hash,
-                             options)
-        run_code(code)
-
-    verbose = 0
-    for Hash in Hash1, Hash2:
-        for K in range(0, 27):
-            run(K, Hash)
-    print()
-
     verbose = options.verbose
     N = 250
     for Hash in Hash1, Hash2:
