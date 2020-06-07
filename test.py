@@ -63,19 +63,13 @@ class TestsPerfHash(unittest.TestCase):
 class TestsFormat(unittest.TestCase):
 
     def test_basic(self):
-        class o:
-            delimiter = ': '
-            width = 75
-            indent = 4
+        x = Format(delimiter=': ')
+        self.assertEqual(x(list(range(7))), '0: 1: 2: 3: 4: 5: 6')
 
-        x = Format(o)
-        self.assertEqual(x(list(range(10))), '0: 1: 2: 3: 4: 5: 6: 7: 8: 9')
-        o.delimiter = '; '
-        x = Format(o)
+        x = Format(delimiter='; ')
         self.assertEqual(x(list(range(5))), '0; 1; 2; 3; 4')
 
-        o.delimiter = ' '
-        x = Format(o)
+        x = Format(delimiter=' ')
         self.assertEqual(x(list(range(5)), quote=True),
                          '"0" "1" "2" "3" "4"')
         self.assertEqual(x(42), '42')

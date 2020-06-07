@@ -308,16 +308,15 @@ class PerfHash(object):
 
 class Format(object):
 
-    def __init__(self, options):
-        names = ['width', 'indent', 'delimiter']
+    def __init__(self, width=76, indent=4, delimiter=', '):
+        self.width = width
+        self.indent = indent
+        self.delimiter = delimiter
 
-        for name in names:
-            setattr(self, name, getattr(options, name))
-
-        if verbose:
-            print("Format options:")
-            for name in names:
-                print('  %s: %r' % (name, getattr(self, name)))
+    def print_format(self):
+        print("Format options:")
+        for name in 'width', 'indent', 'delimiter':
+            print('  %s: %r' % (name, getattr(self, name)))
 
     def __call__(self, data, quote=False):
         if not isinstance(data, (list, tuple)):
@@ -360,7 +359,10 @@ def generate_code(keys, template, Hash, options):
     except TypeError:
         salt_len = None
 
-    fmt = Format(options)
+    fmt = Format(width=options.width, indent=options.indent,
+                 delimiter=options.delimiter)
+    if verbose:
+        fmt.print_format()
 
     return string.Template(template).substitute(
         NS = salt_len,
