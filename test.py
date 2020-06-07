@@ -58,6 +58,7 @@ class TestsPerfHash(unittest.TestCase):
         d = PerfHash({100 - i: i * i for i in range(500)})
         for i in range(500):
             self.assertEqual(d[100 - i], i * i)
+        self.assertFalse('asdfghjl' in d)
 
 
 class TestsFormat(unittest.TestCase):
