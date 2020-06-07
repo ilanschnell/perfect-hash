@@ -1,6 +1,7 @@
 2020-XX-XX: 0.3.0
 -----------------
   * remove --hashcol option
+  * remove --test option, add tests is seperate module
   * fix typos trail -> trial, issue #2
 
 
