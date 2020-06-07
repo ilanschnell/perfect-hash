@@ -53,6 +53,11 @@ class TestsPerfHash(unittest.TestCase):
         self.assertTrue(d.has_key('foo'))
         self.assertFalse(d.has_key('bar'))
 
+    def test_500(self):
+        d = PerfHash({100 - i: i * i for i in range(500)})
+        for i in range(500):
+            self.assertEqual(d[100 - i], i * i)
+
 
 class TestsFormat(unittest.TestCase):
 

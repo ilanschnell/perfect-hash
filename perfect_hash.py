@@ -521,12 +521,6 @@ def self_test(options):
         flush_dot()
         run_code(code)
 
-    flush_dot()
-    d = PerfHash(dict([(100 - i, i * i) for i in range(500)]))
-    for i in range(500):
-        assert d[100 - i] == i * i
-    flush_dot()
-
     sys.stdout.write('\nOK\n')
     sys.exit(0)
 
