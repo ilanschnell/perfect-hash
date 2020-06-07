@@ -1,7 +1,7 @@
 import unittest
 
 
-from perfect_hash import Graph, PerfHash
+from perfect_hash import Graph, PerfHash, Format
 
 
 
@@ -43,6 +43,29 @@ class TestsPerfHash(unittest.TestCase):
         self.assertEqual(d[False], 'baz')
         self.assertTrue(d.has_key('foo'))
         self.assertFalse(d.has_key('bar'))
+
+
+class TestsFormat(unittest.TestCase):
+
+    def test_basic(self):
+        class o:
+            pass
+        o.delimiter = ': '
+        o.width = 75
+        o.indent = 4
+
+        x = Format(o)
+        self.assertEqual(x(list(range(10))), '0: 1: 2: 3: 4: 5: 6: 7: 8: 9')
+        o.delimiter = '; '
+        x = Format(o)
+        self.assertEqual(x(list(range(5))), '0; 1; 2; 3; 4')
+
+        o.delimiter = ' '
+        x = Format(o)
+        self.assertEqual(x(list(range(5)), quote=True),
+                         '"0" "1" "2" "3" "4"')
+        self.assertEqual(x(42), '42')
+        self.assertEqual(x('Hello'), 'Hello')
 
 
 if __name__ == '__main__':

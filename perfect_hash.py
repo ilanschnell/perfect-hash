@@ -307,28 +307,7 @@ class PerfHash(object):
 
 
 class Format(object):
-    """
-    >>> class o:
-    ...     pass
-    >>> o.delimiter = ': '
-    >>> o.width = 75
-    >>> o.indent = 4
-    >>> x = Format(o)
-    >>> x(list(range(10)))
-    '0: 1: 2: 3: 4: 5: 6: 7: 8: 9'
-    >>> o.delimiter = '; '
-    >>> x = Format(o)
-    >>> x(list(range(5)))
-    '0; 1; 2; 3; 4'
-    >>> o.delimiter = ' '
-    >>> x = Format(o)
-    >>> x(list(range(5)), quote = True )
-    '"0" "1" "2" "3" "4"'
-    >>> x(42)
-    '42'
-    >>> x('Hello')
-    'Hello'
-    """
+
     def __init__(self, options):
         names = ['width', 'indent', 'delimiter']
 
