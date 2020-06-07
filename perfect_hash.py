@@ -153,15 +153,17 @@ class Graph(object):
         return True
 
 
-def generate_hash(kdic, Hash):
+def generate_hash(keys, Hash):
     """
     Return hash functions f1 and f2, and G for a perfect minimal hash.
-    Input is dictionary 'kdic' with the keys and desired hash values.
+    Input is an iterable of 'keys', whos indicies are the desired hash values.
     'Hash' is a random hash function generator, that means Hash(N) returns a
     returns a random hash function which returns hash values from 0..N-1.
     """
     # N is the number of vertices in the graph G
-    N = 1 if not kdic else (max(kdic.values()) + 1)
+    if len(keys) != len(set(keys)):
+        raise ValueError("duplicate keys")
+    N = len(keys) + 1
     if verbose:
         print('N = %i' % N)
 
@@ -184,7 +186,7 @@ def generate_hash(kdic, Hash):
 
         # Connect vertices given by the values of the two hash functions
         # for each key.  Associate the desired hash value with each edge.
-        for key, hashval in kdic.items():
+        for hashval, key in enumerate(keys):
             G.connect(f1(key), f2(key), hashval)
 
         # Try to assign the vertex values.  This will fail when the graph
@@ -199,7 +201,7 @@ def generate_hash(kdic, Hash):
 
     # Sanity check the result by actually verifying that all the keys
     # hash to the right value.
-    for key, hashval in kdic.items():
+    for hashval, key in enumerate(keys):
         assert hashval == (
             G.vertex_values[f1(key)] + G.vertex_values[f2(key)]
         ) % N
