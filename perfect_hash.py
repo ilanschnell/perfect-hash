@@ -258,8 +258,8 @@ class Hash2(object):
 
     def __call__(self, key):
         skey = str(key)
-        while len(self.salt) < len(skey): # add more salt if necessary
-            self.salt.append(random.randint(0, self.N-1))
+        while len(self.salt) < len(skey): # add more salt af necessary
+            self.salt.append(random.randint(0, self.N - 1))
 
         return sum(self.salt[i] * ord(c)
                    for i, c in enumerate(skey)) % self.N
