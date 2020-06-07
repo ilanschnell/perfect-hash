@@ -1,5 +1,3 @@
-
-
 animals.ps: animals.dot
 	neato -Tps $< -Gstart=100 -o $@
 
@@ -14,8 +12,3 @@ animals.py: ../animals.txt
 
 clean:
 	rm animals.py animals.dot animals.ps
-
-
-test:
-	true
-

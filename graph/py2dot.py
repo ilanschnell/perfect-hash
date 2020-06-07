@@ -176,7 +176,7 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
 
     g = NewGraph(len(G))
     g.vertex_values = G
-    for key, hashval in zip(K, H):
+    for hashval, key in enumerate(K):
         g.connect(hash_f(key, S1), hash_f(key, S2), hashval)
     g.check()
     g.set_tree_sizes(opts.verbose)
