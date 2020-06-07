@@ -3,7 +3,6 @@ install:
 
 
 test:
-	python perfect_hash.py --test
 	python test.py
 
 
