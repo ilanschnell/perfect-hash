@@ -28,3 +28,4 @@ clean:
 test: lookup
 	./lookup 'NY'
 	./lookup 'QW'
+	./lookup 'ASKJHFDKJAHFKA'

@@ -1,15 +1,16 @@
 #include <string.h>
+#include <assert.h>
 
 #include "states-code.h"
 
 
-static int T1[] = { $S1 };
+static int T1[] = {$S1};
 
-static int T2[] = { $S2 };
+static int T2[] = {$S2};
 
-static int G[] = { $G };
+static int G[] = {$G};
 
-static char *K[] = { $K };
+static char *K[] = {$K};
 
 static int
 hash_g(const char *key, const int *T)
@@ -17,26 +18,23 @@ hash_g(const char *key, const int *T)
     int i, sum = 0;
 
     for (i = 0; key[i] != '\0'; i++) {
+        assert(i < $NS);
         sum += T[i] * key[i];
         sum %= $NG;
     }
     return G[sum];
 }
 
-static int
-perfect_hash(const char *key)
+/* return index of `key` in K if key is found, -1 otherwise */
+int index_key(const char *key)
 {
-    if (strlen (key) > $NS)
-        return 0;
+    int hash_value;
 
-    return (hash_g(key, T1) + hash_g(key, T2)) % $NG;
-}
+    if (strlen(key) > $NS)
+        return -1;
 
-int has_key(const char *abbr)
-{
-    int hash_value = perfect_hash (abbr);
-
-    if (hash_value < $NK && strcmp(abbr, K[hash_value]) == 0)
+    hash_value = (hash_g(key, T1) + hash_g(key, T2)) % $NG;
+    if (hash_value < $NK && strcmp(key, K[hash_value]) == 0)
         return hash_value;
 
     return -1;
