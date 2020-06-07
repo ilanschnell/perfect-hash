@@ -51,8 +51,8 @@ class TestsPerfHash(unittest.TestCase):
         self.assertRaises(IndexError, d.__getitem__, 'Foo')
         self.assertEqual(d[42], True)
         self.assertEqual(d[False], 'baz')
-        self.assertTrue(d.has_key('foo'))
-        self.assertFalse(d.has_key('bar'))
+        self.assertTrue('foo' in d)
+        self.assertFalse('bar' in d)
 
     def test_500(self):
         d = PerfHash({100 - i: i * i for i in range(500)})

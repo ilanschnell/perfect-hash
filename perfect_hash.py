@@ -160,9 +160,11 @@ def generate_hash(keys, Hash):
     'Hash' is a random hash function generator, that means Hash(N) returns a
     returns a random hash function which returns hash values from 0..N-1.
     """
-    # N is the number of vertices in the graph G
+    if not isinstance(keys, (list, tuple)):
+        raise TypeError("list or tuple expected")
     if len(keys) != len(set(keys)):
         raise ValueError("duplicate keys")
+    # N is the number of vertices in the graph G
     N = len(keys) + 1
     if verbose:
         print('N = %i' % N)
@@ -299,7 +301,7 @@ class PerfHash(object):
         else:
             raise IndexError("no such key: %s" % key)
 
-    def has_key(self, key):
+    def __contains__(self, key):
         h = self.hashval(key)
         return h < self.N and key == self.keys[h]
 
@@ -318,7 +320,7 @@ class Format(object):
                 print('  %s: %r' % (name, getattr(self, name)))
 
     def __call__(self, data, quote=False):
-        if not isinstance(data, list):
+        if not isinstance(data, (list, tuple)):
             return str(data)
 
         lendel = len(self.delimiter)
