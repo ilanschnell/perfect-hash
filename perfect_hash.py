@@ -277,35 +277,31 @@ def perfect_hash(key):
 class PerfHash(object):
     """
     This class is designed for creating perfect hash tables at run time,
-    which should be avoided, in particulat inserting new keys is
-    prohibitively expensive since a new perfect hash table needs to be
-    constructed.  However, this class can be usefull for testing.
+    which is not really useful, except for teaching and testing.
     """
     def __init__(self, dic):
-        self.klst = []
-        self.objs = []
-        kdic = {}
-        for hashval, (key, obj) in enumerate(dic.items()):
-            self.klst.append(key)
-            self.objs.append(obj)
-            kdic[key] = hashval
-
         self.N = len(dic)
-        self.f1, self.f2, self.G = generate_hash(kdic, Hash1)
+        self.keys = []
+        self.values = []
+        for k, v in dic.items():
+            self.keys.append(k)
+            self.values.append(v)
+
+        self.f1, self.f2, self.G = generate_hash(self.keys, Hash1)
 
     def hashval(self, key):
         return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
 
     def __getitem__(self, key):
         h = self.hashval(key)
-        if h < self.N and key == self.klst[h]:
-            return self.objs[h]
+        if h < self.N and key == self.keys[h]:
+            return self.values[h]
         else:
             raise IndexError("no such key: %s" % key)
 
     def has_key(self, key):
         h = self.hashval(key)
-        return h < self.N and key == self.klst[h]
+        return h < self.N and key == self.keys[h]
 
 
 class Format(object):
