@@ -5,11 +5,8 @@
 
 
 static int T1[] = {$S1};
-
 static int T2[] = {$S2};
-
 static int G[] = {$G};
-
 static char *K[] = {$K};
 
 static int
