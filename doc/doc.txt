@@ -77,11 +77,10 @@ The program is invoked like this:
     # ============================ Sanity check =============================
 
     K = ["Elephant", "Horse", "Camel", "Python", "Dog", "Cat"]
-    H = [0, 1, 2, 3, 4, 5]
 
-    assert len(K) == len(H) == 6
+    assert len(K) == 6
 
-    for k, h in zip(K, H):
+    for h, k in enumerate(K):
         assert perfect_hash(k) == h
 
 
@@ -100,9 +99,8 @@ The following parameters are available in the template, and will expand to:
       $S2   |  array of integers S2
       $NG   |  length of array G
       $G    |  array of integers G
-      $NK   |  the number of keys, i.e. length of array K and H
+      $NK   |  the number of keys, i.e. length of array K
       $K    |  array with the quoted keys
-      $H    |  array of integer hash values
       $$    |  $ (a literal dollar sign)
 
 
@@ -130,12 +128,3 @@ a separate header file, should the API for the table only contain the hash
 values, but not the objects being mapped, and so on.
 All these various choices are possible because of the template is simply
 filled with the parameters, no matter what else is inside the template.
-
-Another possible use the program is as a python module.  The functions and
-classes in 'perfect_hash.py' are documented and have clean interfaces.
-The folder 'example-Python' has examples which shows how the module
-can be used directly in this way.
-
-### Requirement:
-
-Python 2.5
