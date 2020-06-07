@@ -5,7 +5,7 @@ import unittest
 
 from perfect_hash import (
     Graph, PerfHash, Format, Hash1, Hash2, generate_code, run_code,
-    builtin_template,
+    builtin_template
 )
 
 
@@ -108,4 +108,11 @@ class TestsIntegration(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    import perfect_hash
+
+    print('Python location:', sys.executable)
+    print('Python version:', sys.version)
+    print('perfect_hash location:', perfect_hash.__file__)
+    print('perfect_hash version:', perfect_hash.__version__)
+    print('Starting self tests ...')
     unittest.main()
