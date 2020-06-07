@@ -267,6 +267,7 @@ class Hash2(object):
     template = """
 S1 = [$S1]
 S2 = [$S2]
+assert len(S1) == len(S2) == $NS
 
 def hash_f(key, T):
     return sum(T[i % $NS] * ord(c) for i, c in enumerate(str(key))) % $NG
@@ -441,7 +442,6 @@ G = [$G]
 # ============================ Sanity check =============================
 
 K = [$K]
-
 assert len(K) == $NK
 
 for h, k in enumerate(K):
