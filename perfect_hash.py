@@ -391,7 +391,7 @@ def generate_code(keys_hashes, template, Hash, options):
         NG = len(G),
         G  = fmt(G),
         NK = len(keys_hashes),
-        K  = fmt([key for key, hashval in keys_hashes], quote = True),
+        K  = fmt([key for key, hashval in keys_hashes], quote=True),
         H  = fmt([hashval for key, hashval in keys_hashes]))
 
 
@@ -442,18 +442,6 @@ def read_table(filename, options):
         exit("Error: no keys found in file `%s'." % filename)
 
     return keys_hashes
-
-
-def print_keys_hashes(keys_hashes):
-    fmt = '%-20s %10s'
-    head = fmt % ('Key', 'Hash value')
-    print('\n' + head)
-    print(len(head) * '-')
-    for tup in keys_hashes[:10]:
-        print(fmt % tup)
-    if len(keys_hashes) > 10:
-        print('...')
-    print()
 
 
 def read_template(filename):
@@ -713,7 +701,7 @@ is processed and the output code is written to stdout.
     keys_hashes = read_table(keys_file, options)
 
     if verbose:
-        print_keys_hashes(keys_hashes)
+        print("Number os keys: %d" % len(keys_hashes))
 
     tmpl_file = args[1] if len(args) == 2 else None
 
