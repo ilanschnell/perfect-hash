@@ -27,7 +27,7 @@ The algorithm works like this:
 4.  Now, for all keys, you draw an edge between vertices f1(key) and f2(key)
     of the graph G, and associate the desired hash value with that edge.
 
-5.  Check if G is acyclic, i.e. has no loops; if no, go back to step 2.
+5.  If G is cyclic, go back to step 2.
 
 6.  Assign values to each vertex such that, for each edge, you can add
     the values for the two vertices and get the desired (hash) value
