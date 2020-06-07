@@ -1,5 +1,6 @@
 import sys
 import random
+import string
 import unittest
 
 
@@ -83,11 +84,8 @@ class TestsFormat(unittest.TestCase):
 
 class TestsIntegration(unittest.TestCase):
 
-    def run_letters(self, K, Hash):
-        keys = [chr(65 + i) for i in range(K)]
-        hashes = list(range(K))
-
-        random.shuffle(keys)
+    def run_keys(self, keys, Hash):
+        hashes = list(range(len(keys)))
 
         class options:
             width = 80
@@ -99,12 +97,26 @@ class TestsIntegration(unittest.TestCase):
                              Hash,
                              options)
         run_code(code)
+        flush_dot()
 
     def test_letters(self):
         for Hash in Hash1, Hash2:
             for K in range(0, 27):
-                self.run_letters(K, Hash)
-                flush_dot()
+                keys = [chr(65 + i) for i in range(K)]
+                random.shuffle(keys)
+                self.run_keys(keys, Hash)
+
+    def test_random(self):
+
+        def random_word():
+            return ''.join(random.choice(string.ascii_letters + string.digits)
+                           for i in range(random.randint(1, 20)))
+
+        N = 250
+        for Hash in Hash1, Hash2:
+            keys = list(set(random_word() for unused in range(N)))
+            random.shuffle(keys)
+            self.run_keys(keys, Hash)
 
 
 if __name__ == '__main__':

@@ -485,45 +485,6 @@ def run_code(code):
     finally:
         rmtree(tmpdir)
 
-def self_test(options):
-    global verbose
-    print('Python location:', sys.executable)
-    print('Python version:', sys.version)
-    print('perfect_hash location:', __file__)
-    print('perfect_hash version:', __version__)
-    print('Starting self tests ...')
-
-    def random_word():
-        return ''.join(random.choice(string.ascii_letters + string.digits)
-                       for i in range(random.randint(1, 20)))
-
-    def flush_dot():
-        sys.stdout.write('.')
-        sys.stdout.flush()
-
-    verbose = options.verbose
-    N = 250
-    for Hash in Hash1, Hash2:
-        if verbose:
-            print('Generating approximately %i key/hash pairs ...' % N)
-        kh = {}
-        for i in range(N):
-            kh[random_word()] = i
-
-        if verbose:
-            print('Generating code for %i key/hash pairs ...' % len(kh))
-        code = generate_code(kh.items(),
-                             builtin_template(Hash),
-                             Hash,
-                             options)
-        if verbose:
-            print('Executing code ...')
-        flush_dot()
-        run_code(code)
-
-    sys.stdout.write('\nOK\n')
-    sys.exit(0)
-
 
 def main():
     from optparse import OptionParser
@@ -629,10 +590,6 @@ is processed and the output code is written to stdout.
                                 "substituting `tmpl' to `code'.",
                       metavar = "FILE")
 
-    parser.add_option("--test",
-                      action  = "store_true",
-                      help    = "Perform self test")
-
     parser.add_option("-v", "--verbose",
                       action  = "store_true",
                       help    = "verbosity")
@@ -647,9 +604,6 @@ is processed and the output code is written to stdout.
 
     global verbose
     verbose = options.verbose
-
-    if options.test:
-        self_test(options)
 
     if len(args) not in (1, 2):
         parser.error("incorrect number of arguments")
