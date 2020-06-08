@@ -10,11 +10,10 @@ int hash_g(char *s, unsigned char T)
 {
     int i, f = 0;
 
-    for (i = 0; s[i] != '\0'; i++) {
+    for (i = 0; s[i] != '\0'; i++)
         f += (T ^ (unsigned char) s[i]) * (i + 1);
-        f %= NG;
-    }
-    return G[f];
+
+    return G[f % NG];
 }
 
 /* return index of `key` in K if key is found, -1 otherwise */

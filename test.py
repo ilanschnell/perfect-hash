@@ -35,7 +35,7 @@ class TestsGenerateCode(unittest.TestCase):
         for h, k in enumerate(month):
             self.assertEqual(h, (G[f1(k)] + G[f2(k)]) % len(G))
 
-    
+
 class TestsGraph(unittest.TestCase):
 
     def test_basic(self):
