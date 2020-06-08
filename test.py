@@ -142,5 +142,4 @@ if __name__ == '__main__':
     print('Python version:', sys.version)
     print('perfect_hash location:', perfect_hash.__file__)
     print('perfect_hash version:', perfect_hash.__version__)
-    print('Starting self tests ...')
     unittest.main()
