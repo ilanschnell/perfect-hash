@@ -27,7 +27,7 @@ class TestsGenerateCode(unittest.TestCase):
             returns hash values from 0..N-1
             """
             junk = "".join(random.choice(string.ascii_letters + string.digits)
-                           for i in range(10))
+                           for unused in range(10))
             return lambda key: hash(junk + str(key)) % N
 
         f1, f2, G = generate_hash(month, mkRandHash)
