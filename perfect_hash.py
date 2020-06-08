@@ -198,7 +198,7 @@ def generate_hash(keys, Hash):
             break
 
     if verbose:
-        print('\nAcyclic graph found after %i trilas.' % trial)
+        print('\nAcyclic graph found after %i trials.' % trial)
         print('N = %i' % N)
 
     # Sanity check the result by actually verifying that all the keys
