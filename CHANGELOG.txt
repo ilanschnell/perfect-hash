@@ -2,6 +2,7 @@
 -----------------
   * remove --hashcol option
   * remove --test option, add tests is seperate module
+  * add simple hash function 3, and example C-3
   * fix typos trail -> trial, issue #2
 
 
