@@ -10,10 +10,11 @@ int hash_g(char *s, unsigned char T)
 {
     int i, f = 0;
 
-    for (i = 0; s[i] != '\0'; i++)
+    for (i = 0; s[i] != '\0'; i++) {
         f += (T ^ (unsigned char) s[i]) * (i + 1);
-
-    return G[f % NG];
+        f %= NG;
+    }
+    return G[f];
 }
 
 /* return index of `key` in K if key is found, -1 otherwise */
@@ -32,7 +33,7 @@ int main()
 {
     int i;
 
-    char *junk = "acnhuvn5yushvghnw7og5siuhgsiuhnglsh45vgghwn";
+    char *junk = "AC.AS";
 
     assert(get_index(junk) == -1);
 

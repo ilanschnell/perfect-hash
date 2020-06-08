@@ -1,12 +1,16 @@
 import sys
+import string
 from random import choice, randint
-from string import ascii_letters, digits
 
 def key():
-    return ''.join(choice(ascii_letters + digits)
-                   for i in range(randint(6, 10)))
+    return ''.join(choice(string.ascii_uppercase)
+                   for i in range(randint(2, 10)))
 
 N = int(sys.argv[1])
 
-for n in range(N):
-    print(key())
+result = set()
+while len(result) < N:
+    result.add(key())
+
+for k in result:
+    print(k)
