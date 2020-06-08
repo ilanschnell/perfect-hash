@@ -6,7 +6,7 @@ import unittest
 
 
 from perfect_hash import (
-    Graph, PerfHash, Format, Hash1, Hash2, Hash3,
+    generate_hash, Graph, PerfHash, Format, Hash1, Hash2, Hash3,
     generate_code, run_code, builtin_template
 )
 
@@ -16,6 +16,26 @@ def flush_dot():
     sys.stdout.flush()
 
 
+class TestsGenerateCode(unittest.TestCase):
+
+    def test_month(self):
+        month = 'jan feb mar apr may jun jul aug sep oct mov dec'.split()
+
+        def mkRandHash(N):
+            """
+            Return a random hash function which
+            returns hash values from 0..N-1
+            """
+            junk = "".join(random.choice(string.ascii_letters + string.digits)
+                           for i in range(10))
+            return lambda key: hash(junk + str(key)) % N
+
+        f1, f2, G = generate_hash(month, mkRandHash)
+
+        for h, k in enumerate(month):
+            self.assertEqual(h, (G[f1(k)] + G[f2(k)]) % len(G))
+
+    
 class TestsGraph(unittest.TestCase):
 
     def test_basic(self):
