@@ -448,7 +448,7 @@ def read_template(filename):
     try:
         with open(filename, 'r') as fi:
             return fi.read()
-    except IOError :
+    except IOError:
         sys.exit("Error: Could not open `%s' for reading." % filename)
 
 
@@ -587,16 +587,16 @@ is processed and the output code is written to stdout.
                       metavar = "FILE")
 
     parser.add_option("-v", "--verbose",
-                      action  = "store_true",
-                      help    = "verbosity")
+                      action = "store_true",
+                      help = "verbosity")
 
     options, args = parser.parse_args()
 
-    if options.trials > 0:
-        global trials
-        trials = options.trials
-    else:
+    if options.trials <= 0:
         parser.error("trials before increasing N has to be larger than zero")
+
+    global trials
+    trials = options.trials
 
     global verbose
     verbose = options.verbose
@@ -634,7 +634,7 @@ is processed and the output code is written to stdout.
         print("tmpl_file = %r" % tmpl_file)
 
     template = (read_template(tmpl_file) if tmpl_file else
-                                                   builtin_template(Hash))
+                builtin_template(Hash))
 
     if options.output:
         outname = options.output
@@ -656,7 +656,7 @@ is processed and the output code is written to stdout.
     else:
         try:
             outstream = open(outname, 'w')
-        except IOError :
+        except IOError:
             sys.exit("Error: Could not open `%s' for writing." % outname)
 
     code = generate_code(keys, template, Hash, options)
