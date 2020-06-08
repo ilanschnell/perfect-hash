@@ -18,8 +18,7 @@ from perfect_hash import generate_hash
 
 
 
-month = dict(zip('jan feb mar apr may jun jul aug sep oct mov dec'.split(),
-                 range(1, 13)))
+month = 'jan feb mar apr may jun jul aug sep oct mov dec'.split()
 
 def mkRandHash(N):
     """
@@ -32,7 +31,7 @@ def mkRandHash(N):
 
 f1, f2, G = generate_hash(month, mkRandHash)
 
-for k, h in month.items():
-    assert h == (G[f1(k)] + G[f2(k)]) % len(G)
+for h, k in enumerate(month):
+    assert (G[f1(k)] + G[f2(k)]) % len(G) == h
 
 print('OK')
