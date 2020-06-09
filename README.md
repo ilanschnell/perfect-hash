@@ -1,8 +1,7 @@
 Program for creating perfect minimal hash function
 --------------------------------------------------
 
-Generate a minimal perfect hash function for the keys in a file,
-desired hash values may be specified within this file as well.
+Generate a minimal perfect hash function for a given set of keys.
 A given code template is filled with parameters, such that the
 output is code which implements the hash function.
 Templates can easily be constructed for any programming language.
