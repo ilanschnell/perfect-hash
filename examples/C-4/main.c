@@ -27,14 +27,14 @@ int get_index(char *k)
 int main()
 {
     int i;
+    char *junk[] = {"ACASSICUHAIUSCSACASCASKHCKJHSAKJCHK827349RFEWIHIWUE",
+                    "abc", "x", "99"};
 
-    char *junk = "ACASSICUHAIUSCSACASCASKHCKJHSAKJCHK827349RFEWIHIWUEHUI";
-    assert(get_index(junk) == -1);
+    for (i = 0; i < 4; i++)
+        assert(get_index(junk[i]) == -1);
 
-    for (i = 0; i < NK; i++) {
-        /* printf("i=%d    %s     %d\n", i, K[i], get_index(K[i])); */
+    for (i = 0; i < NK; i++)
         assert(get_index(K[i]) == i);
-    }
 
     printf("OK\n");
     return 0;
