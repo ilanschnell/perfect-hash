@@ -4,7 +4,7 @@ from random import choice, randint
 
 def key():
     return ''.join(choice(string.ascii_uppercase)
-                   for i in range(randint(2, 10)))
+                   for i in range(randint(1, 3)))
 
 N = int(sys.argv[1])
 
