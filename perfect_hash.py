@@ -297,6 +297,34 @@ def perfect_hash(key):
     return (G[hash_f(key, $S1)] + G[hash_f(key, $S2)]) % $NG
 """
 
+class Hash4(object):
+    """
+    Random hash function generator.
+    """
+    def __init__(self, N):
+        self.N = N
+        self.salt = ''
+
+    def __call__(self, key):
+        skey = str(key)
+        while len(self.salt) < len(skey): # add more salt as necessary
+            self.salt += random.choice(string.ascii_letters + string.digits)
+
+        return sum(ord(self.salt[i]) * ord(c)
+                   for i, c in enumerate(skey)) % self.N
+
+    template = """
+S1 = "$S1"
+S2 = "$S2"
+assert len(S1) == len(S2) == $NS
+
+def hash_f(key, T):
+    return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(str(key))) % $NG
+
+def perfect_hash(key):
+    return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
+"""
+
 
 class PerfHash(object):
     """
@@ -613,6 +641,8 @@ is processed and the output code is written to stdout.
         Hash = Hash2
     elif options.hft == 3:
         Hash = Hash3
+    elif options.hft == 4:
+        Hash = Hash4
     else:
         parser.error("Hash function %s not implemented." % options.hft)
 

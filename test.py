@@ -6,7 +6,7 @@ import unittest
 
 
 from perfect_hash import (
-    generate_hash, Graph, PerfHash, Format, Hash1, Hash2, Hash3,
+    generate_hash, Graph, PerfHash, Format, Hash1, Hash2, Hash3, Hash4,
     generate_code, run_code, builtin_template
 )
 
@@ -116,7 +116,7 @@ class TestsIntegration(unittest.TestCase):
         flush_dot()
 
     def test_letters(self):
-        for Hash in Hash1, Hash2, Hash3:
+        for Hash in Hash1, Hash2, Hash3, Hash4:
             for K in range(0, 27):
                 keys = [chr(65 + i) for i in range(K)]
                 random.shuffle(keys)
@@ -129,7 +129,7 @@ class TestsIntegration(unittest.TestCase):
                            for i in range(random.randint(1, 20)))
 
         N = 250
-        for Hash in Hash1, Hash2, Hash3:
+        for Hash in Hash1, Hash2, Hash3, Hash4:
             keys = list(set(random_word() for unused in range(N)))
             random.shuffle(keys)
             self.run_keys(keys, Hash)
