@@ -153,6 +153,10 @@ class Graph(object):
         return True
 
 
+class TooManyInterationsError(Exception):
+    pass
+
+
 def generate_hash(keys, Hash):
     """
     Return hash functions f1 and f2, and G for a perfect minimal hash.
@@ -177,6 +181,9 @@ def generate_hash(keys, Hash):
             if verbose:
                 sys.stdout.write('\nGenerating graphs N = %i ' % N)
         trial += 1
+
+        if N > 100 * (len(keys) + 1):
+            raise TooManyInterationsError("keys=%r" % keys)
 
         if verbose:
             sys.stdout.write('.')
@@ -331,7 +338,7 @@ class PerfHash(object):
     This class is designed for creating perfect hash tables at run time,
     which is not really useful, except for teaching and testing.
     """
-    def __init__(self, dic):
+    def __init__(self, dic, Hash=Hash4):
         self.N = len(dic)
         self.keys = []
         self.values = []
@@ -339,7 +346,7 @@ class PerfHash(object):
             self.keys.append(k)
             self.values.append(v)
 
-        self.f1, self.f2, self.G = generate_hash(self.keys, Hash1)
+        self.f1, self.f2, self.G = generate_hash(self.keys, Hash)
 
     def hashval(self, key):
         return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
