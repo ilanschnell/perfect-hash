@@ -63,21 +63,18 @@ The program is invoked like this:
     # ================= Python code for perfect hash function ===============
     # =======================================================================
 
-    G = [0, 0, 4, 1, 0, 3, 8, 1, 6]
-
-    S1 = [5, 0, 0, 6, 1, 0, 4, 7]
-    S2 = [7, 3, 6, 7, 8, 5, 7, 6]
+    G = [0, 0, 5, 0, 1, 0, 2, 4, 2]
 
     def hash_f(key, T):
         return sum(T[i % 8] * ord(c) for i, c in enumerate(str(key))) % 9
 
     def perfect_hash(key):
-        return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % 9
+        return (G[hash_f(key, "iLrS2J40")] +
+                G[hash_f(key, "oijG4Diu")]) % 9
 
     # ============================ Sanity check =============================
 
     K = ["Elephant", "Horse", "Camel", "Python", "Dog", "Cat"]
-
     assert len(K) == 6
 
     for h, k in enumerate(K):
@@ -104,22 +101,18 @@ The following parameters are available in the template, and will expand to:
       $$    |  $ (a literal dollar sign)
 
 
-A literal '$' is escaped as '$$'.  Since the syntax for arrays is not the
-same in all programming languages, some specifics can be adjusted using
-command line options.
-The section of the built-in template which creates the actual hash function
-is:
+Since the syntax for arrays is not the same in all programming languages,
+some specifics can be adjusted using command line options.
+The built-in template which creates the above code is:
 
     G = [$G]
 
-    S1 = [$S1]
-    S2 = [$S2]
-
     def hash_f(key, T):
-        return sum(T[i % $NS] * ord(c) for i, c in enumerate(str(key))) % $NG
+        return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(str(key))) % $NG
 
     def perfect_hash(key):
-        return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
+        return (G[hash_f(key, "$S1")] +
+                G[hash_f(key, "$S2")]) % $NG
 
 Using code templates, makes this program very flexible.  The package comes
 with several complete examples for C and C++.  There are many choices one
