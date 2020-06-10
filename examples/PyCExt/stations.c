@@ -9,51 +9,36 @@ static struct {
 #include "stations.dat.h"
 };
 
-static unsigned int
-DEKhash(const unsigned int init, const char *s)
+/* return index of `key` in K if key is found, -1 otherwise */
+static int get_index(const char *key)
 {
-    register unsigned int x;
+    int f1 = 0, f2 = 0, i;
 
-    x = init;
-    for (; *s != '\0'; s++)
-        x = ((x << 5) ^ (x >> 27) ^ (*s)) % (1 << 31);
+    for (i = 0; key[i] != '\0' && i < NS; i++) {
+        f1 += S1[i] * key[i];
+        f2 += S2[i] * key[i];
+    }
+    i = (G[f1 % NG] + G[f2 % NG]) % NG;
+    if (i < NK && strcmp(key, station_list[i].callsign) == 0)
+        return i;
 
-    return x;
+    return -1;
 }
 
-static int
-perf_hash(const char *k)
-{
-    return (G[DEKhash(S1, k) % NG] + G[DEKhash(S2, k) % NG]) % NG;
-}
-
-static int
-getlocator(const char *callsign, char *locator)
-{
-    int hashval = perf_hash(callsign);
-
-    if (hashval < NK &&
-        strcmp(callsign, station_list[hashval].callsign) == 0)
-        {
-            strcpy(locator, station_list[hashval].locator);
-            return 1;
-        }
-    return 0;
-}
-
-static PyObject *
-stations_locator(PyObject *self, PyObject *args)
+static PyObject *stations_locator(PyObject *self, PyObject *args)
 {
     char *callsign;
-    char locator[7];
+    int index;
 
     if (!PyArg_ParseTuple(args, "s", &callsign))
         return NULL;
 
-    if (getlocator(callsign, locator) == 1)
-        return PyUnicode_FromString(locator);
-    else
-        Py_RETURN_NONE;
+    index = get_index(callsign);
+    if (index < 0) {
+        PyErr_SetString(PyExc_KeyError, callsign);
+        return NULL;
+    }
+    return PyUnicode_FromString(station_list[index].locator);
 }
 
 static PyMethodDef module_functions[] = {

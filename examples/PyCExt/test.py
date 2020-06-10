@@ -1,7 +1,9 @@
 from __future__ import print_function
 import sys
 from timeit import timeit
+
 from stations import locator
+
 
 call = sys.argv[1]
 print(repr(call))
