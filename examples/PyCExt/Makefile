@@ -1,11 +1,5 @@
-PYTHON_PREFIX=/Users/ilan/a/envs/py38
-
-
 stations.so: stations.c stations.dat.h stations-code.h
-	gcc -arch x86_64 -O3 -I${PYTHON_PREFIX}/include/python3.8 \
-            -Wall -O3 -Wstrict-prototypes -c stations.c -o stations.o
-	gcc -bundle -undefined dynamic_lookup -L${PYTHON_PREFIX}/lib \
-            -arch x86_64 stations.o -o stations.so
+	python setup.py build_ext --inplace
 
 
 stations.dat.h: stations.dat
@@ -17,7 +11,8 @@ stations-code.h: stations.dat stations-tmpl.h
 
 
 clean:
-	rm -f stations-code.h stations.dat.h stations.so *.o
+	rm -f stations-code.h stations.dat.h *.so *.o
+	rm -rf build
 
 
 test: stations.so
