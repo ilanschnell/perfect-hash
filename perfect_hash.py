@@ -321,15 +321,12 @@ class Hash4(object):
                    for i, c in enumerate(skey)) % self.N
 
     template = """
-S1 = "$S1"
-S2 = "$S2"
-assert len(S1) == len(S2) == $NS
-
 def hash_f(key, T):
     return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(str(key))) % $NG
 
 def perfect_hash(key):
-    return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
+    return (G[hash_f(key, "$S1")] +
+            G[hash_f(key, "$S2")]) % $NG
 """
 
 
