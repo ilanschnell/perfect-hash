@@ -1,4 +1,4 @@
-2020-XX-XX: 0.3.0
+2020-06-10: 0.3.0
 -----------------
   * changed default to use new hash function Hash4
   * created tests in separate module
