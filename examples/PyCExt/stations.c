@@ -1,5 +1,9 @@
 #include "Python.h"
 
+#if PY_MAJOR_VERSION == 2
+#error "no supported for Python 2"
+#endif
+
 #include "stations-code.h"
 
 static struct {

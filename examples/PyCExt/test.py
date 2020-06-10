@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys
 from timeit import timeit
 
@@ -9,7 +8,7 @@ call = sys.argv[1]
 print(repr(call))
 
 D = {}
-N = 1000 * 1000
+N = 1_000_000
 
 for line in open('stations.dat'):
     c, l = [x.strip() for x in line.split(',')]
