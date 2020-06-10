@@ -6,7 +6,7 @@ import unittest
 
 
 from perfect_hash import (
-    generate_hash, Graph, PerfHash, Format, Hash1, Hash2, Hash3, Hash4,
+    generate_hash, Graph, Format, Hash1, Hash2, Hash3, Hash4,
     generate_code, run_code, builtin_template
 )
 
@@ -14,6 +14,36 @@ from perfect_hash import (
 def flush_dot():
     sys.stdout.write('.')
     sys.stdout.flush()
+
+
+class PerfectHash(object):
+    """
+    This class is designed for creating perfect hash tables at run time,
+    which is not really useful, except for teaching and testing.
+    """
+    def __init__(self, dic, Hash):
+        self.N = len(dic)
+        self.keys = []
+        self.values = []
+        for k, v in dic.items():
+            self.keys.append(k)
+            self.values.append(v)
+
+        self.f1, self.f2, self.G = generate_hash(self.keys, Hash)
+
+    def hashval(self, key):
+        return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
+
+    def __getitem__(self, key):
+        h = self.hashval(key)
+        if h < self.N and key == self.keys[h]:
+            return self.values[h]
+        else:
+            raise IndexError("no such key: %s" % key)
+
+    def __contains__(self, key):
+        h = self.hashval(key)
+        return h < self.N and key == self.keys[h]
 
 
 class TestsGenerateCode(unittest.TestCase):
@@ -61,12 +91,11 @@ class TestsGraph(unittest.TestCase):
         self.assertFalse(G.assign_vertex_values())
 
 
-class TestsPerfHash(unittest.TestCase):
+class TestsPerfectHash(unittest.TestCase):
 
     def test_basic(self):
-        d = PerfHash({'foo': (429, 'bar'),
-                      42: True,
-                      False: 'baz'})
+        d = {'foo': (429, 'bar'), 42: True, False: 'baz'}
+        d = PerfectHash(d, Hash4)
 
         self.assertEqual(d['foo'], (429, 'bar'))
         self.assertRaises(IndexError, d.__getitem__, 'Foo')
@@ -74,12 +103,6 @@ class TestsPerfHash(unittest.TestCase):
         self.assertEqual(d[False], 'baz')
         self.assertTrue('foo' in d)
         self.assertFalse('bar' in d)
-        self.assertFalse('matchbox' in d)
-
-    def test_500(self):
-        d = PerfHash({100 - i: i * i for i in range(500)})
-        for i in range(500):
-            self.assertEqual(d[100 - i], i * i)
         self.assertFalse('matchbox' in d)
 
 
