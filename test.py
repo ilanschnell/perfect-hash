@@ -11,9 +11,17 @@ from perfect_hash import (
 )
 
 
+Hashes = Hash1, Hash2, Hash3, Hash4
+
+
 def flush_dot():
     sys.stdout.write('.')
     sys.stdout.flush()
+
+
+def perfect_hash_func(keys, Hash):
+    f1, f2, G = generate_hash(keys, Hash)
+    return lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
 
 
 class PerfectDict(object):
@@ -29,10 +37,7 @@ class PerfectDict(object):
             self.keys.append(k)
             self.values.append(v)
 
-        self.f1, self.f2, self.G = generate_hash(self.keys, Hash)
-
-    def hashval(self, key):
-        return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
+        self.hashval = perfect_hash_func(self.keys, Hash)
 
     def __getitem__(self, key):
         h = self.hashval(key)
@@ -46,10 +51,29 @@ class PerfectDict(object):
         return h < self.N and key == self.keys[h]
 
 
-class TestsGenerateCode(unittest.TestCase):
+class Util(object):
+
+    def create_and_verify(self, keys, Hash):
+        f = perfect_hash_func(keys, Hash)
+        for i, k in enumerate(keys):
+            self.assertEqual(i, f(k))
+        flush_dot()
+
+    def random_keys(self, N):
+        keys = set()
+        while len(keys) < N:
+            keys.add(''.join(
+                random.choice(string.ascii_letters + string.digits)
+                for i in range(random.randint(1, 7))))
+        keys = list(keys)
+        random.shuffle(keys)
+        return keys
+
+
+class TestsGenerateCode(Util, unittest.TestCase):
 
     def test_month(self):
-        month = 'jan feb mar apr may jun jul aug sep oct mov dec'.split()
+        months = 'jan feb mar apr may jun jul aug sep oct mov dec'.split()
 
         def mkRandHash(N):
             """
@@ -60,10 +84,7 @@ class TestsGenerateCode(unittest.TestCase):
                            for unused in range(10))
             return lambda key: hash(junk + str(key)) % N
 
-        f1, f2, G = generate_hash(month, mkRandHash)
-
-        for h, k in enumerate(month):
-            self.assertEqual(h, (G[f1(k)] + G[f2(k)]) % len(G))
+        self.create_and_verify(months, mkRandHash)
 
 
 class TestsGraph(unittest.TestCase):
@@ -122,7 +143,26 @@ class TestsFormat(unittest.TestCase):
         self.assertEqual(x('Hello'), 'Hello')
 
 
-class TestsIntegration(unittest.TestCase):
+class TestsGeneration(Util, unittest.TestCase):
+
+    def test_simple(self):
+        for Hash in Hashes:
+            self.create_and_verify(["Ilan", "Arvin"], Hash)
+
+    def test_letters(self):
+        for K in range(0, 27):
+            keys = [chr(65 + i) for i in range(K)]
+            random.shuffle(keys)
+            for Hash in Hashes:
+                self.create_and_verify(keys, Hash)
+
+    def test_random(self):
+        for Hash in Hash2, Hash4:
+            for N in range(0, 50):
+                self.create_and_verify(self.random_keys(N), Hash)
+
+
+class TestsIntegration(Util, unittest.TestCase):
 
     def run_keys(self, keys, Hash):
 
@@ -138,24 +178,9 @@ class TestsIntegration(unittest.TestCase):
         run_code(code)
         flush_dot()
 
-    def test_letters(self):
-        for Hash in Hash1, Hash2, Hash3, Hash4:
-            for K in range(0, 27):
-                keys = [chr(65 + i) for i in range(K)]
-                random.shuffle(keys)
-                self.run_keys(keys, Hash)
-
     def test_random(self):
-
-        def random_word():
-            return ''.join(random.choice(string.ascii_letters + string.digits)
-                           for i in range(random.randint(1, 20)))
-
-        N = 250
-        for Hash in Hash1, Hash2, Hash3, Hash4:
-            keys = list(set(random_word() for unused in range(N)))
-            random.shuffle(keys)
-            self.run_keys(keys, Hash)
+        for Hash in Hash2, Hash4:
+            self.run_keys(self.random_keys(50), Hash)
 
 
 if __name__ == '__main__':
