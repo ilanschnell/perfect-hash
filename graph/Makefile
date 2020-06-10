@@ -7,7 +7,7 @@ animals.dot: animals.py
 
 
 animals.py: ../animals.txt
-	python ../perfect_hash.py $< >$@
+	python ../perfect_hash.py --hft=2 $< >$@
 
 
 clean:
