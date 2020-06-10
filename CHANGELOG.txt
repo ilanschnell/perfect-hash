@@ -1,3 +1,8 @@
+2020-XX-XX: 0.3.1:
+------------------
+  * improve some exmaples
+
+
 2020-06-10: 0.3.0
 -----------------
   * changed default to use new hash function Hash4
