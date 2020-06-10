@@ -308,6 +308,8 @@ class Hash4(object):
     """
     Random hash function generator.
     """
+    chars = string.ascii_letters + string.digits
+
     def __init__(self, N):
         self.N = N
         self.salt = ''
@@ -315,7 +317,7 @@ class Hash4(object):
     def __call__(self, key):
         skey = str(key)
         while len(self.salt) < len(skey): # add more salt as necessary
-            self.salt += random.choice(string.ascii_letters + string.digits)
+            self.salt += random.choice(self.chars)
 
         return sum(ord(self.salt[i]) * ord(c)
                    for i, c in enumerate(skey)) % self.N
@@ -597,7 +599,7 @@ is processed and the output code is written to stdout.
 
     parser.add_option("--hft",
                       action  = "store",
-                      default = 2,
+                      default = 4,
                       type    = "int",
                       help    = "Hash function type INT (see documentation), "
                                 "The default is %default",
