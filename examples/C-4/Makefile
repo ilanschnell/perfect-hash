@@ -1,12 +1,12 @@
 CC = gcc -Wall
 
 
-a.out: main.c keys.code.h
+a.out: main.c
 	$(CC) $<
 
 
-keys.code.h: keys.dat keys.tmpl.h
-	python ../../perfect_hash.py --hft=4 --trials=50 -v $^
+main.c: keys.dat main-tmpl.c
+	python ../../perfect_hash.py --hft=4 --trials=50 -v -o main.c $^
 
 
 keys.dat:
@@ -14,7 +14,7 @@ keys.dat:
 
 
 clean:
-	rm -f keys.dat keys.code.h a.out
+	rm -f keys.dat main.c a.out
 
 
 test: a.out
