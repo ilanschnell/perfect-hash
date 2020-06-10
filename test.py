@@ -16,7 +16,7 @@ def flush_dot():
     sys.stdout.flush()
 
 
-class PerfectHash(object):
+class PerfectDict(object):
     """
     This class is designed for creating perfect hash tables at run time,
     which is not really useful, except for teaching and testing.
@@ -91,11 +91,11 @@ class TestsGraph(unittest.TestCase):
         self.assertFalse(G.assign_vertex_values())
 
 
-class TestsPerfectHash(unittest.TestCase):
+class TestsPerfectDict(unittest.TestCase):
 
     def test_basic(self):
         d = {'foo': (429, 'bar'), 42: True, False: 'baz'}
-        d = PerfectHash(d, Hash4)
+        d = PerfectDict(d, Hash4)
 
         self.assertEqual(d['foo'], (429, 'bar'))
         self.assertRaises(IndexError, d.__getitem__, 'Foo')
