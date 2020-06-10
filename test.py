@@ -165,16 +165,7 @@ class TestsGeneration(Util, unittest.TestCase):
 class TestsIntegration(Util, unittest.TestCase):
 
     def run_keys(self, keys, Hash):
-
-        class options:
-            width = 80
-            indent = 4
-            delimiter = ','
-
-        code = generate_code(keys,
-                             builtin_template(Hash),
-                             Hash,
-                             options)
+        code = generate_code(keys, builtin_template(Hash), Hash)
         run_code(code)
         flush_dot()
 

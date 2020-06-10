@@ -369,7 +369,7 @@ class Format(object):
         return aux.getvalue()
 
 
-def generate_code(keys, template, Hash, options):
+def generate_code(keys, template, Hash, options=None):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' strinng.  'Hash' is the random hash function
@@ -385,8 +385,12 @@ def generate_code(keys, template, Hash, options):
     except TypeError:
         salt_len = None
 
-    fmt = Format(width=options.width, indent=options.indent,
-                 delimiter=options.delimiter)
+    if options is None:
+        fmt = Format()
+    else:
+        fmt = Format(width=options.width, indent=options.indent,
+                     delimiter=options.delimiter)
+
     if verbose:
         fmt.print_format()
 
@@ -434,7 +438,7 @@ def read_table(filename, options):
             key = row[options.keycol - 1]
         except IndexError:
             sys.exit("%s:%i: Error: Cannot read key, not enough columns." %
-                     (filename, n+1))
+                     (filename, n + 1))
 
         keys.append(key)
 
