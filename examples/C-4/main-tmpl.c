@@ -20,10 +20,8 @@ int get_index(char *k)
     for (i = 0; k[i] != '\0' && i < NS; i++) {
         f1 += "$S1"[i] * k[i];
         f2 += "$S2"[i] * k[i];
-        f1 %= NG;
-        f2 %= NG;
     }
-    i = (G[f1] + G[f2]) % NG;
+    i = (G[f1 % NG] + G[f2 % NG]) % NG;
     if (i < NK && strcmp(k, K[i]) == 0)
         return i;
 

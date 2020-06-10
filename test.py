@@ -169,6 +169,10 @@ class TestsIntegration(Util, unittest.TestCase):
         run_code(code)
         flush_dot()
 
+    def test_simple(self):
+        for Hash in Hashes:
+            self.run_keys(["Ilan", "Arvin"], Hash)
+
     def test_random(self):
         for Hash in Hash2, Hash4:
             self.run_keys(self.random_keys(50), Hash)
