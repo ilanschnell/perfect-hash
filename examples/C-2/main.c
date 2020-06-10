@@ -6,29 +6,20 @@
 #include "keys.code.h"
 
 
-int hash_g(char *s, int *T)
-{
-    int i, f = 0;
-
-    for (i = 0; s[i] != '\0'; i++) {
-        assert(i < NS);
-        f += T[i] * s[i];
-        f %= NG;
-    }
-    return G[f];
-}
-
 /* return index of `key` in K if key is found, -1 otherwise */
-int get_index(char *k)
+int get_index(char *key)
 {
-    int h;
+    int i, f1 = 0, f2 = 0;
 
-    if (strlen(k) > NS)
-        return -1;
-
-    h = (hash_g(k, T1) + hash_g(k, T2)) % NG;
-    if (h < NK && strcmp(k, K[h]) == 0)
-        return h;
+    for (i = 0; key[i] != '\0' && i < NS; i++) {
+        f1 += S1[i] * key[i];
+        f2 += S2[i] * key[i];
+        f1 %= NG;
+        f2 %= NG;
+    }
+    i = (G[f1] + G[f2]) % NG;
+    if (i < NK && strcmp(key, K[i]) == 0)
+        return i;
 
     return -1;
 }
