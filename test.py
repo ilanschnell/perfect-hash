@@ -71,7 +71,12 @@ class TestsFormat(unittest.TestCase):
         self.assertEqual(x('Hello'), 'Hello')
 
 
-class TestsGeneration(unittest.TestCase):
+class TestsGenerateHash(unittest.TestCase):
+
+    def test_args(self):
+        generate_hash(["A", "B"])
+        self.assertRaises(TypeError, generate_hash, {})
+        self.assertRaises(TypeError, generate_hash, ["A", 8])
 
     def create_and_verify(self, keys, Hash):
         f1, f2, G = generate_hash(keys, Hash)
@@ -104,10 +109,14 @@ class TestsGeneration(unittest.TestCase):
                           generate_hash, keys, Hash1)
 
 
-class TestsIntegration(unittest.TestCase):
+class TestsGenerateCode(unittest.TestCase):
+
+    def test_args(self):
+        run_code(generate_code(["A", "B"], Hash2, builtin_template(Hash2)))
+        run_code(generate_code(["A", "B"]))
 
     def run_keys(self, keys, Hash):
-        code = generate_code(keys, builtin_template(Hash), Hash)
+        code = generate_code(keys, Hash)
         run_code(code)
         flush_dot()
 

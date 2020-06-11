@@ -259,6 +259,23 @@ def perfect_hash(key):
             G[hash_f(key, "$S2")]) % $NG
 """
 
+def builtin_template(Hash):
+    return """\
+# =======================================================================
+# ================= Python code for perfect hash function ===============
+# =======================================================================
+
+G = [$G]
+""" + Hash.template + """
+# ============================ Sanity check =============================
+
+K = [$K]
+assert len(K) == $NK
+
+for h, k in enumerate(K):
+    assert perfect_hash(k) == h
+"""
+
 
 class TooManyInterationsError(Exception):
     pass
@@ -369,7 +386,7 @@ class Format(object):
         return aux.getvalue()
 
 
-def generate_code(keys, template, Hash=Hash4, options=None):
+def generate_code(keys, Hash=Hash4, template=None, options=None):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' string.  'Hash' is the random hash function
@@ -384,6 +401,9 @@ def generate_code(keys, template, Hash=Hash4, options=None):
         assert salt_len == len(f2.salt)
     except TypeError:
         salt_len = None
+
+    if template is None:
+        template = builtin_template(Hash)
 
     if options is None:
         fmt = Format()
@@ -459,23 +479,6 @@ def read_template(filename):
     except IOError:
         sys.exit("Error: Could not open `%s' for reading." % filename)
 
-
-def builtin_template(Hash):
-    return """\
-# =======================================================================
-# ================= Python code for perfect hash function ===============
-# =======================================================================
-
-G = [$G]
-""" + Hash.template + """
-# ============================ Sanity check =============================
-
-K = [$K]
-assert len(K) == $NK
-
-for h, k in enumerate(K):
-    assert perfect_hash(k) == h
-"""
 
 def run_code(code):
     tmpdir = tempfile.mkdtemp()
@@ -643,8 +646,7 @@ is processed and the output code is written to stdout.
     if verbose:
         print("tmpl_file = %r" % tmpl_file)
 
-    template = (read_template(tmpl_file) if tmpl_file else
-                builtin_template(Hash))
+    template = read_template(tmpl_file) if tmpl_file else None
 
     if options.output:
         outname = options.output
@@ -669,7 +671,7 @@ is processed and the output code is written to stdout.
         except IOError:
             sys.exit("Error: Could not open `%s' for writing." % outname)
 
-    code = generate_code(keys, template, Hash, options)
+    code = generate_code(keys, Hash, template, options)
 
     if options.execute or template == builtin_template(Hash):
         if verbose:

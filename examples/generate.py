@@ -7,7 +7,7 @@ import random
 import string
 
 sys.path.append('..')
-from perfect_hash import generate_code, builtin_template, run_code
+from perfect_hash import generate_code, run_code
 
 
 class Hash(object):
@@ -32,6 +32,6 @@ def perfect_hash(key):
 
 keys = "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()
 
-code = generate_code(keys, builtin_template(Hash), Hash)
+code = generate_code(keys, Hash)
 print(code)
 run_code(code)
