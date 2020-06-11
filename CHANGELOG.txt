@@ -1,6 +1,7 @@
 2020-06-XX: 0.3.2:
 ------------------
-  *
+  * add example which uses salted Python's hash()
+  * make template argument of generate_code() optional
 
 
 2020-06-11: 0.3.1:
