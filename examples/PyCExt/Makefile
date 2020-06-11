@@ -1,5 +1,6 @@
 stations.so: stations.c stations.dat.h stations-code.h
 	python setup.py build_ext --inplace
+	mv stations.*so stations.so
 
 
 stations.dat.h: stations.dat
@@ -16,4 +17,4 @@ clean:
 
 
 test: stations.so
-	python -c "import stations; print(stations.locator('DL5BAC'))"
+	python test.py
