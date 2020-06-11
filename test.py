@@ -97,6 +97,8 @@ class TestsGeneration(unittest.TestCase):
                 self.create_and_verify(random_keys(N), Hash)
 
     def test_too_many_iterations(self):
+        # through experiment, I found these two keys which cause
+        # generate_hash not to work with Hash1
         keys = ['kg', 'jG']
         self.assertRaises(TooManyInterationsError,
                           generate_hash, keys, Hash1)
