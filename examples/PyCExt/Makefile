@@ -1,4 +1,5 @@
 stations.so: stations.c stations.dat.h stations-code.h
+	rm -f stations.so
 	python setup.py build_ext --inplace
 	mv stations.*so stations.so
 

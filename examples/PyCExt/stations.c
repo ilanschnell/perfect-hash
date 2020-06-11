@@ -29,14 +29,16 @@ static int get_index(const char *key)
     return -1;
 }
 
-static PyObject *stations_locator(PyObject *self, PyObject *args)
+static PyObject *stations_locator(PyObject *self, PyObject *obj)
 {
-    char *callsign;
+    const char *callsign;
     int index;
 
-    if (!PyArg_ParseTuple(args, "s", &callsign))
+    if (!PyUnicode_Check(obj)) {
+        PyErr_SetString(PyExc_TypeError, "string expected");
         return NULL;
-
+    }
+    callsign = PyUnicode_AsUTF8(obj);
     index = get_index(callsign);
     if (index < 0) {
         PyErr_SetString(PyExc_KeyError, callsign);
@@ -46,7 +48,7 @@ static PyObject *stations_locator(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef module_functions[] = {
-    {"locator", stations_locator, METH_VARARGS, "Get locator from callsign."},
+    {"locator", stations_locator, METH_O, "Get locator from callsign."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
