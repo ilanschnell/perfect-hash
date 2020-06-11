@@ -4,7 +4,7 @@ import string
 from random import choice, randint
 
 
-from perfect_hash import generate_hash, Hash4 as Hash
+from perfect_hash import generate_hash
 
 
 def flush_dot():
@@ -24,7 +24,7 @@ def main():
             while len(keys) < N:
                 keys.add(random_key())
             keys = list(keys)
-            generate_hash(keys, Hash)
+            generate_hash(keys)
 
 
 if __name__ == '__main__':
