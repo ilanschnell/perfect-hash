@@ -1,4 +1,4 @@
-2020-XX-XX: 0.3.1:
+2020-06-11: 0.3.1:
 ------------------
   * improve testing and exmaples
 
