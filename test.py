@@ -7,7 +7,7 @@ import unittest
 
 from perfect_hash import (
     generate_hash, Graph, Format, Hash1, Hash2, Hash3, Hash4,
-    generate_code, run_code, builtin_template
+    generate_code, run_code, builtin_template, TooManyInterationsError,
 )
 
 
@@ -95,6 +95,11 @@ class TestsGeneration(unittest.TestCase):
         for Hash in Hash2, Hash4:
             for N in range(0, 50):
                 self.create_and_verify(random_keys(N), Hash)
+
+    def test_too_many_iterations(self):
+        keys = ['kg', 'jG']
+        self.assertRaises(TooManyInterationsError,
+                          generate_hash, keys, Hash1)
 
 
 class TestsIntegration(unittest.TestCase):
