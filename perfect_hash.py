@@ -48,23 +48,22 @@ attempt.
 """
 from __future__ import absolute_import, division, print_function
 
-__version__ = '0.3.0'
-
 import sys
 import random
 import string
 import subprocess
+import shutil
+import tempfile
 from collections import defaultdict
-from shutil import rmtree
-from tempfile import mkdtemp
 from os.path import join
 
-is_py2 = bool(sys.version_info[0] == 2)
-
-if is_py2:
+if sys.version_info[0] == 2:
     from cStringIO import StringIO
 else:
     from io import StringIO
+
+
+__version__ = '0.3.0'
 
 
 verbose = False
@@ -479,7 +478,7 @@ for h, k in enumerate(K):
 """
 
 def run_code(code):
-    tmpdir = mkdtemp()
+    tmpdir = tempfile.mkdtemp()
     path = join(tmpdir, 't.py')
     with open(path, 'w') as fo:
         fo.write(code)
@@ -488,7 +487,7 @@ def run_code(code):
     except subprocess.CalledProcessError as e:
         raise AssertionError(e)
     finally:
-        rmtree(tmpdir)
+        shutil.rmtree(tmpdir)
 
 
 def main():
