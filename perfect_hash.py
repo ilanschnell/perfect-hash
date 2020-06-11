@@ -372,7 +372,7 @@ class Format(object):
 def generate_code(keys, template, Hash=Hash4, options=None):
     """
     Takes a list of key value pairs and inserts the generated parameter
-    lists into the 'template' strinng.  'Hash' is the random hash function
+    lists into the 'template' string.  'Hash' is the random hash function
     generator, and the optional keywords are formating options.
     The return value is the substituted code template.
     """
