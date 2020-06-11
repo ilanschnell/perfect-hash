@@ -19,24 +19,15 @@ def flush_dot():
     sys.stdout.flush()
 
 
-class Util(object):
-
-    def create_and_verify(self, keys, Hash):
-        f1, f2, G = generate_hash(keys, Hash)
-        f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
-        for i, k in enumerate(keys):
-            self.assertEqual(i, f(k))
-        flush_dot()
-
-    def random_keys(self, N):
-        keys = set()
-        while len(keys) < N:
-            keys.add(''.join(
-                random.choice(string.ascii_letters + string.digits)
-                for i in range(random.randint(1, 7))))
-        keys = list(keys)
-        random.shuffle(keys)
-        return keys
+def random_keys(N):
+    keys = set()
+    while len(keys) < N:
+        keys.add(''.join(
+            random.choice(string.ascii_letters + string.digits)
+            for i in range(random.randint(1, 7))))
+    keys = list(keys)
+    random.shuffle(keys)
+    return keys
 
 
 class TestsGraph(unittest.TestCase):
@@ -80,7 +71,14 @@ class TestsFormat(unittest.TestCase):
         self.assertEqual(x('Hello'), 'Hello')
 
 
-class TestsGeneration(Util, unittest.TestCase):
+class TestsGeneration(unittest.TestCase):
+
+    def create_and_verify(self, keys, Hash):
+        f1, f2, G = generate_hash(keys, Hash)
+        f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
+        for i, k in enumerate(keys):
+            self.assertEqual(i, f(k))
+        flush_dot()
 
     def test_simple(self):
         for Hash in Hashes:
@@ -96,10 +94,10 @@ class TestsGeneration(Util, unittest.TestCase):
     def test_random(self):
         for Hash in Hash2, Hash4:
             for N in range(0, 50):
-                self.create_and_verify(self.random_keys(N), Hash)
+                self.create_and_verify(random_keys(N), Hash)
 
 
-class TestsIntegration(Util, unittest.TestCase):
+class TestsIntegration(unittest.TestCase):
 
     def run_keys(self, keys, Hash):
         code = generate_code(keys, builtin_template(Hash), Hash)
@@ -112,7 +110,7 @@ class TestsIntegration(Util, unittest.TestCase):
 
     def test_random(self):
         for Hash in Hash2, Hash4:
-            self.run_keys(self.random_keys(50), Hash)
+            self.run_keys(random_keys(50), Hash)
 
 
 if __name__ == '__main__':
