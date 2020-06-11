@@ -19,42 +19,11 @@ def flush_dot():
     sys.stdout.flush()
 
 
-def perfect_hash_func(keys, Hash):
-    f1, f2, G = generate_hash(keys, Hash)
-    return lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
-
-
-class PerfectDict(object):
-    """
-    This class is designed for creating perfect hash tables at run time,
-    which is not really useful, except for teaching and testing.
-    """
-    def __init__(self, dic, Hash):
-        self.N = len(dic)
-        self.keys = []
-        self.values = []
-        for k, v in dic.items():
-            self.keys.append(k)
-            self.values.append(v)
-
-        self.hashval = perfect_hash_func(self.keys, Hash)
-
-    def __getitem__(self, key):
-        h = self.hashval(key)
-        if h < self.N and key == self.keys[h]:
-            return self.values[h]
-        else:
-            raise IndexError("no such key: %s" % key)
-
-    def __contains__(self, key):
-        h = self.hashval(key)
-        return h < self.N and key == self.keys[h]
-
-
 class Util(object):
 
     def create_and_verify(self, keys, Hash):
-        f = perfect_hash_func(keys, Hash)
+        f1, f2, G = generate_hash(keys, Hash)
+        f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
         for i, k in enumerate(keys):
             self.assertEqual(i, f(k))
         flush_dot()
@@ -68,23 +37,6 @@ class Util(object):
         keys = list(keys)
         random.shuffle(keys)
         return keys
-
-
-class TestsGenerateCode(Util, unittest.TestCase):
-
-    def test_month(self):
-        months = 'jan feb mar apr may jun jul aug sep oct mov dec'.split()
-
-        def mkRandHash(N):
-            """
-            Return a random hash function which
-            returns hash values from 0..N-1
-            """
-            junk = "".join(random.choice(string.ascii_letters + string.digits)
-                           for unused in range(10))
-            return lambda key: hash(junk + str(key)) % N
-
-        self.create_and_verify(months, mkRandHash)
 
 
 class TestsGraph(unittest.TestCase):
@@ -110,21 +62,6 @@ class TestsGraph(unittest.TestCase):
         # adding edge 0:2 produces a loop, so the graph is no longer acyclic
         G.connect(0, 2, 0)
         self.assertFalse(G.assign_vertex_values())
-
-
-class TestsPerfectDict(unittest.TestCase):
-
-    def test_basic(self):
-        d = {'foo': (429, 'bar'), 42: True, False: 'baz'}
-        d = PerfectDict(d, Hash4)
-
-        self.assertEqual(d['foo'], (429, 'bar'))
-        self.assertRaises(IndexError, d.__getitem__, 'Foo')
-        self.assertEqual(d[42], True)
-        self.assertEqual(d[False], 'baz')
-        self.assertTrue('foo' in d)
-        self.assertFalse('bar' in d)
-        self.assertFalse('matchbox' in d)
 
 
 class TestsFormat(unittest.TestCase):

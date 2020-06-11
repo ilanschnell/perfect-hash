@@ -153,74 +153,6 @@ class Graph(object):
         return True
 
 
-class TooManyInterationsError(Exception):
-    pass
-
-
-def generate_hash(keys, Hash):
-    """
-    Return hash functions f1 and f2, and G for a perfect minimal hash.
-    Input is an iterable of 'keys', whos indicies are the desired hash values.
-    'Hash' is a random hash function generator, that means Hash(N) returns a
-    returns a random hash function which returns hash values from 0..N-1.
-    """
-    if not isinstance(keys, (list, tuple)):
-        raise TypeError("list or tuple expected")
-    if len(keys) != len(set(keys)):
-        raise ValueError("duplicate keys")
-    # N is the number of vertices in the graph G
-    N = len(keys) + 1
-    if verbose:
-        print('N = %i' % N)
-
-    trial = 0  # Number of trial graphs so far
-    while True:
-        if (trial % trials) == 0:   # trials failures, increase N slightly
-            if trial > 0:
-                N = max(N + 1, int(1.05 * N))
-            if verbose:
-                sys.stdout.write('\nGenerating graphs N = %i ' % N)
-        trial += 1
-
-        if N > 100 * (len(keys) + 1):
-            raise TooManyInterationsError("keys=%r" % keys)
-
-        if verbose:
-            sys.stdout.write('.')
-            sys.stdout.flush()
-
-        G = Graph(N)   # Create graph with N vertices
-        f1 = Hash(N)   # Create 2 random hash functions
-        f2 = Hash(N)
-
-        # Connect vertices given by the values of the two hash functions
-        # for each key.  Associate the desired hash value with each edge.
-        for hashval, key in enumerate(keys):
-            G.connect(f1(key), f2(key), hashval)
-
-        # Try to assign the vertex values.  This will fail when the graph
-        # is cyclic.  But when the graph is acyclic it will succeed and we
-        # break out, because we're done.
-        if G.assign_vertex_values():
-            break
-
-    if verbose:
-        print('\nAcyclic graph found after %i trials.' % trial)
-        print('N = %i' % N)
-
-    # Sanity check the result by actually verifying that all the keys
-    # hash to the right value.
-    for hashval, key in enumerate(keys):
-        assert hashval == (
-            G.vertex_values[f1(key)] + G.vertex_values[f2(key)]
-        ) % N
-
-    if verbose:
-        print('OK')
-
-    return f1, f2, G.vertex_values
-
-
 class Hash1(object):
     """
     Random hash function generator.
@@ -332,6 +264,74 @@ def perfect_hash(key):
 """
 
 
+class TooManyInterationsError(Exception):
+    pass
+
+
+def generate_hash(keys, Hash=Hash4):
+    """
+    Return hash functions f1 and f2, and G for a perfect minimal hash.
+    Input is an iterable of 'keys', whos indicies are the desired hash values.
+    'Hash' is a random hash function generator, that means Hash(N) returns a
+    returns a random hash function which returns hash values from 0..N-1.
+    """
+    if not isinstance(keys, (list, tuple)):
+        raise TypeError("list or tuple expected")
+    if len(keys) != len(set(keys)):
+        raise ValueError("duplicate keys")
+    # N is the number of vertices in the graph G
+    N = len(keys) + 1
+    if verbose:
+        print('N = %i' % N)
+
+    trial = 0  # Number of trial graphs so far
+    while True:
+        if (trial % trials) == 0:   # trials failures, increase N slightly
+            if trial > 0:
+                N = max(N + 1, int(1.05 * N))
+            if verbose:
+                sys.stdout.write('\nGenerating graphs N = %i ' % N)
+        trial += 1
+
+        if N > 100 * (len(keys) + 1):
+            raise TooManyInterationsError("keys=%r" % keys)
+
+        if verbose:
+            sys.stdout.write('.')
+            sys.stdout.flush()
+
+        G = Graph(N)   # Create graph with N vertices
+        f1 = Hash(N)   # Create 2 random hash functions
+        f2 = Hash(N)
+
+        # Connect vertices given by the values of the two hash functions
+        # for each key.  Associate the desired hash value with each edge.
+        for hashval, key in enumerate(keys):
+            G.connect(f1(key), f2(key), hashval)
+
+        # Try to assign the vertex values.  This will fail when the graph
+        # is cyclic.  But when the graph is acyclic it will succeed and we
+        # break out, because we're done.
+        if G.assign_vertex_values():
+            break
+
+    if verbose:
+        print('\nAcyclic graph found after %i trials.' % trial)
+        print('N = %i' % N)
+
+    # Sanity check the result by actually verifying that all the keys
+    # hash to the right value.
+    for hashval, key in enumerate(keys):
+        assert hashval == (
+            G.vertex_values[f1(key)] + G.vertex_values[f2(key)]
+        ) % N
+
+    if verbose:
+        print('OK')
+
+    return f1, f2, G.vertex_values
+
+
 class Format(object):
 
     def __init__(self, width=76, indent=4, delimiter=', '):
@@ -369,7 +369,7 @@ class Format(object):
         return aux.getvalue()
 
 
-def generate_code(keys, template, Hash, options=None):
+def generate_code(keys, template, Hash=Hash4, options=None):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' strinng.  'Hash' is the random hash function
