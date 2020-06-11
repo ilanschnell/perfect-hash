@@ -6,12 +6,9 @@ sys.path.append('..')
 from perfect_hash import generate_hash
 
 
-months = 'jan feb mar apr may jun jul aug sep oct mov dec'.split()
-
-
 def mkRandHash(N):
     """
-    Return a random hash function which returns hash values from 0..N-1
+    Return a random hash function which returns hash values from 0 .. N-1
     """
     junk = "".join(random.choice(string.ascii_letters + string.digits)
                    for unused in range(10))
@@ -19,11 +16,18 @@ def mkRandHash(N):
 
 
 def mkPerfHash(keys, Hash):
-    f1, f2, G = generate_hash(months, Hash)
+    """
+    Given a list of keys and a hash function generator, return a perfect
+    hash function for the keys, i.e. each key is mapped to it's index in
+    the list.
+    """
+    f1, f2, G = generate_hash(keys, Hash)
     return lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
 
 
+months = "jan feb mar apr may jun jul aug sep oct mov dec".split()
+
 f = mkPerfHash(months, mkRandHash)
-for h, k in enumerate(months):
-    assert h == f(k)
+for i, month in enumerate(months):
+    assert f(month) == i
 print("OK")
