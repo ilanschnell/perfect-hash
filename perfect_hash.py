@@ -157,7 +157,7 @@ class Hash1(object):
     """
     Random hash function generator.
     For simplicity and speed, this doesn't implement any byte-level hashing
-    scheme.  Instead, a random string is generated and prefixing to str(key),
+    scheme.  Instead, a random string is generated and prefixing to key,
     and then Python's hashing function is used.
     """
     def __init__(self, N):
@@ -196,12 +196,11 @@ class Hash2(object):
         self.salt = []
 
     def __call__(self, key):
-        skey = str(key)
-        while len(self.salt) < len(skey): # add more salt as necessary
+        while len(self.salt) < len(key): # add more salt as necessary
             self.salt.append(random.randint(1, self.N - 1))
 
         return sum(self.salt[i] * ord(c)
-                   for i, c in enumerate(skey)) % self.N
+                   for i, c in enumerate(key)) % self.N
 
     template = """
 S1 = [$S1]
@@ -224,9 +223,8 @@ class Hash3(object):
         self.salt = random.randint(32, 127)
 
     def __call__(self, key):
-        skey = str(key)
         return sum((self.salt ^ ord(c)) * (i + 1)
-                   for i, c in enumerate(skey)) % self.N
+                   for i, c in enumerate(key)) % self.N
 
     template = """
 def hash_f(key, T):
@@ -247,12 +245,11 @@ class Hash4(object):
         self.salt = ''
 
     def __call__(self, key):
-        skey = str(key)
-        while len(self.salt) < len(skey): # add more salt as necessary
+        while len(self.salt) < len(key): # add more salt as necessary
             self.salt += random.choice(self.chars)
 
         return sum(ord(self.salt[i]) * ord(c)
-                   for i, c in enumerate(skey)) % self.N
+                   for i, c in enumerate(key)) % self.N
 
     template = """
 def hash_f(key, T):
@@ -279,6 +276,10 @@ def generate_hash(keys, Hash=Hash4):
         raise TypeError("list or tuple expected")
     if len(keys) != len(set(keys)):
         raise ValueError("duplicate keys")
+    for key in keys:
+        if not isinstance(key, str):
+            raise TypeError("key a not string: %r" % key)
+
     # N is the number of vertices in the graph G
     N = len(keys) + 1
     if verbose:
