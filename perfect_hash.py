@@ -179,8 +179,8 @@ def DEKhash(x, s):
     return x
 
 def perfect_hash(key):
-    return (G[DEKhash($S1, str(key)) % $NG] +
-            G[DEKhash($S2, str(key)) % $NG]) % $NG
+    return (G[DEKhash($S1, key) % $NG] +
+            G[DEKhash($S2, key) % $NG]) % $NG
 """
 
 class Hash2(object):
@@ -209,7 +209,7 @@ S2 = [$S2]
 assert len(S1) == len(S2) == $NS
 
 def hash_f(key, T):
-    return sum(T[i % $NS] * ord(c) for i, c in enumerate(str(key))) % $NG
+    return sum(T[i % $NS] * ord(c) for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
@@ -230,7 +230,7 @@ class Hash3(object):
 
     template = """
 def hash_f(key, T):
-    return sum((T ^ ord(c)) * (i + 1) for i, c in enumerate(str(key))) % $NG
+    return sum((T ^ ord(c)) * (i + 1) for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     return (G[hash_f(key, $S1)] + G[hash_f(key, $S2)]) % $NG
@@ -256,7 +256,7 @@ class Hash4(object):
 
     template = """
 def hash_f(key, T):
-    return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(str(key))) % $NG
+    return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     return (G[hash_f(key, "$S1")] +
