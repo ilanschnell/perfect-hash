@@ -12,7 +12,7 @@ def mkRandHash(N):
     """
     junk = "".join(random.choice(string.ascii_letters + string.digits)
                    for unused in range(10))
-    return lambda key: hash(junk + str(key)) % N
+    return lambda key: hash(junk + key) % N
 
 
 def mkPerfHash(keys, Hash):
@@ -30,4 +30,5 @@ months = "jan feb mar apr may jun jul aug sep oct mov dec".split()
 f = mkPerfHash(months, mkRandHash)
 for i, month in enumerate(months):
     assert f(month) == i
+
 print("OK")
