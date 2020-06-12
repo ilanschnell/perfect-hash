@@ -112,8 +112,8 @@ class TestsGenerateHash(unittest.TestCase):
 class TestsGenerateCode(unittest.TestCase):
 
     def test_args(self):
-        run_code(generate_code(["A", "B"], Hash2, builtin_template(Hash2)))
         run_code(generate_code(["A", "B"]))
+        run_code(generate_code(["A", "B"], Hash2, builtin_template(Hash2)))
 
     def run_keys(self, keys, Hash):
         code = generate_code(keys, Hash)

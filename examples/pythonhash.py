@@ -10,7 +10,7 @@ sys.path.append('..')
 from perfect_hash import generate_code, run_code
 
 
-class Hash(object):
+class PythonHash(object):
     """
     Random hash function generator.
     """
@@ -32,6 +32,6 @@ def perfect_hash(key):
 
 keys = "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()
 
-code = generate_code(keys, Hash)
+code = generate_code(keys, PythonHash)
 print(code)
 run_code(code)
