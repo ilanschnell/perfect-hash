@@ -183,26 +183,6 @@ def perfect_hash(key):
     return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
 """
 
-class Hash3(object):
-    """
-    Random hash function generator.
-    """
-    def __init__(self, N):
-        self.N = N
-        self.salt = random.randint(32, 127)
-
-    def __call__(self, key):
-        return sum((self.salt ^ ord(c)) * (i + 1)
-                   for i, c in enumerate(key)) % self.N
-
-    template = """
-def hash_f(key, T):
-    return sum((T ^ ord(c)) * (i + 1) for i, c in enumerate(key)) % $NG
-
-def perfect_hash(key):
-    return (G[hash_f(key, $S1)] + G[hash_f(key, $S2)]) % $NG
-"""
-
 class Hash4(object):
     """
     Random hash function generator.
