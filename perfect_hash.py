@@ -152,36 +152,6 @@ class Graph(object):
         return True
 
 
-class Hash1(object):
-    """
-    Random hash function generator.
-    For simplicity and speed, this doesn't implement any byte-level hashing
-    scheme.  Instead, a random string is generated and prefixing to key,
-    and then Python's hashing function is used.
-    """
-    def __init__(self, N):
-        self.N = N
-        self.salt = random.randint(0, 1 << 31)
-
-    def DEKhash(self, x, s):
-        for c in s:
-            x = ((x << 5) ^ (x >> 27) ^ ord(c)) % (1 << 31)
-        return x
-
-    def __call__(self, key):
-        return self.DEKhash(self.salt, str(key)) % self.N
-
-    template = """
-def DEKhash(x, s):
-    for c in s:
-        x = ((x << 5) ^ (x >> 27) ^ ord(c)) % (1 << 31)
-    return x
-
-def perfect_hash(key):
-    return (G[DEKhash($S1, key) % $NG] +
-            G[DEKhash($S2, key) % $NG]) % $NG
-"""
-
 class Hash2(object):
     """
     Random hash function generator.
@@ -618,9 +588,7 @@ is processed and the output code is written to stdout.
     if len(args) == 2 and not args[1].count('tmpl'):
         parser.error("template filename does not contain 'tmpl'")
 
-    if options.hft == 1:
-        Hash = Hash1
-    elif options.hft == 2:
+    if options.hft == 2:
         Hash = Hash2
     elif options.hft == 3:
         Hash = Hash3

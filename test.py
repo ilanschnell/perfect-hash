@@ -6,12 +6,12 @@ import unittest
 
 
 from perfect_hash import (
-    generate_hash, Graph, Format, Hash1, Hash2, Hash3, Hash4,
+    generate_hash, Graph, Format, Hash2, Hash3, Hash4,
     generate_code, run_code, builtin_template, TooManyInterationsError,
 )
 
 
-Hashes = Hash1, Hash2, Hash3, Hash4
+Hashes = Hash2, Hash3, Hash4
 
 
 def flush_dot():
@@ -102,11 +102,14 @@ class TestsGenerateHash(unittest.TestCase):
                 self.create_and_verify(random_keys(N), Hash)
 
     def test_too_many_iterations(self):
-        # through experiment, I found these two keys which cause
-        # generate_hash not to work with Hash1
+
+        def Hash(N):
+            # the returned hash function has no random salt
+            return lambda key: hash(key) % N
+
         keys = ['kg', 'jG']
         self.assertRaises(TooManyInterationsError,
-                          generate_hash, keys, Hash1)
+                          generate_hash, keys, Hash)
 
 
 class TestsGenerateCode(unittest.TestCase):
