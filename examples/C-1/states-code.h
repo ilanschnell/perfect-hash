@@ -9,6 +9,6 @@ struct {
 #include "states.dat.h"
 };
 
-int get_index(const char *key);
+int get_hashval(const char *key);
 
 #endif  /* STH */

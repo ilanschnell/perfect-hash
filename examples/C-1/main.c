@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "states-code.h"
 
@@ -13,13 +14,13 @@ int main (int argc, char *argv[])
         return 2;
     }
 
-    i = get_index(abbr);
-    if (i < 0)
-        printf("'%s' is not an abbreviation for a state.\n", abbr);
-    else
+    i = get_hashval(abbr);
+    if (i >= 0 && strcmp(abbr, states[i].abbr) == 0)
         printf("The state of %s has a population of %g million.\n",
                states[i].name,
                1e-6 * states[i].pop);
+    else
+        printf("'%s' is not an abbreviation for a state.\n", abbr);
 
     return 0;
 }
