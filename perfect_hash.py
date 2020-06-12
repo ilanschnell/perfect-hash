@@ -152,7 +152,7 @@ class Graph(object):
         return True
 
 
-class StringHash(object):
+class StrSaltHash(object):
     """
     Random hash function generator.
     Simple byte level hashing: each byte is multiplied to another byte from
@@ -181,7 +181,7 @@ def perfect_hash(key):
             G[hash_f(key, "$S2")]) % $NG
 """
 
-class IntegerHash(object):
+class IntSaltHash(object):
     """
     Random hash function generator.
     Simple byte level hashing, each byte is multiplied in sequence to a table
@@ -232,7 +232,7 @@ class TooManyInterationsError(Exception):
     pass
 
 
-def generate_hash(keys, Hash=StringHash):
+def generate_hash(keys, Hash=StrSaltHash):
     """
     Return hash functions f1 and f2, and G for a perfect minimal hash.
     Input is an iterable of 'keys', whos indicies are the desired hash values.
@@ -337,7 +337,7 @@ class Format(object):
         return aux.getvalue()
 
 
-def generate_code(keys, Hash=StringHash, template=None, options=None):
+def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' string.  'Hash' is the random hash function
@@ -570,9 +570,9 @@ is processed and the output code is written to stdout.
         parser.error("template filename does not contain 'tmpl'")
 
     if options.hft == 1:
-        Hash = StringHash
+        Hash = StrSaltHash
     elif options.hft == 2:
-        Hash = IntegerHash
+        Hash = IntSaltHash
     else:
         parser.error("Hash function %s not implemented." % options.hft)
 

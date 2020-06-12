@@ -6,12 +6,12 @@ import unittest
 
 
 from perfect_hash import (
-    generate_hash, Graph, Format, StringHash, IntegerHash,
+    generate_hash, Graph, Format, StrSaltHash, IntSaltHash,
     generate_code, run_code, builtin_template, TooManyInterationsError,
 )
 
 
-Hashes = StringHash, IntegerHash
+Hashes = StrSaltHash, IntSaltHash
 
 
 def flush_dot():
@@ -117,7 +117,7 @@ class TestsGenerateCode(unittest.TestCase):
     def test_args(self):
         run_code(generate_code(["A", "B"]))
         run_code(generate_code(["A", "B"],
-                               IntegerHash, builtin_template(IntegerHash)))
+                               IntSaltHash, builtin_template(IntSaltHash)))
 
     def run_keys(self, keys, Hash):
         code = generate_code(keys, Hash)
