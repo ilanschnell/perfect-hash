@@ -21,7 +21,7 @@ int main (int argc, char *argv[])
         return 2;
     }
 
-    i = index_key(abbr);
+    i = get_index(abbr);
     if (i < 0) {
         printf("'%s' is not an abbreviation for a state.\n", abbr);
     }

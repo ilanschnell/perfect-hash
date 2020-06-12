@@ -1,38 +1,27 @@
 #include <string.h>
-#include <assert.h>
 
-#include "states-code.h"
+#define NK  $NK       /* number of keys */
+#define NG  $NG       /* number of vertices */
+#define NS  $NS       /* length of array T1 and T2 */
 
-
-static int T1[] = {$S1};
-static int T2[] = {$S2};
+static int S1[] = {$S1};
+static int S2[] = {$S2};
 static int G[] = {$G};
 static char *K[] = {$K};
 
-static int
-hash_g(const char *key, const int *T)
-{
-    int i, sum = 0;
-
-    for (i = 0; key[i] != '\0'; i++) {
-        assert(i < $NS);
-        sum += T[i] * key[i];
-        sum %= $NG;
-    }
-    return G[sum];
-}
 
 /* return index of `key` in K if key is found, -1 otherwise */
-int index_key(const char *key)
+int get_index(const char *key)
 {
-    int hash_value;
+    int i, f1 = 0, f2 = 0;
 
-    if (strlen(key) > $NS)
-        return -1;
-
-    hash_value = (hash_g(key, T1) + hash_g(key, T2)) % $NG;
-    if (hash_value < $NK && strcmp(key, K[hash_value]) == 0)
-        return hash_value;
+    for (i = 0; key[i] != '\0' && i < NS; i++) {
+        f1 += S1[i] * key[i];
+        f2 += S2[i] * key[i];
+    }
+    i = (G[f1 % NG] + G[f2 % NG]) % NG;
+    if (i < NK && strcmp(key, K[i]) == 0)
+        return i;
 
     return -1;
 }
