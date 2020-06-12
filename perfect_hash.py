@@ -529,7 +529,8 @@ is processed and the output code is written to stdout.
                       action  = "store",
                       default = 1,
                       type    = "int",
-                      help    = "Hash function type INT (see documentation), "
+                      help    = "Hash function type INT. "
+                                "Possible values are 1 and 2. "
                                 "The default is %default",
                       metavar = "INT")
 
