@@ -1,4 +1,4 @@
-2020-06-XX: 0.4.0:
+2020-06-12: 0.4.0:
 ------------------
   * remove Hash1, Hash3 functions (because those can fail)
   * add example which uses salted Python's hash()
