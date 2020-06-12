@@ -9,7 +9,7 @@ stations.dat.h: stations.dat
 
 
 stations-code.h: stations.dat stations-tmpl.h
-	python ../../perfect_hash.py --hft=4 $^
+	python ../../perfect_hash.py --hft=1 $^
 
 
 clean:

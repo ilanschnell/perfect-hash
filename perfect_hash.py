@@ -152,40 +152,12 @@ class Graph(object):
         return True
 
 
-class Hash2(object):
+class StringHash(object):
     """
     Random hash function generator.
-    Simple byte level hashing, each byte is multiplied in sequence to a table
-    containing random numbers modulo N, and then these products are summed up.
-    The table with random numbers is dynamically expanded whenever
-    a key longer than the current table size is encountered.
-    """
-    def __init__(self, N):
-        self.N = N
-        self.salt = []
-
-    def __call__(self, key):
-        while len(self.salt) < len(key): # add more salt as necessary
-            self.salt.append(random.randint(1, self.N - 1))
-
-        return sum(self.salt[i] * ord(c)
-                   for i, c in enumerate(key)) % self.N
-
-    template = """
-S1 = [$S1]
-S2 = [$S2]
-assert len(S1) == len(S2) == $NS
-
-def hash_f(key, T):
-    return sum(T[i % $NS] * ord(c) for i, c in enumerate(key)) % $NG
-
-def perfect_hash(key):
-    return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
-"""
-
-class Hash4(object):
-    """
-    Random hash function generator.
+    Simple byte level hashing: each byte is multiplied to another byte from
+    a random string of characters, summed up, and finally modulo N is
+    taken.
     """
     chars = string.ascii_letters + string.digits
 
@@ -207,6 +179,35 @@ def hash_f(key, T):
 def perfect_hash(key):
     return (G[hash_f(key, "$S1")] +
             G[hash_f(key, "$S2")]) % $NG
+"""
+
+class IntegerHash(object):
+    """
+    Random hash function generator.
+    Simple byte level hashing, each byte is multiplied in sequence to a table
+    containing random numbers, summed tp, and finally modulo N is taken.
+    """
+    def __init__(self, N):
+        self.N = N
+        self.salt = []
+
+    def __call__(self, key):
+        while len(self.salt) < len(key): # add more salt as necessary
+            self.salt.append(random.randint(1, 255))
+
+        return sum(self.salt[i] * ord(c)
+                   for i, c in enumerate(key)) % self.N
+
+    template = """
+S1 = [$S1]
+S2 = [$S2]
+assert len(S1) == len(S2) == $NS
+
+def hash_f(key, T):
+    return sum(T[i % $NS] * ord(c) for i, c in enumerate(key)) % $NG
+
+def perfect_hash(key):
+    return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
 """
 
 def builtin_template(Hash):
@@ -231,7 +232,7 @@ class TooManyInterationsError(Exception):
     pass
 
 
-def generate_hash(keys, Hash=Hash4):
+def generate_hash(keys, Hash=StringHash):
     """
     Return hash functions f1 and f2, and G for a perfect minimal hash.
     Input is an iterable of 'keys', whos indicies are the desired hash values.
@@ -336,7 +337,7 @@ class Format(object):
         return aux.getvalue()
 
 
-def generate_code(keys, Hash=Hash4, template=None, options=None):
+def generate_code(keys, Hash=StringHash, template=None, options=None):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' string.  'Hash' is the random hash function
@@ -526,7 +527,7 @@ is processed and the output code is written to stdout.
 
     parser.add_option("--hft",
                       action  = "store",
-                      default = 4,
+                      default = 1,
                       type    = "int",
                       help    = "Hash function type INT (see documentation), "
                                 "The default is %default",
@@ -568,10 +569,10 @@ is processed and the output code is written to stdout.
     if len(args) == 2 and not args[1].count('tmpl'):
         parser.error("template filename does not contain 'tmpl'")
 
-    if options.hft == 2:
-        Hash = Hash2
-    elif options.hft == 4:
-        Hash = Hash4
+    if options.hft == 1:
+        Hash = StringHash
+    elif options.hft == 2:
+        Hash = IntegerHash
     else:
         parser.error("Hash function %s not implemented." % options.hft)
 
