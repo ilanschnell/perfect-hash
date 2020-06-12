@@ -6,8 +6,8 @@
 #include "keys.code.h"
 
 
-/* return index of `key` in K if key is found, -1 otherwise */
-int get_index(char *key)
+/* return index of key in K if key is found, -1 otherwise */
+int get_index(const char *key)
 {
     int i, f1 = 0, f2 = 0;
 

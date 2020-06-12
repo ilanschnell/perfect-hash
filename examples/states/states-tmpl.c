@@ -7,7 +7,7 @@ static int S2[] = {$S2};
 static int G[] = {$G};
 
 
-/* return hashval of `key` */
+/* return hashval of key, -1 if key is definitely not a key */
 int get_hashval(const char *key)
 {
     int i, f1 = 0, f2 = 0;
@@ -17,8 +17,5 @@ int get_hashval(const char *key)
         f2 += S2[i] * key[i];
     }
     i = (G[f1 % NG] + G[f2 % NG]) % NG;
-    if (i < NK)
-        return i;
-
-    return -1;
+    return (i < NK) ? i : -1;
 }

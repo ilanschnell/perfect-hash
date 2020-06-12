@@ -13,7 +13,7 @@ char *K[] = {$K};
 
 
 /* return index of key in K if key is found, -1 otherwise */
-int get_index(char *key)
+int get_index(const char *key)
 {
     int f1 = 0, f2 = 0, i;
 
