@@ -570,8 +570,6 @@ is processed and the output code is written to stdout.
 
     if options.hft == 2:
         Hash = Hash2
-    elif options.hft == 3:
-        Hash = Hash3
     elif options.hft == 4:
         Hash = Hash4
     else:
