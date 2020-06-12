@@ -12,17 +12,17 @@ int G[] = {$G};
 char *K[] = {$K};
 
 
-/* return index of `key` in K if key is found, -1 otherwise */
-int get_index(char *k)
+/* return index of key in K if key is found, -1 otherwise */
+int get_index(char *key)
 {
     int f1 = 0, f2 = 0, i;
 
-    for (i = 0; k[i] != '\0' && i < NS; i++) {
-        f1 += "$S1"[i] * k[i];
-        f2 += "$S2"[i] * k[i];
+    for (i = 0; key[i] != '\0' && i < NS; i++) {
+        f1 += "$S1"[i] * key[i];
+        f2 += "$S2"[i] * key[i];
     }
     i = (G[f1 % NG] + G[f2 % NG]) % NG;
-    if (i < NK && strcmp(k, K[i]) == 0)
+    if (i < NK && strcmp(key, K[i]) == 0)
         return i;
 
     return -1;
