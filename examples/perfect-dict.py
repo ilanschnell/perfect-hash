@@ -32,12 +32,12 @@ class PerfectDict(object):
         return h < self.N and key == self.keys[h]
 
 
-d = {'foo': 429, 'bar': 686, 'baz': 128}
+d = {'foo': 429, 'bar': 686, 'baz': 128, 'quux': "Hello"}
 p = PerfectDict(d)
 
-assert p['foo'] == 429
-assert p['bar'] == 686
-assert p['baz'] == 128
+for k, v in d.items():
+    assert p[k] == v
 assert 'foo' in p
 assert 'matchbox' not in p
+
 print("OK")
