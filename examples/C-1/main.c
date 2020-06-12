@@ -2,14 +2,6 @@
 
 #include "states-code.h"
 
-struct {
-    char *name;
-    char *abbr;
-    int pop;
-} states[] = {
-#include "states.dat.h"
-};
-
 
 int main (int argc, char *argv[])
 {
@@ -22,14 +14,12 @@ int main (int argc, char *argv[])
     }
 
     i = get_index(abbr);
-    if (i < 0) {
+    if (i < 0)
         printf("'%s' is not an abbreviation for a state.\n", abbr);
-    }
-    else {
+    else
         printf("The state of %s has a population of %g million.\n",
                states[i].name,
                1e-6 * states[i].pop);
-    }
 
     return 0;
 }
