@@ -63,7 +63,7 @@ else:
     from io import StringIO
 
 
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 
 
 verbose = False
@@ -535,8 +535,8 @@ is processed and the output code is written to stdout.
                       action  = "store",
                       default = 1,
                       type    = "int",
-                      help    = "Hash function type INT. "
-                                "Possible values are 1 and 2. "
+                      help    = "Hash function type INT.  Possible values "
+                                "are 1 (StrSaltHash) and 2 (IntSaltHash). "
                                 "The default is %default",
                       metavar = "INT")
 
