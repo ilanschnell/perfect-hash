@@ -77,10 +77,10 @@ fill in the calculated parameters, this allows the generation of perfect
 hash function in any programming language.  The hash function is kept quite
 simple and does not require machine or language specific byte level operations
 which might be hard to implement in the target language.
-The following parameters are available in the template, and will expand to:
+The following parameters are available in the template:
 
 | string  |  expands to                              |
-|---------|------------------------------------------|
+| ------- | ---------------------------------------- |
 | `$NS`   |  length of S1 and S2 salt                |
 | `$S1`   |  S1 salt                                 |
 | `$S2`   |  S2 salt                                 |
