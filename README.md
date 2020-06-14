@@ -132,6 +132,13 @@ short of "hash function type".  There are two types to choose from:
    arrays (appart from the always present array `G`).
 
 
+### Examples
+
+The source repository contains many useful examples (in `examples/`) which
+illustrate how to use the `perfect-hash` command, as well as `python_hash.py`
+as a library.
+
+
 ### Acknowledgments
 
 Part of the code is based on an a program A.M. Kuchling wrote:
