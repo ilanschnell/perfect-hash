@@ -1,3 +1,9 @@
+2020-06-XX: 0.4.1:
+------------------
+  * improve error message for too many keys
+  * add warning for when default hash function is likely going to fail
+
+
 2020-06-12: 0.4.0:
 ------------------
   * remove Hash1, Hash3 functions (because those can fail)
