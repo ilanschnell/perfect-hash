@@ -14,4 +14,4 @@ do
     make clean
     popd
 done
-echo "=== all tests OK ==="
+echo "=== all examples OK ==="

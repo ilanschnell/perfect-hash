@@ -9,8 +9,8 @@ class DEKHash(object):
     """
     Random hash function generator.
     """
-    def __init__(self, N):
-        self.N = N
+    def __init__(self, NG):
+        self.NG = NG
         self.salt = random.randint(0, 1 << 31)
 
     def DEKhash(self, x, key):
@@ -19,7 +19,7 @@ class DEKHash(object):
         return x
 
     def __call__(self, key):
-        return self.DEKhash(self.salt, key) % self.N
+        return self.DEKhash(self.salt, key) % self.NG
 
     template = """
 def DEKhash(x, s):

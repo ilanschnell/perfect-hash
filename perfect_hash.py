@@ -156,13 +156,13 @@ class StrSaltHash(object):
     """
     Random hash function generator.
     Simple byte level hashing: each byte is multiplied to another byte from
-    a random string of characters, summed up, and finally modulo N is
+    a random string of characters, summed up, and finally modulo NG is
     taken.
     """
     chars = string.ascii_letters + string.digits
 
-    def __init__(self, N):
-        self.N = N
+    def __init__(self, NG):
+        self.NG = NG
         self.salt = ''
 
     def __call__(self, key):
@@ -170,7 +170,7 @@ class StrSaltHash(object):
             self.salt += random.choice(self.chars)
 
         return sum(ord(self.salt[i]) * ord(c)
-                   for i, c in enumerate(key)) % self.N
+                   for i, c in enumerate(key)) % self.NG
 
     template = """
 def hash_f(key, T):
@@ -185,18 +185,18 @@ class IntSaltHash(object):
     """
     Random hash function generator.
     Simple byte level hashing, each byte is multiplied in sequence to a table
-    containing random numbers, summed tp, and finally modulo N is taken.
+    containing random numbers, summed tp, and finally modulo NG is taken.
     """
-    def __init__(self, N):
-        self.N = N
+    def __init__(self, NG):
+        self.NG = NG
         self.salt = []
 
     def __call__(self, key):
         while len(self.salt) < len(key): # add more salt as necessary
-            self.salt.append(random.randint(1, self.N - 1))
+            self.salt.append(random.randint(1, self.NG - 1))
 
         return sum(self.salt[i] * ord(c)
-                   for i, c in enumerate(key)) % self.N
+                   for i, c in enumerate(key)) % self.NG
 
     template = """
 S1 = [$S1]
@@ -241,6 +241,7 @@ def generate_hash(keys, Hash=StrSaltHash):
     """
     if not isinstance(keys, (list, tuple)):
         raise TypeError("list or tuple expected")
+    NK = len(keys)
     if len(keys) != len(set(keys)):
         raise ValueError("duplicate keys")
     for key in keys:
@@ -253,30 +254,30 @@ WARNING: You have %d keys.
          Please use --hft=2 instead.
 """ % len(keys))
 
-    # N is the number of vertices in the graph G
-    N = len(keys) + 1
+    # the number of vertices in the graph G
+    NG = len(keys) + 1
     if verbose:
-        print('N = %i' % N)
+        print('NG = %d' % NG)
 
     trial = 0  # Number of trial graphs so far
     while True:
         if (trial % trials) == 0:   # trials failures, increase N slightly
             if trial > 0:
-                N = max(N + 1, int(1.05 * N))
+                NG = max(NG + 1, int(1.05 * NG))
             if verbose:
-                sys.stdout.write('\nGenerating graphs N = %i ' % N)
+                sys.stdout.write('\nGenerating graphs NG = %d ' % NG)
         trial += 1
 
-        if N > 100 * (len(keys) + 1):
+        if NG > 100 * (len(keys) + 1):
             raise TooManyInterationsError("%d keys" % len(keys))
 
         if verbose:
             sys.stdout.write('.')
             sys.stdout.flush()
 
-        G = Graph(N)   # Create graph with N vertices
-        f1 = Hash(N)   # Create 2 random hash functions
-        f2 = Hash(N)
+        G = Graph(NG)   # Create graph with NG vertices
+        f1 = Hash(NG)   # Create 2 random hash functions
+        f2 = Hash(NG)
 
         # Connect vertices given by the values of the two hash functions
         # for each key.  Associate the desired hash value with each edge.
@@ -290,15 +291,15 @@ WARNING: You have %d keys.
             break
 
     if verbose:
-        print('\nAcyclic graph found after %i trials.' % trial)
-        print('N = %i' % N)
+        print('\nAcyclic graph found after %d trials.' % trial)
+        print('NG = %d' % NG)
 
     # Sanity check the result by actually verifying that all the keys
     # hash to the right value.
     for hashval, key in enumerate(keys):
         assert hashval == (
             G.vertex_values[f1(key)] + G.vertex_values[f2(key)]
-        ) % N
+        ) % NG
 
     if verbose:
         print('OK')
@@ -352,7 +353,7 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
     """
     f1, f2, G = generate_hash(keys, Hash)
 
-    assert f1.N == f2.N == len(G)
+    assert f1.NG == f2.NG == len(G)
     try:
         salt_len = len(f1.salt)
         assert salt_len == len(f2.salt)
@@ -414,7 +415,7 @@ def read_table(filename, options):
         try:
             key = row[options.keycol - 1]
         except IndexError:
-            sys.exit("%s:%i: Error: Cannot read key, not enough columns." %
+            sys.exit("%s:%d: Error: Cannot read key, not enough columns." %
                      (filename, n + 1))
 
         keys.append(key)
