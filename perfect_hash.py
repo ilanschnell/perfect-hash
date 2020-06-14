@@ -246,6 +246,12 @@ def generate_hash(keys, Hash=StrSaltHash):
     for key in keys:
         if not isinstance(key, str):
             raise TypeError("key a not string: %r" % key)
+    if len(keys) > 10000 and Hash == StrSaltHash:
+        print("""\
+WARNING: You have %d keys.
+         Using --hft=1 is likely to fail for so many keys.
+         Please use --hft=2 instead.
+""" % len(keys))
 
     # N is the number of vertices in the graph G
     N = len(keys) + 1
