@@ -193,7 +193,7 @@ class IntSaltHash(object):
 
     def __call__(self, key):
         while len(self.salt) < len(key): # add more salt as necessary
-            self.salt.append(random.randint(1, 255))
+            self.salt.append(random.randint(1, self.N - 1))
 
         return sum(self.salt[i] * ord(c)
                    for i, c in enumerate(key)) % self.N
