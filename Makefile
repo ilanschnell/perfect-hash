@@ -3,6 +3,7 @@ install:
 
 
 test:
+	cd ${PWD}/examples && bash run-all.sh
 	python test.py
 
 
