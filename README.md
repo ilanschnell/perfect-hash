@@ -114,6 +114,24 @@ All these various choices are possible because of the template is simply
 filled with the parameters, no matter what else is inside the template.
 
 
+### Hash function types
+
+One important option the `perfect-hash` command provides is `--hft` which is
+short of "hash function type".  There are two types to choose from:
+
+1: A random hash function generation which creates hash function with a
+   random string being used as it's salt.   This is the default.
+   Since the generated random hash function does not include large enough
+   output for a very large number of keys (over 10,000), the perfect hash
+   function generation will fail for such large keys.  However, the
+   implementation of this hash function is quite simple and fast.
+
+2: A random hash function generation which creates hash function with a
+   random integers being used as it's salt.  Using this option will always
+   succeed, but an implementation requires two additional integer
+   arrays (appart from the always present array `G`).
+
+
 ### Acknowledgments
 
 Part of the code is based on an a program A.M. Kuchling wrote:
