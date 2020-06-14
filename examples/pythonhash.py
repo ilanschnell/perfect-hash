@@ -16,12 +16,12 @@ class PythonHash(object):
     """
     chars = string.ascii_letters + string.digits
 
-    def __init__(self, NG):
-        self.NG = NG
+    def __init__(self, N):
+        self.N = N
         self.salt = ''.join(random.choice(self.chars) for _ in range(10))
 
     def __call__(self, key):
-        return hash(self.salt + key) % self.NG
+        return hash(self.salt + key) % self.N
 
     template = """
 def perfect_hash(key):

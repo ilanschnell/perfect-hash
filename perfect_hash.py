@@ -161,8 +161,8 @@ class StrSaltHash(object):
     """
     chars = string.ascii_letters + string.digits
 
-    def __init__(self, NG):
-        self.NG = NG
+    def __init__(self, N):
+        self.N = N
         self.salt = ''
 
     def __call__(self, key):
@@ -170,7 +170,7 @@ class StrSaltHash(object):
             self.salt += random.choice(self.chars)
 
         return sum(ord(self.salt[i]) * ord(c)
-                   for i, c in enumerate(key)) % self.NG
+                   for i, c in enumerate(key)) % self.N
 
     template = """
 def hash_f(key, T):
@@ -187,16 +187,16 @@ class IntSaltHash(object):
     Simple byte level hashing, each byte is multiplied in sequence to a table
     containing random numbers, summed tp, and finally modulo NG is taken.
     """
-    def __init__(self, NG):
-        self.NG = NG
+    def __init__(self, N):
+        self.N = N
         self.salt = []
 
     def __call__(self, key):
         while len(self.salt) < len(key): # add more salt as necessary
-            self.salt.append(random.randint(1, self.NG - 1))
+            self.salt.append(random.randint(1, self.N - 1))
 
         return sum(self.salt[i] * ord(c)
-                   for i, c in enumerate(key)) % self.NG
+                   for i, c in enumerate(key)) % self.N
 
     template = """
 S1 = [$S1]
@@ -353,7 +353,7 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
     """
     f1, f2, G = generate_hash(keys, Hash)
 
-    assert f1.NG == f2.NG == len(G)
+    assert f1.N == f2.N == len(G)
     try:
         salt_len = len(f1.salt)
         assert salt_len == len(f2.salt)
