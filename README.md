@@ -1,10 +1,21 @@
-Program for creating perfect minimal hash function
---------------------------------------------------
+Creating minimal perfect hash functions
+---------------------------------------
 
 Generate a minimal perfect hash function for a given set of keys.
 A given code template is filled with parameters, such that the
 output is code which implements the hash function.
 Templates can easily be constructed for any programming language.
+
+
+### Installation
+
+The minimal perfect hash function generator is written in pure Python,
+and can be installed using:
+
+    $ pip install perfect-hash
+
+
+### Acknowledgments
 
 Part of the code is based on an a program A.M. Kuchling wrote:
 http://www.amk.ca/python/code/perfect-hash
