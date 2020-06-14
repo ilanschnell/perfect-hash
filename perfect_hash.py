@@ -242,20 +242,20 @@ def generate_hash(keys, Hash=StrSaltHash):
     if not isinstance(keys, (list, tuple)):
         raise TypeError("list or tuple expected")
     NK = len(keys)
-    if len(keys) != len(set(keys)):
+    if NK != len(set(keys)):
         raise ValueError("duplicate keys")
     for key in keys:
         if not isinstance(key, str):
             raise TypeError("key a not string: %r" % key)
-    if len(keys) > 10000 and Hash == StrSaltHash:
+    if NK > 10000 and Hash == StrSaltHash:
         print("""\
 WARNING: You have %d keys.
          Using --hft=1 is likely to fail for so many keys.
          Please use --hft=2 instead.
-""" % len(keys))
+""" % NK)
 
     # the number of vertices in the graph G
-    NG = len(keys) + 1
+    NG = NK + 1
     if verbose:
         print('NG = %d' % NG)
 
@@ -268,8 +268,8 @@ WARNING: You have %d keys.
                 sys.stdout.write('\nGenerating graphs NG = %d ' % NG)
         trial += 1
 
-        if NG > 100 * (len(keys) + 1):
-            raise TooManyInterationsError("%d keys" % len(keys))
+        if NG > 100 * (NK + 1):
+            raise TooManyInterationsError("%d keys" % NK)
 
         if verbose:
             sys.stdout.write('.')
