@@ -262,7 +262,7 @@ def generate_hash(keys, Hash=StrSaltHash):
         trial += 1
 
         if N > 100 * (len(keys) + 1):
-            raise TooManyInterationsError("keys=%r" % keys)
+            raise TooManyInterationsError("%d keys" % len(keys))
 
         if verbose:
             sys.stdout.write('.')
