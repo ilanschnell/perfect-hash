@@ -30,7 +30,7 @@ to N *consecutive* integers, usually in the range from 0 to N-1.
 
 ### Usage
 
-Given a set of keys which are character string, the program returns a minimal
+Given a set of keys which are character strings, the program returns a minimal
 perfect hash function.  This hash function is returned in the form of Python
 code by default.  Suppose we have a file with keys:
 
