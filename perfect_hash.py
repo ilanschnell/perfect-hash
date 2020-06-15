@@ -261,7 +261,7 @@ WARNING: You have %d keys.
 
     trial = 0  # Number of trial graphs so far
     while True:
-        if (trial % trials) == 0:   # trials failures, increase N slightly
+        if (trial % trials) == 0:   # trials failures, increase NG slightly
             if trial > 0:
                 NG = max(NG + 1, int(1.05 * NG))
             if verbose:
@@ -525,7 +525,7 @@ is processed and the output code is written to stdout.
                       default = 5,
                       type    = "int",
                       help    = "Specifies the number of trials before "
-                                "N is increased.  A small INT will give "
+                                "NG is increased.  A small INT will give "
                                 "compute faster, but the array G will be "
                                 "large.  A large INT will take longer to "
                                 "compute but G will be smaller. "
