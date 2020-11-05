@@ -107,9 +107,9 @@ The built-in template which creates the above code is:
 
 Using code templates, makes this program very flexible.  The source repository
 includes several complete examples for C.  There are many choices one
-faces when implementing a static hash table: do the parameter lists go into
-a separate header file, should the API for the table only contain the hash
-values, but not the objects being mapped, and so on.
+faces when implementing a static hash table: Do the parameter lists go into
+a separate header file?  Should the API for the table only contain the hash
+values, but not the objects being mapped?  And so on.
 All these various choices are possible because of the template is simply
 filled with the parameters, no matter what else is inside the template.
 
