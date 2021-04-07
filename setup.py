@@ -4,8 +4,7 @@ from distutils.core import setup
 
 kwds = {}
 try:
-    kwds['long_description'] = open('README.md').read()
-    kwds['long_description_content_type'] = 'test/markdown'
+    kwds['long_description'] = open('README.rst').read()
 except IOError:
     pass
 
@@ -33,6 +32,8 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Utilities",
     ],
     description = "creating perfect minimal hash function",

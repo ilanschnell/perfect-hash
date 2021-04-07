@@ -1,5 +1,5 @@
 Creating minimal perfect hash functions
----------------------------------------
+=======================================
 
 Generate a minimal perfect hash function for a given set of keys.
 A given code template is filled with parameters, such that the
@@ -7,10 +7,13 @@ output is code which implements the hash function.
 Templates can easily be constructed for any programming language.
 
 
-### Installation
+Installation
+------------
 
 The minimal perfect hash function generator is written in pure Python,
 and can be installed using:
+
+.. code-block:: shell-session
 
     $ pip install perfect-hash
 
@@ -18,7 +21,8 @@ The code supports Python 2.7 and Python 3.5 or higher.
 However, some of the examples do not support Python 2 anymore.
 
 
-### Introduction
+Introduction
+------------
 
 A perfect hash function of a certain set S of keys is a hash function
 which maps all keys in S to different numbers.
@@ -28,11 +32,14 @@ Further, a perfect hash function is called "minimal" when it maps N keys
 to N *consecutive* integers, usually in the range from 0 to N-1.
 
 
-### Usage
+Usage
+-----
 
 Given a set of keys which are character strings, the program returns a minimal
 perfect hash function.  This hash function is returned in the form of Python
 code by default.  Suppose we have a file with keys:
+
+.. code-block::
 
     # 'animals.txt'
     Elephant
@@ -47,6 +54,8 @@ The exact way this file is parsed can be specified using command line
 options, for example it is possible to only read one column from a file
 which contains different items in each row.
 The program is invoked like this:
+
+.. code-block:: python
 
     $ perfect-hash animals.txt
     # =======================================================================
@@ -79,21 +88,25 @@ simple and does not require machine or language specific byte level operations
 which might be hard to implement in the target language.
 The following parameters are available in the template:
 
-| string  |  expands to                              |
-| ------- | ---------------------------------------- |
-| `$NS`   |  length of S1 and S2 salt                |
-| `$S1`   |  S1 salt                                 |
-| `$S2`   |  S2 salt                                 |
-| `$NG`   |  length of array G                       |
-| `$G`    |  array of integers G                     |
-| `$NK`   |  number of keys, i.e. length of array K  |
-| `$K`    |  array with (quoted) keys                |
-| `$$`    |  $ (a literal dollar sign)               |
++----------+------------------------------------------+
+| string   |  expands to                              |
++==========+==========================================+
+| ``$NS``  |  length of S1 and S2 salt                |
+| ``$S1``  |  S1 salt                                 |
+| ``$S2``  |  S2 salt                                 |
+| ``$NG``  |  length of array G                       |
+| ``$G``   |  array of integers G                     |
+| ``$NK``  |  number of keys, i.e. length of array K  |
+| ``$K``   |  array with (quoted) keys                |
+| ``$$``   |  $ (a literal dollar sign)               |
++----------+------------------------------------------+
 
 
 Since the syntax for arrays is not the same in all programming languages,
 some specifics can be adjusted using command line options.
 The built-in template which creates the above code is:
+
+.. code-block:: python
 
     G = [$G]
 
@@ -114,10 +127,11 @@ All these various choices are possible because of the template is simply
 filled with the parameters, no matter what else is inside the template.
 
 
-### Hash function types
+Hash function types
+-------------------
 
-One important option the `perfect-hash` command provides is `--hft` which is
-short of "hash function type".  There are two types to choose from:
+One important option the ``perfect-hash`` command provides is ``--hft`` which
+is short of "hash function type".  There are two types to choose from:
 
 1. A random hash function generation which creates hash function with a
    random string being used as it's salt.   This is the default.
@@ -129,17 +143,19 @@ short of "hash function type".  There are two types to choose from:
 2. A random hash function generation which creates hash function with a
    random integers being used as it's salt.  Using this option will always
    succeed, but an implementation requires two additional integer
-   arrays (appart from the always present array `G`).
+   arrays (appart from the always present array ``G``).
 
 
-### Examples
+Examples
+--------
 
-The source repository contains many useful examples (in `examples/`) which
-illustrate how to use the `perfect-hash` command, as well as `python_hash.py`
-as a library.
+The source repository contains many useful examples (in ``examples/``) which
+illustrate how to use the ``perfect-hash`` command, as well
+as ``python_hash.py`` as a library.
 
 
-### License of output
+License of output
+-----------------
 
 perfect-hash is released under the BSD license.  However, that does not
 cause the output produced by perfect-hash to be under BSD.  The reason is
@@ -156,7 +172,8 @@ output is under the same license, with the same copyright holder, as the
 input that was passed to perfect-hash.
 
 
-### Acknowledgments
+Acknowledgments
+---------------
 
 Part of the code is based on an a program A.M. Kuchling wrote:
 http://www.amk.ca/python/code/perfect-hash
