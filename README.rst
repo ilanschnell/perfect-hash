@@ -99,7 +99,7 @@ string      expands to
 ``$NK``     number of keys, i.e. length of array K
 ``$K``      array with (quoted) keys
 ``$$``      $ (a literal dollar sign)
-----------  ---------------------------------------
+==========  =======================================
 
 
 Since the syntax for arrays is not the same in all programming languages,
