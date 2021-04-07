@@ -88,18 +88,18 @@ simple and does not require machine or language specific byte level operations
 which might be hard to implement in the target language.
 The following parameters are available in the template:
 
-+----------+------------------------------------------+
-| string   |  expands to                              |
-+==========+==========================================+
-| ``$NS``  |  length of S1 and S2 salt                |
-| ``$S1``  |  S1 salt                                 |
-| ``$S2``  |  S2 salt                                 |
-| ``$NG``  |  length of array G                       |
-| ``$G``   |  array of integers G                     |
-| ``$NK``  |  number of keys, i.e. length of array K  |
-| ``$K``   |  array with (quoted) keys                |
-| ``$$``   |  $ (a literal dollar sign)               |
-+----------+------------------------------------------+
+----------  ---------------------------------------
+string      expands to
+==========  =======================================
+``$NS``     length of S1 and S2 salt
+``$S1``     S1 salt
+``$S2``     S2 salt
+``$NG``     length of array G
+``$G``      array of integers G
+``$NK``     number of keys, i.e. length of array K
+``$K``      array with (quoted) keys
+``$$``      $ (a literal dollar sign)
+----------  ---------------------------------------
 
 
 Since the syntax for arrays is not the same in all programming languages,
