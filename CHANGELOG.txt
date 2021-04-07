@@ -1,6 +1,7 @@
-2020-06-XX: 0.4.2:
+2021-04-07: 0.4.2:
 ------------------
-  * add missing long_description_content_type in setup.py
+  * add "License of output" paragraph to README, issue #5
+  * switch documentation from markdown to reStructuredText
 
 
 2020-06-14: 0.4.1:

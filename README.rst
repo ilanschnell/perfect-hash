@@ -143,7 +143,7 @@ is short of "hash function type".  There are two types to choose from:
 2. A random hash function generation which creates hash function with a
    random integers being used as it's salt.  Using this option will always
    succeed, but an implementation requires two additional integer
-   arrays (appart from the always present array ``G``).
+   arrays (apart from the always present array ``G``).
 
 
 Examples
