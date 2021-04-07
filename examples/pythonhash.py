@@ -1,6 +1,5 @@
 # Set PYTHONHASHSEED when running this program, e.g.:
-# $ export PYTHONHASHSEED=0
-# $ python generate.py
+# $ export PYTHONHASHSEED=123456
 
 import sys
 import random
@@ -34,4 +33,10 @@ keys = "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()
 
 code = generate_code(keys, PythonHash)
 print(code)
-run_code(code)
+try:
+    run_code(code)
+except AssertionError:
+    print("""\
+Set PYTHONHASHSEED when running this program, e.g.:
+$ export PYTHONHASHSEED=0
+""")
