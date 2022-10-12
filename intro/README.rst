@@ -8,5 +8,4 @@ or perfect.
 Further, a perfect hash function is called "minimal" when it maps N keys
 to N *consecutive* integers, usually in the range from 0 to N-1.
 
-  ![hashing types](./compare.png)
-
+<img src="./compare.png" alt="hash types" />
