@@ -9,4 +9,5 @@ Further, a perfect hash function is called "minimal" when it maps N keys
 to N *consecutive* integers, usually in the range from 0 to N-1.
 
 .. image:: ./compare.png
+  :width: 732
   :alt: hash types
