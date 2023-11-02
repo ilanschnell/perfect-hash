@@ -635,8 +635,7 @@ is processed and the output code is written to stdout.
 
     if outstream:
         outstream.write(code)
-        if not outname == 'std':
-            outstream.close()
+        outstream.close()
 
 
 if __name__ == '__main__':
