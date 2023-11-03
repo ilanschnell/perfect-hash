@@ -12,7 +12,7 @@ http://www.amk.ca/python/code/perfect-hash
 The algorithm the program uses is described in the paper
 'Optimal algorithms for minimal perfect hashing',
 Z. J. Czech, G. Havas and B.S. Majewski.
-http://citeseer.ist.psu.edu/122364.html
+http://cmph.sourceforge.net/papers/chm92.pdf
 
 The algorithm works like this:
 
