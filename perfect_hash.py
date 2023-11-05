@@ -452,9 +452,7 @@ def run_code(code):
 
 
 def main():
-    from optparse import OptionParser
-
-    usage = "usage: %prog [options] KEYS_FILE [TMPL_FILE]"
+    import argparse
 
     description = """\
 Generates code for perfect hash functions from
@@ -463,148 +461,108 @@ If no template file is provided, a small built-in Python template
 is processed and the output code is written to stdout.
 """
 
-    parser = OptionParser(usage = usage,
-                          description = description,
-                          prog = sys.argv[0],
-                          version = "%prog: " + __version__)
+    p = argparse.ArgumentParser(
+        description=description,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_option("--delimiter",
-                      action  = "store",
-                      default = ", ",
-                      help    = "Delimiter for list items used in output, "
-                                "the default delimiter is '%default'",
-                      metavar = "STR")
+    p.add_argument('KEYS_FILE', nargs=1,
+                   help="file containing keys for perfect hash function")
 
-    parser.add_option("--indent",
-                      action  = "store",
-                      default = 4,
-                      type    = "int",
-                      help    = "Make INT spaces at the beginning of a "
-                                "new line when generated list is wrapped. "
-                                "Default is %default",
-                      metavar = "INT")
+    p.add_argument('TMPL_FILE', nargs="?",
+                   help="code template file, must contain 'tmpl' in filename")
 
-    parser.add_option("--width",
-                      action  = "store",
-                      default = 76,
-                      type    = "int",
-                      help    = "Maximal width of generated list when "
-                                "wrapped.  Default width is %default",
-                      metavar = "INT")
+    p.add_argument("--delimiter", action="store", default=", ",
+                   help="Delimiter for list items used in output.",
+                   metavar="STR")
 
-    parser.add_option("--comment",
-                      action  = "store",
-                      default = "#",
-                      help    = "STR is the character, or sequence of "
-                                "characters, which marks the beginning "
-                                "of a comment (which runs till "
-                                "the end of the line), in the input "
-                                "KEYS_FILE. "
-                                "Default is '%default'",
-                      metavar = "STR")
+    p.add_argument("--indent", action="store", default=4, type=int,
+                   help="Make INT spaces at the beginning of a "
+                        "new line when generated list is wrapped.",
+                   metavar="INT")
 
-    parser.add_option("--splitby",
-                      action  = "store",
-                      default = ",",
-                      help    = "STR is the character by which the columns "
-                                "in the input KEYS_FILE are split. "
-                                "Default is '%default'",
-                      metavar = "STR")
+    p.add_argument("--width", action="store", default=76, type=int,
+                   help="Maximal width of generated list when wrapped.",
+                   metavar="INT")
 
-    parser.add_option("--keycol",
-                      action  = "store",
-                      default = 1,
-                      type    = "int",
-                      help    = "Specifies the column INT in the input "
-                                "KEYS_FILE which contains the keys. "
-                                "Default is %default, i.e. the first column.",
-                      metavar = "INT")
+    p.add_argument("--comment", action="store", default="#",
+                   help="STR is the character, or sequence of characters, "
+                        "which marks the beginning of a comment (which runs "
+                        " till the end of the line), in the input KEYS_FILE.",
+                   metavar="STR")
 
-    parser.add_option("--trials",
-                      action  = "store",
-                      default = 5,
-                      type    = "int",
-                      help    = "Specifies the number of trials before "
-                                "NG is increased.  A small INT will give "
-                                "compute faster, but the array G will be "
-                                "large.  A large INT will take longer to "
-                                "compute but G will be smaller. "
-                                "Default is %default",
-                      metavar = "INT")
+    p.add_argument("--splitby", action="store", default = ",",
+                   help="STR is the character by which the columns "
+                        "in the input KEYS_FILE are split.",
+                   metavar="STR")
 
-    parser.add_option("--hft",
-                      action  = "store",
-                      default = 1,
-                      type    = "int",
-                      help    = "Hash function type INT.  Possible values "
-                                "are 1 (StrSaltHash) and 2 (IntSaltHash). "
-                                "The default is %default",
-                      metavar = "INT")
+    p.add_argument("--keycol", action="store", default=1, type=int,
+                   help="Specifies the column INT in the input "
+                        "KEYS_FILE which contains the keys.",
+                   metavar="INT")
 
-    parser.add_option("-e", "--execute",
-                      action  = "store_true",
-                      help    = "Execute the generated code within "
-                                "the Python interpreter.")
+    p.add_argument("--trials", action="store", default=5, type=int,
+                   help="Specifies the number of trials before NG is "
+                        "increased.  A small INT will give compute faster, "
+                        "but the array G will be large.  A large INT will "
+                        "take longer to compute but G will be smaller.",
+                   metavar="INT")
 
-    parser.add_option("-o", "--output",
-                      action  = "store",
-                      help    = "Specify output FILE explicitly. "
-                                "`-o std' means standard output. "
-                                "`-o no' means no output. "
-                                "By default, the file name is obtained "
-                                "from the name of the template file by "
-                                "substituting `tmpl' to `code'.",
-                      metavar = "FILE")
+    p.add_argument("--hft", action="store", default=1, type=int,
+                   help="Hash function type INT.  Possible values "
+                        "are 1 (StrSaltHash) and 2 (IntSaltHash).",
+                   metavar="INT")
 
-    parser.add_option("-v", "--verbose",
-                      action = "store_true",
-                      help = "verbosity")
+    p.add_argument("-e", "--execute", action="store_true",
+                   help="execute generated code within Python interpreter")
 
-    options, args = parser.parse_args()
+    p.add_argument("-o", "--output", action="store",
+                   help="Specify output FILE explicitly. "
+                        "`-o std' means standard output. "
+                        "`-o no' means no output. "
+                        "By default, the file name is obtained "
+                        "from the name of the template file by "
+                        "substituting `tmpl' to `code'.",
+                   metavar="FILE")
 
-    if options.trials <= 0:
-        parser.error("trials before increasing N has to be larger than zero")
+    p.add_argument("-v", "--verbose", action="store_true")
 
-    global trials
-    trials = options.trials
+    args = p.parse_args()
 
-    global verbose
-    verbose = options.verbose
+    if args.trials <= 0:
+        p.error("trials before increasing N has to be larger than zero")
 
-    if len(args) not in (1, 2):
-        parser.error("incorrect number of arguments")
+    global trials, verbose
+    trials = args.trials
+    verbose = args.verbose
 
-    if len(args) == 2 and not args[1].count('tmpl'):
-        parser.error("template filename does not contain 'tmpl'")
+    if args.TMPL_FILE and not args.TMPL_FILE.count('tmpl'):
+        p.error("template filename does not contain 'tmpl'")
 
-    if options.hft == 1:
+    if args.hft == 1:
         Hash = StrSaltHash
-    elif options.hft == 2:
+    elif args.hft == 2:
         Hash = IntSaltHash
     else:
-        parser.error("Hash function %s not implemented." % options.hft)
+        p.error("Hash function %s not implemented." % args.hft)
 
     # --------------------- end parsing and checking --------------
 
-    keys_file = args[0]
-
+    keys_file = args.KEYS_FILE[0]
     if verbose:
         print("keys_file = %r" % keys_file)
 
-    keys = read_table(keys_file, options)
-
+    keys = read_table(keys_file, args)
     if verbose:
         print("Number os keys: %d" % len(keys))
 
-    tmpl_file = args[1] if len(args) == 2 else None
-
+    tmpl_file = args.TMPL_FILE
     if verbose:
         print("tmpl_file = %r" % tmpl_file)
 
     template = read_template(tmpl_file) if tmpl_file else None
 
-    if options.output:
-        outname = options.output
+    if args.output:
+        outname = args.output
     else:
         if tmpl_file:
             if 'tmpl' not in tmpl_file:
@@ -626,9 +584,9 @@ is processed and the output code is written to stdout.
         except IOError:
             sys.exit("Error: Could not open `%s' for writing." % outname)
 
-    code = generate_code(keys, Hash, template, options)
+    code = generate_code(keys, Hash, template, args)
 
-    if options.execute or template == builtin_template(Hash):
+    if args.execute or template == builtin_template(Hash):
         if verbose:
             print('Executing code...\n')
         run_code(code)
