@@ -1,5 +1,8 @@
 import re
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 
 kwds = {}
@@ -21,7 +24,7 @@ setup(
     url = "https://github.com/ilanschnell/perfect-hash",
     license = "BSD",
     classifiers = [
-        "License :: OSI Approved :: Python Software Foundation License",
+        "License :: OSI Approved :: BSD License",
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
