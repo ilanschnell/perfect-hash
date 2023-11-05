@@ -63,7 +63,7 @@ else:
     from io import StringIO
 
 
-__version__ = '0.4.3'
+__version__ = '0.4.4'
 
 
 verbose = False
