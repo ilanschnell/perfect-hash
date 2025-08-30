@@ -1,4 +1,4 @@
-# ./mk_rnd_keys.py 10000 | sort | uniq | shuf >keywords.txt
+# python mk_rnd_keys.py 10000 | sort | uniq | shuf >keywords.txt
 
 import sys
 from random import choice, randint

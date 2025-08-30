@@ -11,7 +11,7 @@ class DEKHash(object):
     """
     def __init__(self, N):
         self.N = N
-        self.salt = random.randint(0, 1 << 31)
+        self.salt = random.getrandbits(31)
 
     def DEKhash(self, x, key):
         for c in key:
