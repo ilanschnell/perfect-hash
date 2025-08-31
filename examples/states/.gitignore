@@ -1,0 +1,4 @@
+lookup
+*.o
+states-code.c
+states.dat.h

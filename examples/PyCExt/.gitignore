@@ -1,0 +1,4 @@
+*.so
+build/
+stations-code.h
+stations.dat.h
