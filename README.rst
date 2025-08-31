@@ -61,14 +61,16 @@ The program is invoked like this:
     # ================= Python code for perfect hash function ===============
     # =======================================================================
 
-    G = [0, 3, 6, 0, 4, 1, 5]
+    G = [0, 4, 3, 1, 5, 6, 2]
 
     def hash_f(key, T):
-        return sum(ord(T[i % 8]) * ord(c) for i, c in enumerate(key)) % 7
+        return sum(T[i % 8] * c for i, c in enumerate(key)) % 7
 
     def perfect_hash(key):
-        return (G[hash_f(key, "1mmhoNMG")] +
-                G[hash_f(key, "gf53KKbH")]) % 7
+        if isinstance(key, str):
+            key = key.encode()
+        return (G[hash_f(key, b"CaczM6WN")] +
+                G[hash_f(key, b"zWCE7MDv")]) % 7
 
     # ============================ Sanity check =============================
 
