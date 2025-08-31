@@ -354,7 +354,8 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
     generator, and the optional keywords are formating options.
     The return value is the substituted code template.
     """
-    f1, f2, G = generate_hash(keys, Hash, options.pow2 if options else False)
+    pow2 = options.pow2 if options else False
+    f1, f2, G = generate_hash(keys, Hash, pow2)
 
     assert f1.N == f2.N == len(G)
     try:
@@ -375,7 +376,7 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
     if verbose:
         fmt.print_format()
 
-    return string.Template(template).substitute(
+    res = string.Template(template).substitute(
         NS = salt_len,
         S1 = fmt(f1.salt),
         S2 = fmt(f2.salt),
@@ -383,6 +384,11 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
         G  = fmt(G),
         NK = len(keys),
         K  = fmt(list(keys), quote=True))
+
+    if pow2:
+        res = res.replace("%% %d" % len(G), "& %d" % (len(G) - 1))
+
+    return res
 
 
 def read_table(filename, options):
