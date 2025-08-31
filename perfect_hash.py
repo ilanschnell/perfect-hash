@@ -189,11 +189,12 @@ class IntSaltHash(object):
         self.salt = []
 
     def __call__(self, key):
+        if isinstance(key, str):
+            key = key.encode()
         while len(self.salt) < len(key): # add more salt as necessary
             self.salt.append(random.randrange(1, self.N))
 
-        return sum(self.salt[i] * ord(c)
-                   for i, c in enumerate(key)) % self.N
+        return sum(self.salt[i] * c for i, c in enumerate(key)) % self.N
 
     template = """
 S1 = [$S1]
@@ -201,9 +202,11 @@ S2 = [$S2]
 assert len(S1) == len(S2) == $NS
 
 def hash_f(key, T):
-    return sum(T[i % $NS] * ord(c) for i, c in enumerate(key)) % $NG
+    return sum(T[i % $NS] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
+    if isinstance(key, str):
+        key = key.encode()
     return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
 """
 
