@@ -226,7 +226,7 @@ class TooManyInterationsError(Exception):
     pass
 
 
-def generate_hash(keys, Hash=StrSaltHash):
+def generate_hash(keys, Hash=StrSaltHash, pow2=False):
     """
     Return hash functions f1 and f2, and G for a perfect minimal hash.
     Input is an iterable of 'keys', whos indicies are the desired hash values.
@@ -249,7 +249,13 @@ WARNING: You have %d keys.
 """ % NK)
 
     # the number of vertices in the graph G
-    NG = NK + 1
+    if pow2:
+        NG = 1
+        while NG < NK + 1:
+            NG *= 2
+    else:
+        NG = NK + 1
+
     if verbose:
         print('NG = %d' % NG)
 
@@ -257,7 +263,10 @@ WARNING: You have %d keys.
     while True:
         if (trial % trials) == 0:   # trials failures, increase NG slightly
             if trial > 0:
-                NG = max(NG + 1, int(1.05 * NG))
+                if pow2:
+                    NG *= 2
+                else:
+                    NG = max(NG + 1, int(1.05 * NG))
             if verbose:
                 sys.stdout.write('\nGenerating graphs NG = %d ' % NG)
         trial += 1
@@ -345,7 +354,7 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
     generator, and the optional keywords are formating options.
     The return value is the substituted code template.
     """
-    f1, f2, G = generate_hash(keys, Hash)
+    f1, f2, G = generate_hash(keys, Hash, options.pow2 if options else False)
 
     assert f1.N == f2.N == len(G)
     try:
@@ -505,6 +514,9 @@ is processed and the output code is written to stdout.
                    help="Hash function type INT.  Possible values "
                         "are 1 (StrSaltHash) and 2 (IntSaltHash).",
                    metavar="INT")
+
+    p.add_argument("--pow2", action="store_true",
+                   help="Only use powers of 2 for graph size NG.")
 
     p.add_argument("-e", "--execute", action="store_true",
                    help="execute generated code within Python interpreter")
