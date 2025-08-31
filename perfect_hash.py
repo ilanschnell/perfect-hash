@@ -46,8 +46,6 @@ If the procedure fails, G is cyclic, and we go back to step 2, replacing G
 with a new graph, and thereby discarding the vertex values from the failed
 attempt.
 """
-from __future__ import absolute_import, division, print_function
-
 import sys
 import random
 import string
@@ -55,15 +53,11 @@ import subprocess
 import shutil
 import tempfile
 from collections import defaultdict
+from io import StringIO
 from os.path import join
 
-if sys.version_info[0] == 2:
-    from cStringIO import StringIO
-else:
-    from io import StringIO
 
-
-__version__ = '0.4.4'
+__version__ = "0.5.0"
 
 
 verbose = False

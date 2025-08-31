@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys
 import string
 from random import choice, randint
