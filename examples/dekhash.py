@@ -15,19 +15,20 @@ class DEKHash(object):
 
     def DEKhash(self, x, key):
         for c in key:
-            x = ((x << 5) ^ (x >> 27) ^ ord(c)) % (1 << 31)
+            x = ((x << 5) ^ (x >> 27) ^ c) % (1 << 31)
         return x
 
     def __call__(self, key):
-        return self.DEKhash(self.salt, key) % self.N
+        return self.DEKhash(self.salt, key.encode()) % self.N
 
     template = """
 def DEKhash(x, s):
     for c in s:
-        x = ((x << 5) ^ (x >> 27) ^ ord(c)) % (1 << 31)
+        x = ((x << 5) ^ (x >> 27) ^ c) % (1 << 31)
     return x % $NG
 
 def perfect_hash(key):
+    key = key.encode()
     return (G[DEKhash($S1, key)] +
             G[DEKhash($S2, key)]) % $NG
 """
