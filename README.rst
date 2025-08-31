@@ -17,8 +17,7 @@ and can be installed using:
 
     $ pip install perfect-hash
 
-The code supports Python 2.7 and Python 3.5 or higher.
-However, some of the examples do not support Python 2 anymore.
+The code supports Python 3.5 or higher.
 
 
 Introduction
