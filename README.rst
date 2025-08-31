@@ -112,11 +112,13 @@ The built-in template which creates the above code is:
     G = [$G]
 
     def hash_f(key, T):
-        return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(str(key))) % $NG
+        return sum(T[i % $NS] * c for i, c in enumerate(str(key))) % $NG
 
     def perfect_hash(key):
-        return (G[hash_f(key, "$S1")] +
-                G[hash_f(key, "$S2")]) % $NG
+        if isinstance(key, str):
+            key = key.encode()
+        return (G[hash_f(key, b"$S1")] +
+                G[hash_f(key, b"$S2")]) % $NG
 
 
 Using code templates, makes this program very flexible.  The source repository
