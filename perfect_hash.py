@@ -153,26 +153,29 @@ class StrSaltHash(object):
     a random string of characters, summed up, and finally modulo NG is
     taken.
     """
-    chars = string.ascii_letters + string.digits
+    chars = (string.ascii_letters + string.digits).encode()
 
     def __init__(self, N):
         self.N = N
-        self.salt = ''
+        self.salt = bytearray()
 
     def __call__(self, key):
+        if isinstance(key, str):
+            key = key.encode()
         while len(self.salt) < len(key): # add more salt as necessary
-            self.salt += random.choice(self.chars)
+            self.salt.append(random.choice(self.chars))
 
-        return sum(ord(self.salt[i]) * ord(c)
-                   for i, c in enumerate(key)) % self.N
+        return sum(self.salt[i] * c for i, c in enumerate(key)) % self.N
 
     template = """
 def hash_f(key, T):
-    return sum(ord(T[i % $NS]) * ord(c) for i, c in enumerate(key)) % $NG
+    return sum(T[i % $NS] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
-    return (G[hash_f(key, "$S1")] +
-            G[hash_f(key, "$S2")]) % $NG
+    if isinstance(key, str):
+        key = key.encode()
+    return (G[hash_f(key, b"$S1")] +
+            G[hash_f(key, b"$S2")]) % $NG
 """
 
 class IntSaltHash(object):
@@ -323,8 +326,11 @@ class Format(object):
             print('  %s: %r' % (name, getattr(self, name)))
 
     def __call__(self, data, quote=False):
+        if isinstance(data, bytearray):
+            return data.decode()
+
         if not isinstance(data, (list, tuple)):
-            return str(data)
+            return data
 
         lendel = len(self.delimiter)
         aux = StringIO()

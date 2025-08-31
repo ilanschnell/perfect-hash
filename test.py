@@ -66,7 +66,7 @@ class TestsFormat(unittest.TestCase):
         x = Format(delimiter=' ')
         self.assertEqual(x(list(range(5)), quote=True),
                          '"0" "1" "2" "3" "4"')
-        self.assertEqual(x(42), '42')
+        self.assertEqual(x(42), 42)
         self.assertEqual(x('Hello'), 'Hello')
 
 
