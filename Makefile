@@ -4,7 +4,7 @@ install:
 
 test:
 	cd ${PWD}/examples && bash run-all.sh
-	python test.py
+	python test_perfect_hash.py
 
 
 clean:
