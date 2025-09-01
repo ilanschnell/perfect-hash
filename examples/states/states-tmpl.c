@@ -12,9 +12,10 @@ int get_hashval(const char *key)
 {
     int i, f1 = 0, f2 = 0;
 
-    for (i = 0; key[i] != '\0' && i < NS; i++) {
-        f1 += S1[i] * key[i];
-        f2 += S2[i] * key[i];
+    for (i = 0; key[i] && i < NS; i++) {
+        unsigned char c = key[i];
+        f1 += S1[i] * c;
+        f2 += S2[i] * c;
     }
     i = (G[f1 % NG] + G[f2 % NG]) % NG;
     return (i < NK) ? i : -1;
