@@ -1,10 +1,9 @@
 import sys
-import string
+from string import ascii_uppercase
 from random import choice, randint
 
 def key():
-    return ''.join(choice(string.ascii_uppercase)
-                   for i in range(randint(1, 8)))
+    return ''.join(choice(ascii_uppercase) for i in range(randint(1, 8)))
 
 N = int(sys.argv[1])
 
