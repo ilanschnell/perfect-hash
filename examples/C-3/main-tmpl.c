@@ -31,8 +31,7 @@ int get_index(const char *key)
 int main()
 {
     int i;
-    char *junk[] = {"ACASSICUHAIUSCSACASCASKHCKJHSAKJCHK827349RFEWIHIWUE",
-                    "abc", "x", "99"};
+    char *junk[] = {"Überflieger", "abc", "x", "99"};
 
     for (i = 0; i < 4; i++)
         assert(get_index(junk[i]) == -1);
