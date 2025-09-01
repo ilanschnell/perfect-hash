@@ -3,21 +3,18 @@
 
 import sys
 import random
-import string
 
 sys.path.append('..')
-from perfect_hash import generate_code, run_code
+from perfect_hash import generate_code, run_code, anum_chars
 
 
 class PythonHash(object):
     """
     Random hash function generator.
     """
-    chars = string.ascii_letters + string.digits
-
     def __init__(self, N):
         self.N = N
-        self.salt = ''.join(random.choice(self.chars) for _ in range(10))
+        self.salt = ''.join(random.choice(anum_chars) for _ in range(10))
 
     def __call__(self, key):
         return hash(self.salt + key) % self.N

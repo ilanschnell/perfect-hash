@@ -59,7 +59,7 @@ from os.path import join
 
 __version__ = "0.5.0"
 
-
+anum_chars = string.ascii_letters + string.digits
 verbose = False
 trials = 5
 
@@ -153,8 +153,6 @@ class StrSaltHash(object):
     a random string of characters, summed up, and finally modulo NG is
     taken.
     """
-    chars = (string.ascii_letters + string.digits).encode()
-
     def __init__(self, N):
         self.N = N
         self.salt = bytearray()
@@ -163,7 +161,7 @@ class StrSaltHash(object):
         if isinstance(key, str):
             key = key.encode()
         while len(self.salt) < len(key): # add more salt as necessary
-            self.salt.append(random.choice(self.chars))
+            self.salt.append(random.choice(anum_chars.encode()))
 
         return sum(self.salt[i] * c for i, c in enumerate(key)) % self.N
 

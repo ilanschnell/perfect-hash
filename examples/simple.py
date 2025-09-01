@@ -1,17 +1,15 @@
 import sys
 import random
-import string
 
 sys.path.append('..')
-from perfect_hash import generate_hash
+from perfect_hash import generate_hash, anum_chars
 
 
 def mkRandHash(N):
     """
     Return a random hash function which returns hash values from 0 .. N-1
     """
-    junk = "".join(random.choice(string.ascii_letters + string.digits)
-                   for unused in range(10))
+    junk = "".join(random.choice(anum_chars) for unused in range(10))
     return lambda key: hash(junk + key) % N
 
 
