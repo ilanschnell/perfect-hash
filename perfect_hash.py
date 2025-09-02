@@ -57,7 +57,7 @@ from io import StringIO
 from os.path import join
 
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 anum_chars = string.ascii_letters + string.digits
 verbose = False

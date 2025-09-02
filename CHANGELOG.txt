@@ -1,3 +1,7 @@
+2025-XX-XX: 0.5.1:
+------------------
+
+
 2025-09-02: 0.5.0:
 ------------------
   * add --pow2 option for only using powers of 2 for graph size NG, #10
