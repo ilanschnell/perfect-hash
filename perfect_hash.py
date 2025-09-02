@@ -167,11 +167,13 @@ class StrSaltHash(object):
 
     template = """
 def hash_f(key, T):
-    return sum(T[i % $NS] * c for i, c in enumerate(key)) % $NG
+    return sum(T[i] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     if isinstance(key, str):
         key = key.encode()
+    if len(key) > $NS:
+        return -1
     return (G[hash_f(key, b"$S1")] +
             G[hash_f(key, b"$S2")]) % $NG
 """
@@ -200,11 +202,13 @@ S2 = [$S2]
 assert len(S1) == len(S2) == $NS
 
 def hash_f(key, T):
-    return sum(T[i % $NS] * c for i, c in enumerate(key)) % $NG
+    return sum(T[i] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     if isinstance(key, str):
         key = key.encode()
+    if len(key) > $NS:
+        return -1
     return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
 """
 
