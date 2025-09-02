@@ -485,7 +485,7 @@ is processed and the output code is written to stdout.
                    help="file containing keys for perfect hash function")
 
     p.add_argument('TMPL_FILE', nargs="?",
-                   help="code template file, must contain 'tmpl' in filename")
+                   help="code template file, must contain `tmpl` in filename")
 
     p.add_argument("--delimiter", action="store", default=", ",
                    help="Delimiter for list items used in output.",
@@ -536,11 +536,11 @@ is processed and the output code is written to stdout.
 
     p.add_argument("-o", "--output", action="store",
                    help="Specify output FILE explicitly. "
-                        "`-o std' means standard output. "
-                        "`-o no' means no output. "
+                        "`-o std` means standard output. "
+                        "`-o no` means no output. "
                         "By default, the file name is obtained "
                         "from the name of the template file by "
-                        "substituting `tmpl' to `code'.",
+                        "substituting `tmpl` with `code`.",
                    metavar="FILE")
 
     p.add_argument("-v", "--verbose", action="store_true")
