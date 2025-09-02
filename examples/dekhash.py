@@ -15,7 +15,7 @@ class DEKHash(object):
 
     def DEKhash(self, x, key):
         for c in key:
-            x = ((x << 5) ^ (x >> 27) ^ c) % (1 << 31)
+            x = ((x << 5) ^ (x >> 27) ^ c) & 0xffff_ffff
         return x
 
     def __call__(self, key):
@@ -24,7 +24,7 @@ class DEKHash(object):
     template = """
 def DEKhash(x, s):
     for c in s:
-        x = ((x << 5) ^ (x >> 27) ^ c) % (1 << 31)
+        x = ((x << 5) ^ (x >> 27) ^ c) & 0xffff_ffff
     return x % $NG
 
 def perfect_hash(key):
