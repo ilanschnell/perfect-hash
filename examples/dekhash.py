@@ -2,7 +2,7 @@ import sys
 import random
 
 sys.path.append('..')
-from perfect_hash import generate_code, run_code
+import perfect_hash
 
 
 class DEKHash(object):
@@ -35,6 +35,8 @@ def perfect_hash(key):
 
 keys = "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()
 
-code = generate_code(keys, DEKHash)
+perfect_hash.verbose = True
+perfect_hash.trials = 100
+code = perfect_hash.generate_code(keys, DEKHash, pow2=0)
 print(code)
-run_code(code)
+perfect_hash.run_code(code)
