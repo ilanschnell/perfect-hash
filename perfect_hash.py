@@ -165,8 +165,8 @@ class StrSaltHash(object):
         return sum(self.salt[i] * c for i, c in enumerate(key)) % self.N
 
     template = """
-def hash_f(key, T):
-    return sum(T[i] * c for i, c in enumerate(key)) % $NG
+def hash_f(key, salt):
+    return sum(salt[i] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     key = key.encode()
@@ -198,8 +198,8 @@ S1 = [$S1]
 S2 = [$S2]
 assert len(S1) == len(S2) == $NS
 
-def hash_f(key, T):
-    return sum(T[i] * c for i, c in enumerate(key)) % $NG
+def hash_f(key, salt):
+    return sum(salt[i] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
     key = key.encode()
