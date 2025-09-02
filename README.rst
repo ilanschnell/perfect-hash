@@ -113,7 +113,7 @@ The built-in template which creates the above code is:
     G = [$G]
 
     def hash_f(key, salt):
-        return sum(salt[i] * c for i, c in enumerate(str(key))) % $NG
+        return sum(salt[i] * c for i, c in enumerate(key)) % $NG
 
     def perfect_hash(key):
         key = key.encode()
