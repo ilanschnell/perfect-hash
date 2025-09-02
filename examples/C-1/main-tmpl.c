@@ -6,6 +6,7 @@
 #define NK  $NK       /* number of keys */
 #define NG  $NG       /* number of vertices */
 #define NS  $NS       /* length of salt strings */
+#define NG1 (NG - 1)  /* in this example NG is a power of 2 */
 
 int G[] = {$G};
 
@@ -25,7 +26,7 @@ int get_index(const char *key)
         f1 += "$S1"[i] * c;
         f2 += "$S2"[i] * c;
     }
-    i = (G[f1 % NG] + G[f2 % NG]) % NG;
+    i = (G[f1 & NG1] + G[f2 & NG1]) & NG1;
     if (i < NK && strcmp(key, K[i]) == 0)
         return i;
 
