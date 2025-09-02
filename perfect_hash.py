@@ -574,7 +574,7 @@ is processed and the output code is written to stdout.
 
     keys = read_table(keys_file, args)
     if verbose:
-        print("Number os keys: %d" % len(keys))
+        print("Number of keys: %d" % len(keys))
 
     tmpl_file = args.TMPL_FILE
     if verbose:
