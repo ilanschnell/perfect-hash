@@ -544,6 +544,8 @@ is processed and the output code is written to stdout.
                    metavar="FILE")
 
     p.add_argument("-v", "--verbose", action="store_true")
+    p.add_argument("-V", "--version", action="version",
+                   version="perfect-hash version: %s" % __version__)
 
     args = p.parse_args()
 
