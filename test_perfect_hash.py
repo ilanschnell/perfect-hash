@@ -78,10 +78,13 @@ class TestsGenerateHash(unittest.TestCase):
 
     def create_and_verify(self, keys, Hash):
         f1, f2, G = generate_hash(keys, Hash)
+        self.assertEqual(len(f1.salt), len(f2.salt))
+        self.assertTrue(f1.N == f2.N == len(G))
+
         f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
         for i, k in enumerate(keys):
             self.assertEqual(i, f(k))
-        self.assertEqual(len(f1.salt), len(f2.salt))
+
         if keys:
             slen = max(len(k.encode()) for k in keys)
             self.assertEqual(slen, len(f1.salt))
