@@ -354,14 +354,14 @@ class Format(object):
         return aux.getvalue()
 
 
-def generate_code(keys, Hash=StrSaltHash, template=None, options=None):
+def generate_code(keys, Hash=StrSaltHash, template=None, options=None,
+                  pow2=False):
     """
     Takes a list of key value pairs and inserts the generated parameter
     lists into the 'template' string.  'Hash' is the random hash function
     generator, and the optional keywords are formating options.
     The return value is the substituted code template.
     """
-    pow2 = options.pow2 if options else False
     f1, f2, G = generate_hash(keys, Hash, pow2)
 
     assert f1.N == f2.N == len(G)
@@ -603,7 +603,7 @@ is processed and the output code is written to stdout.
         except IOError:
             sys.exit("Error: Could not open `%s' for writing." % outname)
 
-    code = generate_code(keys, Hash, template, args)
+    code = generate_code(keys, Hash, template, args, args.pow2)
 
     if args.execute or template == builtin_template(Hash):
         if verbose:
