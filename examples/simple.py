@@ -7,19 +7,19 @@ from perfect_hash import generate_hash, anum_chars
 
 def mkRandHash(N):
     """
-    Return a random hash function which returns hash values from 0 .. N-1
+    Return a random hash function which returns hash values in range(N)
     """
-    junk = "".join(random.choices(anum_chars, k=10))
-    return lambda key: hash(junk + key) % N
+    salt = "".join(random.choices(anum_chars, k=10))
+    return lambda key: hash(salt + key) % N
 
 
-def mkPerfHash(keys, Hash):
+def mkPerfHash(keys, hash_f):
     """
     Given a list of keys and a hash function generator, return a perfect
     hash function for the keys, i.e. each key is mapped to it's index in
     the list.
     """
-    f1, f2, G = generate_hash(keys, Hash)
+    f1, f2, G = generate_hash(keys, hash_f)
     return lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
 
 
