@@ -84,12 +84,17 @@ class TestsGenerateHash(unittest.TestCase):
             self.assertEqual(i, f(k))
         self.assertEqual(len(f1.salt), len(f2.salt))
         if keys:
-            self.assertEqual(max(len(k) for k in keys), len(f1.salt))
+            slen = max(len(k.encode()) for k in keys)
+            self.assertEqual(slen, len(f1.salt))
         flush_dot()
 
     def test_simple(self):
         for Hash in Hashes:
             self.create_and_verify(["Ilan", "Arvin"], Hash)
+
+    def test_unicode(self):
+        for Hash in Hashes:
+            self.create_and_verify([u"\ud55c", "A", u"\u00a2"], Hash)
 
     def test_letters(self):
         for K in range(0, 27):
