@@ -154,7 +154,7 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
     opts, args = parser.parse_args()
 
     if len(args) > 1:
-        parser.error("incorrect number of arguments")
+        parser.error("too many arguments")
 
     # --------------------- end parsing and checking -----------------------
 
@@ -162,11 +162,8 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
         sys.stderr.write('minsize (of trees): %i\n' % opts.minsize)
         sys.stderr.write('labels (in output): %s\n' % opts.labels)
 
-    if len(args)==1:
-        try:
-            fi = open(args[0])
-        except IOError:
-            sys.exit("Error: Can't open `%s' for reading." % args[0])
+    if len(args) == 1:
+        fi = open(args[0])
     else:
         fi = sys.stdin
 
@@ -175,15 +172,13 @@ tools (see http://www.graphviz.org/) to generate a picture of the graph.
     g = NewGraph(len(G))
     g.vertex_values = G
     for hashval, key in enumerate(K):
+        key = key.encode()
         g.connect(hash_f(key, S1), hash_f(key, S2), hashval)
     g.check()
     g.set_tree_sizes(opts.verbose)
 
     if opts.output:
-        try:
-            fo = open(opts.output, 'w')
-        except IOError :
-            sys.exit("Error: Can't open `%s' for writing." % opts.output)
+        fo = open(opts.output, 'w')
     else:
         fo = sys.stdout
 
