@@ -17,7 +17,10 @@ int get_index(const char *key)
 {
     int f1 = 0, f2 = 0, i;
 
-    for (i = 0; key[i] && i < NS; i++) {
+    if (strlen(key) > NS)
+        return -1;
+
+    for (i = 0; key[i]; i++) {
         unsigned char c = key[i];
         f1 += "$S1"[i] * c;
         f2 += "$S2"[i] * c;
