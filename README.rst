@@ -61,16 +61,17 @@ The program is invoked like this:
     # ================= Python code for perfect hash function ===============
     # =======================================================================
 
-    G = [0, 4, 3, 1, 5, 6, 2]
+    G = [0, 4, 0, 5, 5, 4, 6]
 
-    def hash_f(key, T):
-        return sum(T[i % 8] * c for i, c in enumerate(key)) % 7
+    def hash_f(key, salt):
+        return sum(salt[i] * c for i, c in enumerate(key)) % 7
 
     def perfect_hash(key):
-        if isinstance(key, str):
-            key = key.encode()
-        return (G[hash_f(key, b"CaczM6WN")] +
-                G[hash_f(key, b"zWCE7MDv")]) % 7
+        key = key.encode()
+        if len(key) > 8:
+            return -1
+        return (G[hash_f(key, b"W4dBruLw")] +
+                G[hash_f(key, b"J5GKXqH1")]) % 7
 
     # ============================ Sanity check =============================
 
@@ -111,12 +112,13 @@ The built-in template which creates the above code is:
 
     G = [$G]
 
-    def hash_f(key, T):
-        return sum(T[i % $NS] * c for i, c in enumerate(str(key))) % $NG
+    def hash_f(key, salt):
+        return sum(salt[i] * c for i, c in enumerate(str(key))) % $NG
 
     def perfect_hash(key):
-        if isinstance(key, str):
-            key = key.encode()
+        key = key.encode()
+        if len(key) > $NS:
+            return -1
         return (G[hash_f(key, b"$S1")] +
                 G[hash_f(key, b"$S2")]) % $NG
 
