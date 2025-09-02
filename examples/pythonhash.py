@@ -14,7 +14,7 @@ class PythonHash(object):
     """
     def __init__(self, N):
         self.N = N
-        self.salt = ''.join(random.choice(anum_chars) for _ in range(10))
+        self.salt = ''.join(random.choices(anum_chars, k=10))
 
     def __call__(self, key):
         return hash(self.salt + key) % self.N

@@ -1,4 +1,3 @@
-import sys
 from timeit import timeit
 
 from stations import locator
