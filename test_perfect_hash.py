@@ -5,6 +5,7 @@ import unittest
 
 
 from perfect_hash import (
+    anum_chars,
     generate_hash, Graph, Format, StrSaltHash, IntSaltHash,
     generate_code, run_code, builtin_template, TooManyInterationsError,
 )
@@ -21,9 +22,7 @@ def flush_dot():
 def random_keys(N):
     keys = set()
     while len(keys) < N:
-        keys.add(''.join(
-            random.choice(string.ascii_letters + string.digits)
-            for i in range(random.randint(1, 7))))
+        keys.add(''.join(random.choices(anum_chars, k=random.randint(1, 7))))
     keys = list(keys)
     random.shuffle(keys)
     return keys
@@ -97,9 +96,8 @@ class TestsGenerateHash(unittest.TestCase):
             self.create_and_verify([u"\ud55c", "A", u"\u00a2"], Hash)
 
     def test_letters(self):
-        for K in range(0, 27):
-            keys = [chr(65 + i) for i in range(K)]
-            random.shuffle(keys)
+        for k in range(0, 27):
+            keys = random.sample(string.ascii_uppercase, k)
             for Hash in Hashes:
                 self.create_and_verify(keys, Hash)
 

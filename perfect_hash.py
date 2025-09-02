@@ -158,9 +158,8 @@ class StrSaltHash(object):
         self.salt = bytearray()
 
     def __call__(self, key):
-        if isinstance(key, str):
-            key = key.encode()
-        while len(self.salt) < len(key): # add more salt as necessary
+        key = key.encode()
+        while len(self.salt) < len(key):  # add more salt as necessary
             self.salt.append(random.choice(anum_chars.encode()))
 
         return sum(self.salt[i] * c for i, c in enumerate(key)) % self.N
@@ -170,8 +169,7 @@ def hash_f(key, T):
     return sum(T[i] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
-    if isinstance(key, str):
-        key = key.encode()
+    key = key.encode()
     if len(key) > $NS:
         return -1
     return (G[hash_f(key, b"$S1")] +
@@ -189,9 +187,8 @@ class IntSaltHash(object):
         self.salt = []
 
     def __call__(self, key):
-        if isinstance(key, str):
-            key = key.encode()
-        while len(self.salt) < len(key): # add more salt as necessary
+        key = key.encode()
+        while len(self.salt) < len(key):  # add more salt as necessary
             self.salt.append(random.randrange(1, self.N))
 
         return sum(self.salt[i] * c for i, c in enumerate(key)) % self.N
@@ -205,8 +202,7 @@ def hash_f(key, T):
     return sum(T[i] * c for i, c in enumerate(key)) % $NG
 
 def perfect_hash(key):
-    if isinstance(key, str):
-        key = key.encode()
+    key = key.encode()
     if len(key) > $NS:
         return -1
     return (G[hash_f(key, S1)] + G[hash_f(key, S2)]) % $NG
