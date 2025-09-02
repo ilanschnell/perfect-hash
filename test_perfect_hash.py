@@ -82,6 +82,9 @@ class TestsGenerateHash(unittest.TestCase):
         f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
         for i, k in enumerate(keys):
             self.assertEqual(i, f(k))
+        self.assertEqual(len(f1.salt), len(f2.salt))
+        if keys:
+            self.assertEqual(max(len(k) for k in keys), len(f1.salt))
         flush_dot()
 
     def test_simple(self):
