@@ -1,5 +1,5 @@
-animals.ps: animals.dot
-	neato -Tps $< -Gstart=100 -o $@
+animals.png: animals.dot
+	neato -Tpng $< -Gstart=100 -o $@
 
 
 animals.dot: animals.py
@@ -11,4 +11,4 @@ animals.py: ../animals.txt
 
 
 clean:
-	rm animals.py animals.dot animals.ps
+	rm animals.py animals.dot animals.png
