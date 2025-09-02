@@ -6,16 +6,12 @@ except ImportError:
 
 
 kwds = {}
-try:
-    kwds['long_description'] = open('README.rst').read()
-except IOError:
-    pass
+kwds['long_description'] = open('README.rst').read()
 
 # Read version from perfect_hash/__init__.py
 pat = re.compile(r'__version__\s*=\s*(\S+)', re.M)
 data = open('perfect_hash.py').read()
 kwds['version'] = eval(pat.search(data).group(1))
-
 
 setup(
     name = "perfect-hash",
