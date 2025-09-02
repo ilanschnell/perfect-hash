@@ -137,7 +137,7 @@ class Graph(object):
                     self.vertex_values[neighbor] = (
                         edge_value - self.vertex_values[vertex]) % self.N
 
-        # check if all vertices have a valid value
+        # check if all vertices have been assigned
         for vertex in range(self.N):
             assert self.vertex_values[vertex] >= 0
 
