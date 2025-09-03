@@ -26,7 +26,7 @@ static int get_index(const char *key)
     return -1;
 }
 
-static PyObject *stations_locator(PyObject *self, PyObject *obj)
+static PyObject *module_locator(PyObject *module, PyObject *obj)
 {
     const char *callsign;
     int index;
@@ -45,8 +45,9 @@ static PyObject *stations_locator(PyObject *self, PyObject *obj)
 }
 
 static PyMethodDef module_functions[] = {
-    {"locator", stations_locator, METH_O, "Get locator from callsign."},
-    {NULL, NULL, 0, NULL}        /* Sentinel */
+    {"locator", (PyCFunction) module_locator, METH_O,
+     PyDoc_STR("Get locator from callsign.")},
+    {NULL, NULL}        /* Sentinel */
 };
 
 static PyModuleDef moduledef = {
