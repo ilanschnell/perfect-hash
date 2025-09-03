@@ -1,9 +1,5 @@
 #include "Python.h"
 
-#if PY_MAJOR_VERSION == 2
-#error "no supported for Python 2"
-#endif
-
 #include "stations-code.h"
 
 static struct {
@@ -60,11 +56,5 @@ static PyModuleDef moduledef = {
 PyMODINIT_FUNC
 PyInit_stations(void)
 {
-    PyObject *m;
-
-    m = PyModule_Create(&moduledef);
-    if (m == NULL)
-        return NULL;
-
-    return m;
+    return PyModule_Create(&moduledef);
 }
