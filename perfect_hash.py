@@ -556,7 +556,7 @@ is processed and the output code is written to stdout.
     trials = args.trials
     verbose = args.verbose
 
-    if args.TMPL_FILE and not args.TMPL_FILE.count('tmpl'):
+    if args.TMPL_FILE and 'tmpl' not in args.TMPL_FILE:
         p.error("template filename does not contain 'tmpl'")
 
     if args.hft == 1:
@@ -584,13 +584,12 @@ is processed and the output code is written to stdout.
 
     if args.output:
         outname = args.output
+    elif tmpl_file:
+        if 'tmpl' not in tmpl_file:
+            sys.exit("Hmm, template filename does not contain 'tmpl'")
+        outname = tmpl_file.replace('tmpl', 'code')
     else:
-        if tmpl_file:
-            if 'tmpl' not in tmpl_file:
-                sys.exit("Hmm, template filename does not contain 'tmpl'")
-            outname = tmpl_file.replace('tmpl', 'code')
-        else:
-            outname = 'std'
+        outname = 'std'
 
     if verbose:
         print("outname = %r\n" % outname)
