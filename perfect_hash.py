@@ -594,26 +594,18 @@ is processed and the output code is written to stdout.
     if verbose:
         print("outname = %r\n" % outname)
 
-    if outname == 'std':
-        outstream = sys.stdout
-    elif outname == 'no':
-        outstream = None
-    else:
-        try:
-            outstream = open(outname, 'w')
-        except IOError:
-            sys.exit("Error: Could not open `%s' for writing." % outname)
-
     code = generate_code(keys, Hash, template, args, args.pow2)
+
+    if outname == 'std':
+        sys.stdout.write(code)
+    elif outname != 'no':
+        with open(outname, 'w') as fo:
+            fo.write(code)
 
     if args.execute or template == builtin_template(Hash):
         if verbose:
             print('Executing code...\n')
         run_code(code)
-
-    if outstream:
-        outstream.write(code)
-        outstream.close()
 
 
 if __name__ == '__main__':
