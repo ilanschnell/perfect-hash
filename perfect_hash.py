@@ -444,14 +444,12 @@ def read_table(filename, options):
     return keys
 
 
-def read_template(filename):
+def read_template(path):
     if verbose:
-        print("Reading template from file `%s'" % filename)
-    try:
-        with open(filename, 'r') as fi:
-            return fi.read()
-    except IOError:
-        sys.exit("Error: Could not open `%s' for reading." % filename)
+        print("Reading template from path: %r" % path)
+
+    with open(path, 'r') as fi:
+        return fi.read()
 
 
 def run_code(code):
@@ -602,7 +600,7 @@ is processed and the output code is written to stdout.
         with open(outname, 'w') as fo:
             fo.write(code)
 
-    if args.execute or template == builtin_template(Hash):
+    if args.execute:
         if verbose:
             print('Executing code...\n')
         run_code(code)
