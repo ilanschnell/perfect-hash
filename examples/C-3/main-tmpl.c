@@ -15,10 +15,10 @@ char *K[] = {$K};
 /* return index of key in K if key is found, -1 otherwise */
 int get_index(const char *key)
 {
+    unsigned char c;
     int f1 = 0, f2 = 0, i;
 
-    for (i = 0; key[i] && i < NS; i++) {
-        unsigned char c = key[i];
+    for (i = 0; (c = key[i]) && i < NS; i++) {
         f1 += "$S1"[i] * c;
         f2 += "$S2"[i] * c;
     }
@@ -32,17 +32,13 @@ int get_index(const char *key)
 int main()
 {
     int i;
-    char *junk[] = {"Überflieger", "abc", "König", "99"};
+    char *junk[] = {"Überflieger", "abc", "König Charles", "1234"};
 
-    for (i = 0; i < 4; i++) {
-        printf("'%s'\n", junk[i]);
+    for (i = 0; i < 4; i++)
         assert(get_index(junk[i]) == -1);
-    }
 
-    for (i = 0; i < NK; i++) {
-        printf("'%s'\n", K[i]);
+    for (i = 0; i < NK; i++)
         assert(get_index(K[i]) == i);
-    }
 
     printf("OK\n");
     return 0;
