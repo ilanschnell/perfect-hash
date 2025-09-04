@@ -32,13 +32,17 @@ int get_index(const char *key)
 int main()
 {
     int i;
-    char *junk[] = {"Überflieger", "abc", "x", "99"};
+    char *junk[] = {"Überflieger", "abc", "König", "99"};
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++) {
+        printf("'%s'\n", junk[i]);
         assert(get_index(junk[i]) == -1);
+    }
 
-    for (i = 0; i < NK; i++)
+    for (i = 0; i < NK; i++) {
+        printf("'%s'\n", K[i]);
         assert(get_index(K[i]) == i);
+    }
 
     printf("OK\n");
     return 0;
