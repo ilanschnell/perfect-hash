@@ -16,20 +16,19 @@ char *K[] = {$K};
 /* return index of key in K if key is found, -1 otherwise */
 int get_index(const char *key)
 {
-    int f1 = 0, f2 = 0, i;
+    if (strlen(key) <= NS) {
+        unsigned char c;
+        int f1 = 0, f2 = 0, i = 0;
 
-    if (strlen(key) > NS)
-        return -1;
-
-    for (i = 0; key[i]; i++) {
-        unsigned char c = key[i];
-        f1 += "$S1"[i] * c;
-        f2 += "$S2"[i] * c;
+        while ((c = key[i])) {
+            f1 += "$S1"[i] * c;
+            f2 += "$S2"[i] * c;
+            i++;
+        }
+        i = (G[f1 & NG1] + G[f2 & NG1]) & NG1;
+        if (i < NK && strcmp(key, K[i]) == 0)
+            return i;
     }
-    i = (G[f1 & NG1] + G[f2 & NG1]) & NG1;
-    if (i < NK && strcmp(key, K[i]) == 0)
-        return i;
-
     return -1;
 }
 
