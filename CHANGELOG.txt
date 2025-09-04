@@ -1,6 +1,7 @@
 2025-XX-XX: 0.5.1:
 ------------------
   * add --version option
+  * change default value for number of trials before increasing NG to 50
   * fix pipeline, see #9
 
 
