@@ -61,7 +61,7 @@ __version__ = "0.5.1"
 
 anum_chars = string.ascii_letters + string.digits
 verbose = False
-trials = 5
+trials = 50
 
 
 class Graph(object):
@@ -514,7 +514,7 @@ is processed and the output code is written to stdout.
                         "KEYS_FILE which contains the keys.",
                    metavar="INT")
 
-    p.add_argument("--trials", action="store", default=5, type=int,
+    p.add_argument("--trials", action="store", default=50, type=int,
                    help="Specifies the number of trials before NG is "
                         "increased.  A small INT will give compute faster, "
                         "but the array G will be large.  A large INT will "

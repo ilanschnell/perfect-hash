@@ -6,7 +6,7 @@ a.out: main.c
 
 
 main.c: keys.dat main-tmpl.c
-	python ../../perfect_hash.py --pow2 --trials=50 -v -o main.c $^
+	python ../../perfect_hash.py --pow2 --trials=250 -v -o main.c $^
 
 
 keys.dat:
