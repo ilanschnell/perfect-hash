@@ -10,7 +10,7 @@ keys.code.h: keys.dat keys.tmpl.h
 
 
 keys.dat:
-	python ./mk_rnd_keys.py 1000 >keys.dat
+	python ./mk_rnd_keys.py 5000 >keys.dat
 
 
 clean:
