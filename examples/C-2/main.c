@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "keys.code.h"
 
@@ -25,11 +26,15 @@ int get_index(const char *key)
 
 int main()
 {
+    char *key;
     int i;
-    char *junk[] = {"A.B", "a-", "xx=", "9#", "acl+"};
 
-    for (i = 0; i < 5; i++)
-        assert(get_index(junk[i]) == -1);
+    key = (char *) malloc(64);
+    for (i = 0; i < NK; i++) {
+        strcpy(key, K[i]);
+        key[2] = '+';
+        assert(get_index(key) == -1);
+    }
 
     for (i = 0; i < NK; i++)
         assert(get_index(K[i]) == i);
