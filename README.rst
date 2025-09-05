@@ -5,6 +5,10 @@ Generate a minimal perfect hash function for a given set of keys.
 A given code template is filled with parameters, such that the
 output is code which implements the hash function.
 Templates can easily be constructed for any programming language.
+Although the ``perfect-hash`` command generates Python code by default,
+this code is only meant to be a working illustration of the generated
+hash function.  As Python has a very efficient dictionary implementation,
+one would ordinarily never want to use this Python code in production.
 
 
 Installation
@@ -28,7 +32,7 @@ which maps all keys in S to different numbers.
 That means that for the set S, the hash function is collision-free,
 or perfect.
 Further, a perfect hash function is called "minimal" when it maps N keys
-to N *consecutive* integers, usually in the range from 0 to N-1.
+to N *consecutive* integers, usually in ``range(N)``.
 
 
 Usage
@@ -90,18 +94,18 @@ simple and does not require machine or language specific byte level operations
 which might be hard to implement in the target language.
 The following parameters are available in the template:
 
-==========  =======================================
+==========  ==========================================
 string      expands to
-==========  =======================================
-``$NS``     length of S1 and S2 salt
-``$S1``     S1 salt
-``$S2``     S2 salt
-``$NG``     length of array G
-``$G``      array of integers G
-``$NK``     number of keys, i.e. length of array K
-``$K``      array with (quoted) keys
+==========  ==========================================
+``$NS``     length of ``S1`` and ``S2`` salt
+``$S1``     ``S1`` salt
+``$S2``     ``S2`` salt
+``$NG``     length of array ``G``
+``$G``      array of integers ``G``
+``$NK``     number of keys, i.e. length of array ``K``
+``$K``      array with (quoted) keys ``K``
 ``$$``      $ (a literal dollar sign)
-==========  =======================================
+==========  ==========================================
 
 
 Since the syntax for arrays is not the same in all programming languages,
@@ -173,8 +177,8 @@ The output produced by perfect-hash contains essentially all of the
 input data.  Therefore the output is a “derivative work” of the input (in
 the sense of U.S. copyright law); and its copyright status depends on the
 copyright of the input.  For most software licenses, the result is that the
-output is under the same license, with the same copyright holder, as the
-input that was passed to perfect-hash.
+output is under the same license as the input itself, with the same copyright
+holder, as the input that was merely passed though perfect-hash.
 
 
 Acknowledgments
