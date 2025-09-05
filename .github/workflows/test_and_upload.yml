@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   test:
+    name: Self Test and Examples
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,3 +21,22 @@ jobs:
         with:
           name: sdist
           path: dist/*.tar.gz
+
+  upload_pypi:
+    needs: [test, build_sdist]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    # upload to PyPI on every tag
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: sdist
+          path: dist/*.tar.gz
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
