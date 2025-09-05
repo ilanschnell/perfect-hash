@@ -1,7 +1,8 @@
-#include <assert.h>
-#include <stdbool.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
+
 
 #define NK  $NK       /* number of keys */
 #define NG  $NG       /* number of vertices */
@@ -34,11 +35,15 @@ int get_index(const char *key)
 
 int main()
 {
+    char *key;
     int i;
-    char *junk[] = {"ACASSICUHAIUS", "abc", "x", "99"};
 
-    for (i = 0; i < 4; i++)
-        assert(get_index(junk[i]) == -1);
+    key = (char *) malloc(64);
+    for (i = 0; i < NK; i++) {
+        strcpy(key, K[i]);
+        key[0] += 32;           /* make lowercase */
+        assert(get_index(key) == -1);
+    }
 
     for (i = 0; i < NK; i++)
         assert(get_index(K[i]) == i);
