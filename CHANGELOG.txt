@@ -2,6 +2,7 @@
 ------------------
   * add --version option
   * change default value for number of trials before increasing NG to 50
+  * improved many of the exmaples
   * fix pipeline, see #9
 
 
