@@ -5,9 +5,6 @@ on: [push]
 jobs:
     execute-code:
         runs-on: ubuntu-latest
-
         steps:
           - uses: actions/checkout@v4
-
-          - name: test perfect-hash
-            run: make test
+          - run: make test
