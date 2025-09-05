@@ -11,9 +11,9 @@ static int G[] = {$G};
 int get_hashval(const char *key)
 {
     int i, f1 = 0, f2 = 0;
+    unsigned char c;
 
-    for (i = 0; key[i] && i < NS; i++) {
-        unsigned char c = key[i];
+    for (i = 0; (c = key[i]) && i < NS; i++) {
         f1 += S1[i] * c;
         f2 += S2[i] * c;
     }
