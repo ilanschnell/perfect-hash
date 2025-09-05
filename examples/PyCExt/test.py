@@ -24,7 +24,12 @@ print("%s  %8.3f" % (loc1, 1e3 * (t1 - t0)))
 print("%s  %8.3f" % (loc2, 1e3 * (t2 - t1)))
 assert loc1 == loc2 == "JO43LG"
 
-try:
-    locator("W5UN")
-except KeyError:
-    print("OK")
+for call in "W5UN", "N1BUG", "W4ZD", "KH3HZO", "ZB2IQ", "HB9CV":
+    ke = False
+    try:
+        locator(call)
+    except KeyError:
+        ke = True
+    assert ke, call
+
+print("OK")
