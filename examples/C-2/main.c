@@ -26,14 +26,15 @@ int get_index(const char *key)
 int main()
 {
     int i;
+    char *junk[] = {"A.B", "a-", "xx=", "9#", "acl+"};
 
-    assert(get_index("A.B") == -1);
+    for (i = 0; i < 5; i++)
+        assert(get_index(junk[i]) == -1);
 
-    for (i = 0; i < NK; i++) {
+    for (i = 0; i < NK; i++)
         assert(get_index(K[i]) == i);
-    }
 
-    puts("OK");
+    printf("OK\n");
 
     return 0;
 }
