@@ -13,9 +13,9 @@ static struct {
 static int get_index(const char *key)
 {
     int f1 = 0, f2 = 0, i;
+    unsigned char c;
 
-    for (i = 0; key[i] && i < NS; i++) {
-        unsigned char c = key[i];
+    for (i = 0; (c = key[i]) && i < NS; i++) {
         f1 += S1[i] * c;
         f2 += S2[i] * c;
     }
