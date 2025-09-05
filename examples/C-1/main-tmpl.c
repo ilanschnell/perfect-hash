@@ -41,7 +41,7 @@ int main()
     key = (char *) malloc(64);
     for (i = 0; i < NK; i++) {
         strcpy(key, K[i]);
-        key[0] += 32;           /* make lowercase */
+        key[0] += 32;  /* make first letter lowercase */
         assert(get_index(key) == -1);
     }
 
