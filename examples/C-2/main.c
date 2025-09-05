@@ -17,7 +17,7 @@ int get_index(const char *key)
         f2 += S2[i] * c;
     }
     i = (G[f1 % NG] + G[f2 % NG]) % NG;
-    if (strcmp(key, K[i]) == 0)
+    if (i < NK && strcmp(key, K[i]) == 0)
         return i;
 
     return -1;
