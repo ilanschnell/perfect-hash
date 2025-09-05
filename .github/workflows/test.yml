@@ -1,0 +1,11 @@
+name: test perfect-hash
+
+on: [push]
+
+jobs:
+  test:
+    name: Self Test and Examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
