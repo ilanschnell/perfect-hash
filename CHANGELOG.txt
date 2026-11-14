@@ -1,8 +1,9 @@
-2025-XX-XX: 0.5.2:
+2026-XX-XX  0.5.2:
 ------------------
+  * fix installation failure on Windows, see #11
 
 
-2025-09-05: 0.5.1:
+2025-09-05  0.5.1:
 ------------------
   * add --version option
   * change default value for number of trials before increasing NG to 50
@@ -11,7 +12,7 @@
   * add github workflow for testing
 
 
-2025-09-02: 0.5.0:
+2025-09-02  0.5.0:
 ------------------
   * add --pow2 option for only using powers of 2 for graph size NG, #10
   * simplify some examples
@@ -19,25 +20,25 @@
   * remove Python 2 support
 
 
-2023-11-04: 0.4.3:
+2023-11-04  0.4.3:
 ------------------
   * modernize CLI to use argparse (in favor of optparse)
 
 
-2021-04-07: 0.4.2:
+2021-04-07  0.4.2:
 ------------------
   * add "License of output" paragraph to README, issue #5
   * switch documentation from markdown to reStructuredText
 
 
-2020-06-14: 0.4.1:
+2020-06-14  0.4.1:
 ------------------
   * improve documentation
   * improve error message for too many keys
   * add warning when default hash function is likely going to fail
 
 
-2020-06-12: 0.4.0:
+2020-06-12  0.4.0:
 ------------------
   * remove Hash1, Hash3 functions (because those can fail)
   * add example which uses salted Python's hash()
@@ -45,13 +46,13 @@
   * make template argument of generate_code() optional
 
 
-2020-06-11: 0.3.1:
+2020-06-11  0.3.1:
 ------------------
   * improve testing and exmaples
 
 
-2020-06-10: 0.3.0
------------------
+2020-06-10  0.3.0:
+------------------
   * changed default to use new hash function Hash4
   * created tests in separate module
   * remove --hashcol option
@@ -61,17 +62,17 @@
   * fix typos trail -> trial, issue #2
 
 
-2019-05-31: 0.2.1
------------------
+2019-05-31  0.2.1:
+------------------
   * update Python C extension example to work with Python 3.7
 
 
-2019-05-27: 0.2.0
------------------
+2019-05-27  0.2.0:
+------------------
   * Support for Python 3
   * reorganize code
 
 
-2008-05-05: 0.1
----------------
+2008-05-05  0.1:
+----------------
   * Initial release which only supported Python 2 (tested on 2.5)

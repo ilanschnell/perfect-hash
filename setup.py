@@ -8,7 +8,7 @@ except ImportError:
 kwds = {}
 kwds['long_description'] = open('README.rst', encoding='utf-8').read()
 
-# Read version from perfect_hash/__init__.py
+# Read version from perfect_hash.py
 pat = re.compile(r'__version__\s*=\s*(\S+)', re.M)
 data = open('perfect_hash.py').read()
 kwds['version'] = eval(pat.search(data).group(1))
@@ -20,12 +20,10 @@ setup(
     url = "https://github.com/ilanschnell/perfect-hash",
     license = "BSD",
     classifiers = [
-        "License :: OSI Approved :: BSD License",
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -33,6 +31,8 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
+        "Programming Language :: Python :: 3.15",
         "Topic :: Utilities",
     ],
     description = "creating perfect minimal hash function",
