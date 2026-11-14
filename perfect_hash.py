@@ -22,7 +22,7 @@ The algorithm works like this:
 2.  Choose a number N larger than K.  This is the number of
     vertices in a graph G, and also the size of the resulting table G.
 
-3.  Pick two random hash functions f1, f2, that return values from 0..N-1.
+3.  Pick two random hash functions f1, f2, that return values in range(N).
 
 4.  Now, for all keys, you draw an edge between vertices f1(key) and f2(key)
     of the graph G, and associate the desired hash value with that edge.
