@@ -9,9 +9,9 @@ kwds = {}
 kwds['long_description'] = open('README.rst', encoding='utf-8').read()
 
 # Read version from perfect_hash.py
-pat = re.compile(r'__version__\s*=\s*(\S+)', re.M)
+pat = re.compile(r'__version__\s*=\s*"(\S+)"', re.M)
 data = open('perfect_hash.py').read()
-kwds['version'] = eval(pat.search(data).group(1))
+kwds['version'] = pat.search(data).group(1)
 
 setup(
     name = "perfect-hash",
