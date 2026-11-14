@@ -6,7 +6,7 @@ except ImportError:
 
 
 kwds = {}
-kwds['long_description'] = open('README.rst').read()
+kwds['long_description'] = open('README.rst', encoding='utf-8').read()
 
 # Read version from perfect_hash/__init__.py
 pat = re.compile(r'__version__\s*=\s*(\S+)', re.M)
