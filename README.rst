@@ -169,12 +169,12 @@ License of output
 perfect-hash is released under the BSD license.  However, that does not
 cause the output produced by perfect-hash to be under BSD.  The reason is
 that the output contains only small pieces of text that come directly from
-perfect-hash's source code – less than 10 lines long if the default template
+perfect-hash's source code - less than 10 lines long if the default template
 is being used, which serves more for illustration purposes - too small for
-being significant.  Therefore the output is not “work based on perfect-hash”.
+being significant.  Therefore the output is not "work based on perfect-hash".
 
 The output produced by perfect-hash contains essentially all of the
-input data.  Therefore the output is a “derivative work” of the input (in
+input data.  Therefore the output is a "derivative work" of the input (in
 the sense of U.S. copyright law); and its copyright status depends on the
 copyright of the input.  For most software licenses, the result is that the
 output is under the same license as the input itself, with the same copyright
