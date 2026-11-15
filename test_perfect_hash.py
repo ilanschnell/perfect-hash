@@ -150,6 +150,11 @@ class TestsGenerateCode(unittest.TestCase):
         for Hash in Hashes:
             self.run_keys(["Ilan", "Arvin"], Hash)
 
+    def test_special_keys(self):
+        keys = ['a"b', r'a\b', 'a\tb', 'café']
+        for Hash in Hashes:
+            self.run_keys(keys, Hash)
+
     def test_random(self):
         for Hash in Hashes:
             self.run_keys(random_keys(50), Hash)
