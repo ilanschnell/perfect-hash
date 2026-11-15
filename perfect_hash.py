@@ -1,6 +1,5 @@
 """
-Generate a minimal perfect hash function for the keys in a file,
-desired hash values may be specified within this file as well.
+Generate a minimal perfect hash function for the keys in a file.
 A given code template is filled with parameters, such that the
 output is code which implements the hash function.
 Templates can easily be constructed for any programming language.
@@ -51,7 +50,7 @@ import string
 import subprocess
 import shutil
 import tempfile
-from collections import defaultdict
+from collections import abc, defaultdict
 from io import StringIO
 from os.path import join
 
@@ -80,8 +79,8 @@ class Graph(object):
 
     def connect(self, vertex1, vertex2, edge_value):
         """
-        Connect 'vertex1' and 'vertex2' with an edge, with associated
-        value 'value'
+        Connect `vertex1` and `vertex2` with an edge, with associated
+        value `edge_value`.
         """
         # Add vertices to each other's adjacent list
         self.adjacent[vertex1].append((vertex2, edge_value))
@@ -225,25 +224,25 @@ for h, k in enumerate(K):
 """
 
 
-class TooManyIterationsError(Exception):
+class TooManyIterationsError(ValueError):
     pass
 
 
 def generate_hash(keys, Hash=StrSaltHash, pow2=False):
     """
-    Return hash functions f1 and f2, and G for a perfect minimal hash.
-    Input is an iterable of 'keys', whos indicies are the desired hash values.
-    'Hash' is a random hash function generator, that means Hash(N) returns a
-    returns a random hash function which returns hash values from 0..N-1.
+    Return hash functions `f1` and `f2`, and `G` for a perfect minimal hash.
+    Input is a sequence of `keys`, whose indices are the desired hash values.
+    `Hash` is a random hash function generator, that means `Hash(N)` returns
+    a random hash function which returns values in `range(N)`.
     """
-    if not isinstance(keys, (list, tuple)):
-        raise TypeError("list or tuple expected")
+    if isinstance(keys, str) or not isinstance(keys, abc.Sequence):
+        raise TypeError("sequence of strings expected")
+    for key in keys:
+        if not isinstance(key, str):
+            raise TypeError("key is not a string: %r" % key)
     NK = len(keys)
     if NK != len(set(keys)):
         raise ValueError("duplicate keys")
-    for key in keys:
-        if not isinstance(key, str):
-            raise TypeError("key a not string: %r" % key)
     if NK > 10000 and Hash == StrSaltHash:
         print("""\
 WARNING: You have %d keys.
@@ -373,9 +372,9 @@ class Format(object):
 def generate_code(keys, Hash=StrSaltHash, template=None, options=None,
                   pow2=False):
     """
-    Takes a list of key value pairs and inserts the generated parameter
-    lists into the 'template' string.  'Hash' is the random hash function
-    generator, and the optional keywords are formating options.
+    Takes a sequence of keys and inserts the generated parameter
+    lists into the `template` string.  `Hash` is the random hash function
+    generator. `options`, when provided, controls formatting.
     The return value is the substituted code template.
     """
     f1, f2, G = generate_hash(keys, Hash, pow2)
@@ -416,14 +415,13 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None,
 
 def read_table(filename, options):
     """
-    Reads keys and desired hash value pairs from a file.  If no column
-    for the hash value is specified, a sequence of hash values is generated,
-    from 0 to N-1, where N is the number of rows found in the file.
+    Read keys from a file. Their positions in the returned list determine
+    their desired hash values.
     """
     if verbose:
         print("Reading table from file `%s' to extract keys." % filename)
     try:
-        fi = open(filename)
+        fi = open(filename, encoding='utf-8')
     except IOError:
         sys.exit("Error: Could not open `%s' for reading." % filename)
 
@@ -464,14 +462,14 @@ def read_template(path):
     if verbose:
         print("Reading template from path: %r" % path)
 
-    with open(path, 'r') as fi:
+    with open(path, 'r', encoding='utf-8') as fi:
         return fi.read()
 
 
 def run_code(code):
     tmpdir = tempfile.mkdtemp()
     path = join(tmpdir, 't.py')
-    with open(path, 'w') as fo:
+    with open(path, 'w', encoding='utf-8') as fo:
         fo.write(code)
     try:
         subprocess.check_call([sys.executable, path])
@@ -563,6 +561,9 @@ is processed and the output code is written to stdout.
 
     args = p.parse_args()
 
+    if args.keycol < 1:
+        p.error("key column must be at least 1")
+
     if args.trials <= 0:
         p.error("trials before increasing N has to be larger than zero")
 
@@ -613,7 +614,7 @@ is processed and the output code is written to stdout.
     if outname == 'std':
         sys.stdout.write(code)
     elif outname != 'no':
-        with open(outname, 'w') as fo:
+        with open(outname, 'w', encoding='utf-8') as fo:
             fo.write(code)
 
     if args.execute:
