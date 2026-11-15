@@ -2,6 +2,8 @@
 ------------------
   * correctly escape special characters in generated string literals
   * require Python 3.7 or higher
+  * use UTF-8 for key, template, and generated output files
+  * improve key and command-line argument validation
 
 
 2026-11-14  0.5.2:
