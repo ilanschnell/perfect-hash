@@ -77,7 +77,7 @@ class TestsFormat(unittest.TestCase):
                 (r'a\b', r'"a\\b"'),
                 ('a\tb', r'"a\tb"'),
                 ('a\n', r'"a\n"'),
-                ('\rz', r'"\015z"'),
+                ('\rz', r'"\015z"'),  # ord('\r') = ord('\015') = 0o15 = 13
                 ('café', '"café"'),
                 ('\x01z', r'"\001z"'),
                 ('\x7fz', r'"\177z"'),
