@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Generate a minimal perfect hash function for the keys in a file,
 desired hash values may be specified within this file as well.
@@ -226,7 +225,7 @@ for h, k in enumerate(K):
 """
 
 
-class TooManyInterationsError(Exception):
+class TooManyIterationsError(Exception):
     pass
 
 
@@ -276,7 +275,7 @@ WARNING: You have %d keys.
         trial += 1
 
         if NG > 100 * (NK + 1):
-            raise TooManyInterationsError("%d keys" % NK)
+            raise TooManyIterationsError("%d keys" % NK)
 
         if verbose:
             sys.stdout.write('.')
@@ -439,7 +438,7 @@ def read_table(filename, options):
     fi.close()
 
     if not keys:
-        exit("Error: no keys found in file `%s'." % filename)
+        sys.exit("Error: no keys found in file `%s'." % filename)
 
     return keys
 

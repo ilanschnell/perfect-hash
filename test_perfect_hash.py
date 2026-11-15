@@ -7,7 +7,7 @@ import unittest
 from perfect_hash import (
     anum_chars,
     generate_hash, Graph, Format, StrSaltHash, IntSaltHash,
-    generate_code, run_code, builtin_template, TooManyInterationsError,
+    generate_code, run_code, builtin_template, TooManyIterationsError,
 )
 
 
@@ -116,7 +116,7 @@ class TestsGenerateHash(unittest.TestCase):
             return lambda key: hash(key) % N
 
         keys = ['kg', 'jG']
-        self.assertRaises(TooManyInterationsError,
+        self.assertRaises(TooManyIterationsError,
                           generate_hash, keys, Hash)
 
 
