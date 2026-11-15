@@ -1,0 +1,26 @@
+name: Build and upload to PyPI
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run tests
+        run: make test
+
+      - name: Build source distribution
+        run: pipx run build --sdist
+
+      - name: Upload to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
