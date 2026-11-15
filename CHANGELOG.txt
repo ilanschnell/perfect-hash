@@ -1,4 +1,4 @@
-2026-XX-XX  0.5.2:
+2026-11-14  0.5.2:
 ------------------
   * fix installation failure on Windows, see #11
 
