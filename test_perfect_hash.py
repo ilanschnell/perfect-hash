@@ -72,7 +72,8 @@ class TestsFormat(unittest.TestCase):
     def test_quote_string(self):
         for a, b in [
                 ('a', '"a"'),
-                ('a"b', r'"a\"b"'),
+                ("a'b", '"a\'b"'),    # single quote (') is not escaped
+                ('a"b', r'"a\"b"'),   # double quote (") is escaped
                 (r'a\b', r'"a\\b"'),
                 ('a\tb', r'"a\tb"'),
                 ('café', '"café"'),
@@ -151,7 +152,7 @@ class TestsGenerateCode(unittest.TestCase):
             self.run_keys(["Ilan", "Arvin"], Hash)
 
     def test_special_keys(self):
-        keys = ['a"b', r'a\b', 'a\tb', 'café']
+        keys = ['a"b', "a'b", r'a\b', 'a\tb', 'café']
         for Hash in Hashes:
             self.run_keys(keys, Hash)
 
