@@ -1,5 +1,6 @@
 2026-XX-XX  0.5.3:
 ------------------
+  * correctly escape special characters in generated string literals
   * require Python 3.7 or higher
 
 
