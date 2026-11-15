@@ -4,8 +4,13 @@ on: [push]
 
 jobs:
   test:
-    name: Self Test and Examples
-    runs-on: ubuntu-latest
+    name: Self Test and Examples on Python 3.7
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.7"
+
       - run: make test
