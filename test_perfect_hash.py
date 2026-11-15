@@ -1,3 +1,4 @@
+import ast
 import sys
 import random
 import string
@@ -5,7 +6,7 @@ import unittest
 
 
 from perfect_hash import (
-    anum_chars,
+    anum_chars, quote_string,
     generate_hash, Graph, Format, StrSaltHash, IntSaltHash,
     generate_code, run_code, builtin_template, TooManyIterationsError,
 )
@@ -67,6 +68,19 @@ class TestsFormat(unittest.TestCase):
                          '"0" "1" "2" "3" "4"')
         self.assertEqual(x(42), 42)
         self.assertEqual(x('Hello'), 'Hello')
+
+    def test_quote_string(self):
+        for a, b in [
+                ('a', '"a"'),
+                ('a"b', r'"a\"b"'),
+                (r'a\b', r'"a\\b"'),
+                ('a\tb', r'"a\tb"'),
+                ('café', '"café"'),
+                ('\x01z', r'"\001z"'),
+                ('\x7fz', r'"\177z"'),
+        ]:
+            self.assertEqual(quote_string(a), b)
+            self.assertEqual(ast.literal_eval(b), a)
 
 
 class TestsGenerateHash(unittest.TestCase):

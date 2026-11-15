@@ -313,6 +313,23 @@ WARNING: You have %d keys.
     return f1, f2, G.vertex_values
 
 
+def quote_string(value):
+    "Return a double-quoted string literal valid in both Python and C."
+    escapes = {
+        '\\': '\\\\', '"': '\\"',   '\b': '\\b',  '\f': '\\f',
+        '\n': '\\n',  '\r': '\\r',  '\t': '\\t',
+    }
+    result = []
+    for char in str(value):
+        if char in escapes:
+            result.append(escapes[char])
+        elif ord(char) < 32 or ord(char) == 127:
+            result.append('\\%03o' % ord(char))
+        else:
+            result.append(char)
+    return '"%s"' % ''.join(result)
+
+
 class Format(object):
 
     def __init__(self, width=76, indent=4, delimiter=', '):
@@ -338,7 +355,7 @@ class Format(object):
         for i, elt in enumerate(data):
             last = bool(i == len(data) - 1)
 
-            s = ('"%s"' if quote else '%s') % elt
+            s = quote_string(elt) if quote else str(elt)
 
             if pos + len(s) + lendel > self.width:
                 aux.write('\n' + (self.indent * ' '))
