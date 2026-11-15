@@ -315,10 +315,10 @@ WARNING: You have %d keys.
 
 def quote_string(value):
     "Return a double-quoted string literal valid in both Python and C."
-    escapes = {
-        '\\': '\\\\', '"': '\\"',   '\b': '\\b',  '\f': '\\f',
-        '\n': '\\n',  '\r': '\\r',  '\t': '\\t',
-    }
+    escapes = {'\\': r'\\',
+               '"':  r'\"',
+               '\n': r'\n',
+               '\t': r'\t'}
     result = []
     for char in str(value):
         if char in escapes:

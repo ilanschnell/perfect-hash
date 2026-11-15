@@ -76,6 +76,8 @@ class TestsFormat(unittest.TestCase):
                 ('a"b', r'"a\"b"'),   # double quote (") is escaped
                 (r'a\b', r'"a\\b"'),
                 ('a\tb', r'"a\tb"'),
+                ('a\n', r'"a\n"'),
+                ('\rz', r'"\015z"'),
                 ('café', '"café"'),
                 ('\x01z', r'"\001z"'),
                 ('\x7fz', r'"\177z"'),
@@ -152,7 +154,7 @@ class TestsGenerateCode(unittest.TestCase):
             self.run_keys(["Ilan", "Arvin"], Hash)
 
     def test_special_keys(self):
-        keys = ['a"b', "a'b", r'a\b', 'a\tb', 'café']
+        keys = ['a"b', "a'b", r'a\b', 'a\tb', '\nz', 'a\rb', 'café']
         for Hash in Hashes:
             self.run_keys(keys, Hash)
 
