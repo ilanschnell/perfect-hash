@@ -424,35 +424,28 @@ def read_table(filename, options):
     """
     if verbose:
         print("Reading table from file `%s' to extract keys." % filename)
-
-    fi = open(filename, encoding='utf-8')
-
-    keys = []
-
-    if verbose:
         print("Reader options:")
         for name in 'comment', 'splitby', 'keycol':
             print('  %s: %r' % (name, getattr(options, name)))
 
-    for n, line in enumerate(fi):
-        line = line.strip()
-        if not line or line.startswith(options.comment):
-            continue
+    keys = []
+    with open(filename, encoding='utf-8') as fi:
+        for n, line in enumerate(fi):
+            line = line.strip()
+            if not line or line.startswith(options.comment):
+                continue
 
-        if line.count(options.comment): # strip content after comment
-            line = line.split(options.comment)[0].strip()
+            if options.comment in line:  # strip content after comment
+                line = line.split(options.comment)[0].strip()
 
-        row = [col.strip() for col in line.split(options.splitby)]
+            row = [col.strip() for col in line.split(options.splitby)]
 
-        try:
-            key = row[options.keycol - 1]
-        except IndexError:
-            raise ValueError("%s:%d: cannot read key, not enough columns." %
-                             (filename, n + 1))
-
-        keys.append(key)
-
-    fi.close()
+            try:
+                key = row[options.keycol - 1]
+            except IndexError:
+                raise ValueError("%s:%d: cannot read key, not enough "
+                                 "columns." % (filename, n + 1))
+            keys.append(key)
 
     if not keys:
         raise ValueError("no keys found in file `%s'." % filename)
