@@ -98,6 +98,8 @@ class TestsGenerateHash(unittest.TestCase):
         self.assertRaises(TypeError, generate_hash, iter(["A", "B"]))
         self.assertRaises(TypeError, generate_hash, ["A", 8])
         self.assertRaises(TypeError, generate_hash, ["A", []])
+        # duplicate keys
+        self.assertRaises(ValueError, generate_hash, ["A", "B", "B"])
         self.assertRaises(ValueError, generate_hash, ["A", "B"], trials=0)
 
     def create_and_verify(self, keys, Hash):
@@ -123,14 +125,14 @@ class TestsGenerateHash(unittest.TestCase):
             self.create_and_verify([u"\ud55c", "A", u"\u00a2"], Hash)
 
     def test_letters(self):
-        for k in range(0, 27):
+        for k in range(27):
             keys = random.sample(string.ascii_uppercase, k)
             for Hash in Hashes:
                 self.create_and_verify(keys, Hash)
 
     def test_random(self):
         for Hash in Hashes:
-            for N in range(0, 50):
+            for N in range(50):
                 self.create_and_verify(random_keys(N), Hash)
 
     def test_too_many_iterations(self):
