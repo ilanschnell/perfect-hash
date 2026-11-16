@@ -160,7 +160,7 @@ Examples
 
 The source repository contains many useful examples (in ``examples/``) which
 illustrate how to use the ``perfect-hash`` command, as well
-as ``python_hash.py`` as a library.
+as ``perfect_hash.py`` as a library.
 
 
 License of output
