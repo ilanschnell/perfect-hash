@@ -603,8 +603,6 @@ is processed and the output code is written to stdout.
     if args.output:
         outname = args.output
     elif tmpl_file:
-        if 'tmpl' not in tmpl_file:
-            sys.exit("Hmm, template filename does not contain 'tmpl'")
         outname = tmpl_file.replace('tmpl', 'code')
     else:
         outname = 'std'
