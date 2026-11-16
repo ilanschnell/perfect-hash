@@ -59,7 +59,6 @@ __version__ = "0.6.0"
 
 anum_chars = string.ascii_letters + string.digits
 verbose = False
-trials = 50
 
 
 class Graph(object):
@@ -228,7 +227,7 @@ class TooManyIterationsError(ValueError):
     pass
 
 
-def generate_hash(keys, Hash=StrSaltHash, pow2=False):
+def generate_hash(keys, Hash=StrSaltHash, pow2=False, trials=50):
     """
     Return hash functions `f1` and `f2`, and `G` for a perfect minimal hash.
     Input is a sequence of `keys`, whose indices are the desired hash values.
@@ -257,6 +256,9 @@ WARNING: You have %d keys.
             NG *= 2
     else:
         NG = NK + 1
+
+    if trials <= 0:
+        raise ValueError("trials must be greater than zero")
 
     if verbose:
         print('NG = %d' % NG)
@@ -370,14 +372,14 @@ class Format(object):
 
 
 def generate_code(keys, Hash=StrSaltHash, template=None, options=None,
-                  pow2=False):
+                  pow2=False, trials=50):
     """
     Takes a sequence of keys and inserts the generated parameter
     lists into the `template` string.  `Hash` is the random hash function
     generator. `options`, when provided, controls formatting.
     The return value is the substituted code template.
     """
-    f1, f2, G = generate_hash(keys, Hash, pow2)
+    f1, f2, G = generate_hash(keys, Hash, pow2, trials)
 
     assert f1.N == f2.N == len(G)
     try:
@@ -569,8 +571,7 @@ is processed and the output code is written to stdout.
     if args.trials <= 0:
         p.error("trials before increasing N has to be larger than zero")
 
-    global trials, verbose
-    trials = args.trials
+    global verbose
     verbose = args.verbose
 
     if args.seed is not None:
@@ -620,7 +621,7 @@ is processed and the output code is written to stdout.
     if verbose:
         print("outname = %r\n" % outname)
 
-    code = generate_code(keys, Hash, template, args, args.pow2)
+    code = generate_code(keys, Hash, template, args, args.pow2, args.trials)
 
     if outname == 'std':
         sys.stdout.write(code)

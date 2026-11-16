@@ -98,6 +98,7 @@ class TestsGenerateHash(unittest.TestCase):
         self.assertRaises(TypeError, generate_hash, iter(["A", "B"]))
         self.assertRaises(TypeError, generate_hash, ["A", 8])
         self.assertRaises(TypeError, generate_hash, ["A", []])
+        self.assertRaises(ValueError, generate_hash, ["A", "B"], trials=0)
 
     def create_and_verify(self, keys, Hash):
         f1, f2, G = generate_hash(keys, Hash)

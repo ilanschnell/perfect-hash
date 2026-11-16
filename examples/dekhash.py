@@ -36,7 +36,6 @@ def perfect_hash(key):
 keys = "Monday Tuesday Wednesday Thursday Friday Saturday Sunday".split()
 
 perfect_hash.verbose = True
-perfect_hash.trials = 100
-code = perfect_hash.generate_code(keys, DEKHash, pow2=0)
+code = perfect_hash.generate_code(keys, DEKHash, pow2=0, trials=100)
 print(code)
 perfect_hash.run_code(code)
