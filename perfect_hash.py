@@ -422,12 +422,6 @@ def read_table(filename, options):
     Read keys from a file. Their positions in the returned list determine
     their desired hash values.
     """
-    if verbose:
-        print("Reading table from file `%s' to extract keys." % filename)
-        print("Reader options:")
-        for name in 'comment', 'splitby', 'keycol':
-            print('  %s: %r' % (name, getattr(options, name)))
-
     keys = []
     with open(filename, encoding='utf-8') as fi:
         for n, line in enumerate(fi):
@@ -586,8 +580,10 @@ is processed and the output code is written to stdout.
 
     keys_file = args.KEYS_FILE[0]
     if verbose:
-        print("keys_file = %r" % keys_file)
-
+        print("Reading table from file `%s' to extract keys." % keys_file)
+        print("Reader options:")
+        for name in 'comment', 'splitby', 'keycol':
+            print('  %s: %r' % (name, getattr(args, name)))
     try:
         keys = read_table(keys_file, args)
     except OSError:
