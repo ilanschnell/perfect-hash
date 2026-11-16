@@ -420,10 +420,8 @@ def read_table(filename, options):
     """
     if verbose:
         print("Reading table from file `%s' to extract keys." % filename)
-    try:
-        fi = open(filename, encoding='utf-8')
-    except IOError:
-        sys.exit("Error: Could not open `%s' for reading." % filename)
+
+    fi = open(filename, encoding='utf-8')
 
     keys = []
 
@@ -445,15 +443,15 @@ def read_table(filename, options):
         try:
             key = row[options.keycol - 1]
         except IndexError:
-            sys.exit("%s:%d: Error: Cannot read key, not enough columns." %
-                     (filename, n + 1))
+            raise ValueError("%s:%d: cannot read key, not enough columns." %
+                             (filename, n + 1))
 
         keys.append(key)
 
     fi.close()
 
     if not keys:
-        sys.exit("Error: no keys found in file `%s'." % filename)
+        raise ValueError("no keys found in file `%s'." % filename)
 
     return keys
 
@@ -587,7 +585,13 @@ is processed and the output code is written to stdout.
     if verbose:
         print("keys_file = %r" % keys_file)
 
-    keys = read_table(keys_file, args)
+    try:
+        keys = read_table(keys_file, args)
+    except OSError:
+        p.error("could not open `%s' for reading." % keys_file)
+    except ValueError as e:
+        p.error(str(e))
+
     if verbose:
         print("Number of keys: %d" % len(keys))
 
