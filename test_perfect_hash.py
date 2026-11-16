@@ -1,7 +1,9 @@
 import ast
-import sys
+import os
 import random
 import string
+import subprocess
+import sys
 import unittest
 
 
@@ -165,6 +167,16 @@ class TestsGenerateCode(unittest.TestCase):
     def test_random(self):
         for Hash in Hashes:
             self.run_keys(random_keys(50), Hash)
+
+
+class TestsCLI(unittest.TestCase):
+
+    def test_seed(self):
+        root = os.path.dirname(__file__)
+        cmd = [sys.executable, os.path.join(root, 'perfect_hash.py'),
+               os.path.join(root, 'animals.txt'), '--seed', '123']
+        self.assertEqual(subprocess.check_output(cmd),
+                         subprocess.check_output(cmd))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
-2026-XX-XX  0.5.3:
+2026-XX-XX  0.6.0:
 ------------------
+  * add --seed option (when reproducible output is required)
   * correctly escape special characters in generated string literals
   * require Python 3.7 or higher
   * use UTF-8 for key, template, and generated output files

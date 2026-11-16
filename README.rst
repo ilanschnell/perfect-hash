@@ -94,6 +94,10 @@ table and verify the result::
         # key is present at index
 
 
+Generation uses random hash functions.  Use ``--seed INT`` when reproducible
+output is required.
+
+
 The way the program works is by filling a code template with the calculated
 parameters.  The program can take such a template in form of a file and
 fill in the calculated parameters, this allows the generation of perfect

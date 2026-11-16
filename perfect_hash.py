@@ -55,7 +55,7 @@ from io import StringIO
 from os.path import join
 
 
-__version__ = "0.5.3"
+__version__ = "0.6.0"
 
 anum_chars = string.ascii_letters + string.digits
 verbose = False
@@ -533,6 +533,10 @@ is processed and the output code is written to stdout.
                         "take longer to compute but G will be smaller.",
                    metavar="INT")
 
+    p.add_argument("--seed", type=int,
+                   help="Initialize the random number generator with INT.",
+                   metavar="INT")
+
     p.add_argument("--hft", action="store", default=1, type=int,
                    help="Hash function type INT.  Possible values "
                         "are 1 (StrSaltHash) and 2 (IntSaltHash).",
@@ -568,6 +572,9 @@ is processed and the output code is written to stdout.
     global trials, verbose
     trials = args.trials
     verbose = args.verbose
+
+    if args.seed is not None:
+        random.seed(args.seed)
 
     if args.TMPL_FILE and 'tmpl' not in args.TMPL_FILE:
         p.error("template filename does not contain 'tmpl'")
