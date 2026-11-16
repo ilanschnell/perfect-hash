@@ -410,7 +410,9 @@ def generate_code(keys, Hash=StrSaltHash, template=None, options=None,
         K  = fmt(list(keys), quote=True))
 
     if pow2:
-        res = res.replace("%% %d" % len(G), "& %d" % (len(G) - 1))
+        # Replace modulo by an equivalent bit mask, e.g. "% 32" by "& 31".
+        res = res.replace("%% %d" % len(G),
+                          "& %d" % (len(G) - 1))
 
     return res
 
