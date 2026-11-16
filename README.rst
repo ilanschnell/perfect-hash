@@ -40,9 +40,7 @@ Usage
 
 Given a set of keys which are character strings, the program returns a minimal
 perfect hash function.  This hash function is returned in the form of Python
-code by default.  Suppose we have a file with keys:
-
-.. code-block::
+code by default.  Suppose we have a file with keys::
 
     # 'animals.txt'
     Elephant
