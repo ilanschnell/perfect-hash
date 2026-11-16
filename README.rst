@@ -86,6 +86,16 @@ The program is invoked like this:
         assert perfect_hash(k) == h
 
 
+The generated perfect hash function is only defined for the original set of
+keys.  For any other key, it may return an arbitrary index rather than report
+that the key is absent.  When membership needs to be checked, retain the key
+table and verify the result::
+
+    index = perfect_hash(key)
+    if 0 <= index < len(K) and K[index] == key:
+        # key is present at index
+
+
 The way the program works is by filling a code template with the calculated
 parameters.  The program can take such a template in form of a file and
 fill in the calculated parameters, this allows the generation of perfect
