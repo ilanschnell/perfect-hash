@@ -1,8 +1,9 @@
-2026-11-XX  0.6.0:
+2026-11-17  0.6.0:
 ------------------
   * add --seed option (when reproducible output is required)
   * correctly escape special characters in generated string literals
   * require Python 3.7 or higher
+  * provide universal wheel on PyPI
   * use UTF-8 for key, template, and generated output files
   * improve key and command-line argument validation
   * modernize packaging to `pyproject.toml`
