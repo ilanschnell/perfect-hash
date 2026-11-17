@@ -1,5 +1,5 @@
 install:
-	python setup.py install
+	python -m pip install .
 
 
 test:
