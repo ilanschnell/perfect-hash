@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "perfect-hash"
+dynamic = ["version"]
+description = "creating perfect minimal hash function"
+readme = "README.rst"
+requires-python = ">=3.7"
+license = {file = "LICENSE.txt"}
+authors = [
+    {name = "Ilan Schnell", email = "ilanschnell@gmail.com"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/ilanschnell/perfect-hash"
+
+[project.scripts]
+perfect-hash = "perfect_hash:main"
+
+[tool.setuptools]
+py-modules = ["perfect_hash"]
+
+[tool.setuptools.dynamic]
+version = {attr = "perfect_hash.__version__"}

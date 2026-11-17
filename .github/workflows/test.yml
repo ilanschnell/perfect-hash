@@ -14,3 +14,11 @@ jobs:
           python-version: "3.7"
 
       - run: make test
+
+      - name: Build and test wheel
+        run: |
+          pipx run build --wheel
+          wheel_path=$(realpath dist/*-py3-none-any.whl)
+          cd "$(mktemp -d)"
+          python -m pip install "$wheel_path"
+          perfect-hash --version
