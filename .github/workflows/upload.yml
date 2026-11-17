@@ -20,7 +20,7 @@ jobs:
         run: make test
 
       - name: Build source distribution
-        run: pipx run build --sdist
+        run: pipx run build
 
       - name: Upload to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
