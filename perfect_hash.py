@@ -554,6 +554,12 @@ is processed and the output code is written to stdout.
 
     args = p.parse_args()
 
+    if not args.comment:
+        p.error("comment marker cannot be empty")
+
+    if not args.splitby:
+        p.error("column separator cannot be empty")
+
     if args.keycol < 1:
         p.error("key column must be at least 1")
 
