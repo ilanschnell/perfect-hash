@@ -1,3 +1,7 @@
+2026-XX-XX  0.6.1:
+------------------
+
+
 2026-11-17  0.6.0:
 ------------------
   * add --seed option (when reproducible output is required)
