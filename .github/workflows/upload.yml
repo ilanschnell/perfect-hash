@@ -16,8 +16,8 @@ jobs:
 
       - run: make test
 
-  wheel:
-    name: Test wheel on ${{ matrix.name }}
+  dists:
+    name: Test dists on ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
@@ -33,23 +33,29 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Build wheel
-        run: pipx run build --wheel
+      - name: Build distributions
+        run: pipx run build
 
-      - name: Test wheel
+      - name: Test distributions
         shell: bash
         run: |
           wheel_path=$(realpath dist/*-py3-none-any.whl)
+          sdist_path=$(realpath dist/*.tar.gz)
           keys_path=$(realpath animals.txt)
           cd "$(mktemp -d)"
+
           python -m pip install "$wheel_path"
+          perfect-hash --version
+          perfect-hash --execute "$keys_path"
+
+          python -m pip install --force-reinstall "$sdist_path"
           perfect-hash --version
           perfect-hash --execute "$keys_path"
 
   upload:
     name: Upload source distribution and universal wheel
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [test-python37, wheel]
+    needs: [test-python37, dists]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
