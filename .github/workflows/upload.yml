@@ -16,9 +16,19 @@ jobs:
 
       - run: make test
 
-  wheel-linux:
-    name: Build and test wheel on Linux
-    runs-on: ubuntu-latest
+  wheel:
+    name: Build and test wheel on ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+          - name: macOS
+            os: macos-latest
+          - name: Windows
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v5
@@ -27,52 +37,17 @@ jobs:
         run: pipx run build --wheel
 
       - name: Test wheel
+        shell: bash
         run: |
           wheel_path=$(realpath dist/*-py3-none-any.whl)
           cd "$(mktemp -d)"
           python -m pip install "$wheel_path"
           perfect-hash --version
-
-  wheel-macos:
-    name: Build and test wheel on macOS
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Build wheel
-        run: pipx run build --wheel
-
-      - name: Test wheel
-        run: |
-          wheel_path=$(realpath dist/*-py3-none-any.whl)
-          cd "$(mktemp -d)"
-          python -m pip install "$wheel_path"
-          perfect-hash --version
-
-  wheel-windows:
-    name: Build and test wheel on Windows
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Build wheel
-        run: pipx run build --wheel
-
-      - name: Test wheel
-        shell: pwsh
-        run: |
-          $wheel = (Resolve-Path "dist\*-py3-none-any.whl").Path
-          $venv = Join-Path $env:RUNNER_TEMP "perfect-hash-wheel-test"
-          python -m venv $venv
-          & "$venv\Scripts\python.exe" -m pip install $wheel
-          & "$venv\Scripts\perfect-hash.exe" --version
 
   upload:
     name: Upload source distribution and universal wheel
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [test-python37, wheel-linux, wheel-macos, wheel-windows]
+    needs: [test-python37, wheel]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
