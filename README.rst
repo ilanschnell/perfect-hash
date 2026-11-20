@@ -152,10 +152,10 @@ Hash function types
 -------------------
 
 One important option the ``perfect-hash`` command provides is ``--hft`` which
-is short of "hash function type".  There are two types to choose from:
+is short for "hash function type".  There are two types to choose from:
 
 1. A random hash function generation which creates hash function with a
-   random string being used as it's salt.   This is the default.
+   random string being used as its salt.   This is the default.
    Since the generated random hash function does not include large enough
    output for a very large number of keys (over 10,000), the perfect hash
    function generation will fail for such large keys.  However, the
@@ -196,7 +196,7 @@ holder, as the input that was merely passed though perfect-hash.
 Acknowledgments
 ---------------
 
-Part of the code is based on an a program A.M. Kuchling wrote:
+Part of the code is based on a program A.M. Kuchling wrote:
 http://www.amk.ca/python/code/perfect-hash
 
 The algorithm this library is based on is described in the paper
