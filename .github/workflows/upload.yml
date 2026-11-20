@@ -1,12 +1,78 @@
-name: Build and upload to PyPI
+name: Test, build, and upload to PyPI
 
-on:
-  push:
-    tags:
-      - "*"
+on: [push]
 
 jobs:
+  test-python37:
+    name: Self tests on Python 3.7
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.7"
+
+      - run: make test
+
+  wheel-linux:
+    name: Build and test wheel on Linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build wheel
+        run: pipx run build --wheel
+
+      - name: Test wheel
+        run: |
+          wheel_path=$(realpath dist/*-py3-none-any.whl)
+          cd "$(mktemp -d)"
+          python -m pip install "$wheel_path"
+          perfect-hash --version
+
+  wheel-macos:
+    name: Build and test wheel on macOS
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build wheel
+        run: pipx run build --wheel
+
+      - name: Test wheel
+        run: |
+          wheel_path=$(realpath dist/*-py3-none-any.whl)
+          cd "$(mktemp -d)"
+          python -m pip install "$wheel_path"
+          perfect-hash --version
+
+  wheel-windows:
+    name: Build and test wheel on Windows
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build wheel
+        run: pipx run build --wheel
+
+      - name: Test wheel
+        shell: pwsh
+        run: |
+          $wheel = (Resolve-Path "dist\*-py3-none-any.whl").Path
+          $venv = Join-Path $env:RUNNER_TEMP "perfect-hash-wheel-test"
+          python -m venv $venv
+          & "$venv\Scripts\python.exe" -m pip install $wheel
+          & "$venv\Scripts\perfect-hash.exe" --version
+
   upload:
+    name: Upload source distribution and universal wheel
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [test-python37, wheel-linux, wheel-macos, wheel-windows]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -16,10 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Run tests
-        run: make test
-
-      - name: Build source distribution
+      - name: Build distributions
         run: pipx run build
 
       - name: Upload to PyPI
