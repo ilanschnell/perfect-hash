@@ -276,8 +276,8 @@ WARNING: You have %d keys.
         trial += 1
 
         if NG > 100 * (NK + 1):
-            raise TooManyIterationsError("%d keys" % NK)
-
+            raise TooManyIterationsError("too many iterations for %d keys" %
+                                         NK)
         if verbose:
             sys.stdout.write('.')
             sys.stdout.flush()
@@ -617,7 +617,11 @@ is processed and the output code is written to stdout.
     if verbose:
         print("outname = %r\n" % outname)
 
-    code = generate_code(keys, Hash, template, args, args.pow2, args.trials)
+    try:
+        code = generate_code(keys, Hash, template, args, args.pow2,
+                             args.trials)
+    except ValueError as e:
+        p.error(str(e))
 
     if outname == 'std':
         sys.stdout.write(code)
