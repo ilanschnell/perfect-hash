@@ -4,6 +4,7 @@ import random
 import string
 import subprocess
 import sys
+import tempfile
 import unittest
 
 
@@ -180,6 +181,20 @@ class TestsCLI(unittest.TestCase):
                os.path.join(root, 'animals.txt'), '--seed', '123']
         self.assertEqual(subprocess.check_output(cmd),
                          subprocess.check_output(cmd))
+
+    def test_template_output_path(self):
+        root = os.path.dirname(__file__)
+        with tempfile.TemporaryDirectory(prefix='tmpl-') as tmpdir:
+            tmpl = os.path.join(tmpdir, 'example-tmpl.txt')
+            with open(tmpl, 'w') as fo:
+                fo.write('$NK\n')
+
+            subprocess.check_call([
+                sys.executable, os.path.join(root, 'perfect_hash.py'),
+                os.path.join(root, 'animals.txt'), tmpl,
+            ])
+            with open(os.path.join(tmpdir, 'example-code.txt')) as fi:
+                self.assertEqual(fi.read(), '6\n')
 
 
 if __name__ == '__main__':

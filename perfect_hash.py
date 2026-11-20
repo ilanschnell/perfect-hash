@@ -52,7 +52,7 @@ import shutil
 import tempfile
 from collections import abc, defaultdict
 from io import StringIO
-from os.path import join
+from os.path import basename, dirname, join
 
 
 __version__ = "0.6.1"
@@ -572,7 +572,7 @@ is processed and the output code is written to stdout.
     if args.seed is not None:
         random.seed(args.seed)
 
-    if args.TMPL_FILE and 'tmpl' not in args.TMPL_FILE:
+    if args.TMPL_FILE and 'tmpl' not in basename(args.TMPL_FILE):
         p.error("template filename does not contain 'tmpl'")
 
     if args.hft == 1:
@@ -609,7 +609,8 @@ is processed and the output code is written to stdout.
     if args.output:
         outname = args.output
     elif tmpl_file:
-        outname = tmpl_file.replace('tmpl', 'code')
+        outname = join(dirname(tmpl_file),
+                       basename(tmpl_file).replace('tmpl', 'code'))
     else:
         outname = 'std'
 
