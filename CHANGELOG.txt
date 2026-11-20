@@ -1,5 +1,7 @@
 2026-XX-XX  0.6.1:
 ------------------
+  * improve CLI error handling
+  * derive the default output filename from the template basename
 
 
 2026-11-17  0.6.0:
