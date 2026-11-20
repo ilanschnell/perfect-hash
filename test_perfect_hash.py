@@ -6,12 +6,14 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
 
 
 from perfect_hash import (
     anum_chars, quote_string,
     generate_hash, Graph, Format, StrSaltHash, IntSaltHash,
     generate_code, run_code, builtin_template, TooManyIterationsError,
+    read_table,
 )
 
 
@@ -171,6 +173,38 @@ class TestsGenerateCode(unittest.TestCase):
     def test_random(self):
         for Hash in Hashes:
             self.run_keys(random_keys(50), Hash)
+
+
+class TestReadTable(unittest.TestCase):
+
+    def read(self, text, **kwargs):
+        options = SimpleNamespace(comment='#', splitby=',', keycol=1)
+        for name, value in kwargs.items():
+            setattr(options, name, value)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, 'keys.txt')
+            with open(path, 'w', encoding='utf-8') as fo:
+                fo.write(text)
+            return read_table(path, options)
+
+    def test_basic(self):
+        text = """\
+# comment
+0, Elephant, ignored
+1, café, ignored  # trailing comment
+
+2, Python, ignored
+"""
+        self.assertEqual(self.read(text, keycol=2),
+                         ['Elephant', 'café', 'Python'])
+
+    def test_errors(self):
+        with self.assertRaisesRegex(ValueError, 'no keys found'):
+            self.read('# comment\n\n')
+
+        with self.assertRaisesRegex(ValueError, ':2: cannot read key'):
+            self.read('0, Elephant\n1\n', keycol=2)
 
 
 class TestsCLI(unittest.TestCase):
