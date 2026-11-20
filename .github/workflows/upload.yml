@@ -17,7 +17,7 @@ jobs:
       - run: make test
 
   wheel:
-    name: Build and test wheel on ${{ matrix.name }}
+    name: Test wheel on ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
@@ -40,9 +40,11 @@ jobs:
         shell: bash
         run: |
           wheel_path=$(realpath dist/*-py3-none-any.whl)
+          keys_path=$(realpath animals.txt)
           cd "$(mktemp -d)"
           python -m pip install "$wheel_path"
           perfect-hash --version
+          perfect-hash --execute "$keys_path"
 
   upload:
     name: Upload source distribution and universal wheel
