@@ -207,8 +207,8 @@ class TestReadTable(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'no keys found'):
             self.read('# comment\n\n')
 
-        with self.assertRaisesRegex(ValueError, ':2: cannot read key'):
-            self.read('0, Elephant\n1\n', keycol=2)
+        with self.assertRaisesRegex(ValueError, ':3: cannot read key'):
+            self.read('0, Elephant\n1, Hourse\n2\n3, Dog\n', keycol=2)
 
 
 class TestsCLI(unittest.TestCase):
