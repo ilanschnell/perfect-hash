@@ -179,8 +179,7 @@ class TestReadTable(unittest.TestCase):
 
     def read(self, text, **kwargs):
         options = SimpleNamespace(comment='#', splitby=',', keycol=1)
-        for name, value in kwargs.items():
-            setattr(options, name, value)
+        options.__dict__.update(kwargs)
 
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, 'keys.txt')
