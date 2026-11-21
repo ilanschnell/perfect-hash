@@ -105,10 +105,13 @@ class TestsGenerateHash(unittest.TestCase):
         self.assertRaises(ValueError, generate_hash, ["A", "B", "B"])
         self.assertRaises(ValueError, generate_hash, ["A", "B"], trials=0)
 
-    def create_and_verify(self, keys, Hash):
-        f1, f2, G = generate_hash(keys, Hash)
+    def create_and_verify(self, keys, Hash, pow2=False):
+        f1, f2, G = generate_hash(keys, Hash, pow2)
         self.assertEqual(len(f1.salt), len(f2.salt))
         self.assertTrue(f1.N == f2.N == len(G))
+        if pow2:
+            n = len(G)
+            self.assertTrue(n > 0 and n & (n - 1) == 0, n)
 
         f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
         for i, k in enumerate(keys):
@@ -136,7 +139,8 @@ class TestsGenerateHash(unittest.TestCase):
     def test_random(self):
         for Hash in Hashes:
             for N in range(50):
-                self.create_and_verify(random_keys(N), Hash)
+                for pow2 in False, True:
+                    self.create_and_verify(random_keys(N), Hash, pow2)
 
     def test_too_many_iterations(self):
 
