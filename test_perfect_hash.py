@@ -1,4 +1,3 @@
-import ast
 import os
 import random
 import string
@@ -6,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from ast import literal_eval
 from types import SimpleNamespace
 
 
@@ -88,7 +88,7 @@ class TestsFormat(unittest.TestCase):
                 ('\x7fz', r'"\177z"'),
         ]:
             self.assertEqual(quote_string(a), b)
-            self.assertEqual(ast.literal_eval(b), a)
+            self.assertEqual(literal_eval(b), a)
 
 
 class TestsGenerateHash(unittest.TestCase):
