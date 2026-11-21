@@ -111,7 +111,8 @@ class TestsGenerateHash(unittest.TestCase):
         self.assertTrue(f1.N == f2.N == len(G))
         if pow2:
             n = len(G)
-            self.assertTrue(n > 0 and n & (n - 1) == 0, n)
+            self.assertGreater(n, 0)
+            self.assertEqual(n & (n - 1), 0)
 
         f = lambda k: (G[f1(k)] + G[f2(k)]) % len(G)
         for i, k in enumerate(keys):
